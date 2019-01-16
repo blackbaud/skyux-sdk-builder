@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "1.30.0",
+  "version": "3.0.0-rc.0",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -15,15 +15,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackbaud/skyux-builder.git"
+    "url": "git+https://github.com/blackbaud/skyux-sdk-builder.git"
   },
   "keywords": [],
   "author": "Blackbaud",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/blackbaud/skyux-builder/issues"
+    "url": "https://github.com/blackbaud/skyux-sdk-builder/issues"
   },
-  "homepage": "https://github.com/blackbaud/skyux-builder#readme",
+  "homepage": "https://github.com/blackbaud/skyux-sdk-builder#readme",
   "peerDependencies": {
     "@angular/compiler-cli": "^7.2.0",
     "@angular/compiler": "^7.2.0",
