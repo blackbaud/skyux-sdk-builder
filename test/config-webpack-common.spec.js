@@ -12,8 +12,8 @@ describe('config webpack common', () => {
 
     let existsSync = fs.existsSync;
 
-    spyOn(fs, 'existsSync').and.callFake(function (path) {
-      if (path.indexOf('app-extras.module') >= 0) {
+    spyOn(fs, 'existsSync').and.callFake(function (filePath) {
+      if (filePath.indexOf('app-extras.module') >= 0) {
         return spaVersionExists;
       }
 
@@ -58,40 +58,6 @@ describe('config webpack common', () => {
     expect(config.entry.app[0]).toContain(process.cwd());
   });
 
-  it('should look in the specified import path when resolving SKY UX', () => {
-    const lib = mock.reRequire('../config/webpack/common.webpack.config');
-    const importPath = './some-folder';
-    const cssPath = path.join(importPath, '/scss/sky.scss');
-
-    let config = lib.getWebpackConfig({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: {
-        importPath: importPath,
-        mode: 'advanced'
-      }
-    });
-
-    let alias = config.resolve.alias;
-
-    expect(
-      alias['@blackbaud/skyux/dist']
-    ).toBe(path.join(process.cwd(), importPath));
-
-    config = lib.getWebpackConfig({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: {
-        mode: 'advanced',
-        cssPath: cssPath
-      }
-    });
-
-    alias = config.resolve.alias;
-
-    expect(
-      alias['@skyux/theme/css/sky.css']
-    ).toBe(path.join(process.cwd(), cssPath));
-  });
-
   it('should default to the local app-extras module when not present in the SPA', () => {
     validateAppExtras(false);
   });
@@ -110,7 +76,7 @@ describe('config webpack common', () => {
     });
 
     const lib = mock.reRequire('../config/webpack/common.webpack.config');
-    const config = lib.getWebpackConfig({
+    lib.getWebpackConfig({
       runtime: runtimeUtils.getDefaultRuntime(),
       skyux: {}
     }, {

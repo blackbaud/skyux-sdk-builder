@@ -1,5 +1,4 @@
 //#region imports
-
 import {
   BBAuth,
   BBContextArgs,
@@ -7,13 +6,9 @@ import {
 } from '@blackbaud/auth-client';
 
 import {
+  SkyAppRuntimeConfigParams,
   SkyuxConfig
-} from './config';
-
-import {
-  SkyAppRuntimeConfigParams
-} from './params';
-
+} from '@skyux/config';
 //#endregion
 
 export class SkyAppBootstrapper {

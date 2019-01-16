@@ -3,17 +3,25 @@
 
 const mock = require('mock-require');
 const logger = require('@blackbaud/skyux-logger');
-const config = require('../config/sky-pages/sky-pages.config');
 
-describe('@blackbaud/skyux-builder', () => {
+describe('@skyux-sdk/builder', () => {
+  let config;
+
+  beforeEach(() => {
+    config = mock.reRequire('../config/sky-pages/sky-pages.config');
+  });
+
+  afterEach(() => {
+    mock.stopAll();
+  });
 
   it('should expose a runCommand method', () => {
-    const lib = require('../index');
+    const lib = mock.reRequire('../index');
     expect(typeof lib.runCommand).toEqual('function');
   });
 
   it('should handle known commands', () => {
-    const lib = require('../index');
+    const lib = mock.reRequire('../index');
     const cmds = {
       'build': {
         cmd: 'build',
@@ -62,7 +70,7 @@ describe('@blackbaud/skyux-builder', () => {
     };
 
     Object.keys(cmds).forEach((key) => {
-      mock('../cli/' + cmds[key].lib, () => {
+      mock(`../cli/${cmds[key].lib}`, () => {
         cmds[key].called = true;
       });
       lib.runCommand(cmds[key].cmd, {});
@@ -75,9 +83,9 @@ describe('@blackbaud/skyux-builder', () => {
     spyOn(config, 'getSkyPagesConfig');
 
     const cmd = 'junk-command-that-does-not-exist';
-    const lib = require('../index');
+    const lib = mock.reRequire('../index');
 
-    expect(lib.runCommand(cmd, {})).toBe(false);
+    expect(lib.runCommand(cmd, {})).toEqual(false);
     expect(config.getSkyPagesConfig).not.toHaveBeenCalled();
   });
 
@@ -86,7 +94,9 @@ describe('@blackbaud/skyux-builder', () => {
     spyOn(config, 'getSkyPagesConfig');
 
     const cmd = 'build';
-    const lib = require('../index');
+    mock(`../cli/${cmd}`, () => {});
+
+    const lib = mock.reRequire('../index');
 
     expect(lib.runCommand(cmd, {})).toBe(true);
     expect(config.getSkyPagesConfig).toHaveBeenCalled();
@@ -104,7 +114,7 @@ describe('@blackbaud/skyux-builder', () => {
       expect(a.force).toEqual(argv.f);
       done();
     });
-    const lib = require('../index');
+    const lib = mock.reRequire('../index');
     lib.runCommand('test', argv);
   });
 

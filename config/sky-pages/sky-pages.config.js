@@ -78,7 +78,6 @@ module.exports = {
         srcPath: 'src/app/',
         spaPathAlias: 'sky-pages-spa',
         skyPagesOutAlias: 'sky-pages-internal',
-        skyuxPathAlias: '@blackbaud/skyux/dist',
         useTemplateUrl: false
       },
       skyux: skyuxConfig
@@ -117,7 +116,7 @@ module.exports = {
 
   /**
    * Takes one or more path parts and returns the fully-qualified path to the file
-   * contained in this project (@blackbaud/skyux-builder).
+   * contained in this project (@skyux-sdk/builder).
    * @returns {String} The fully-qualified path.
    */
   outPath: function () {

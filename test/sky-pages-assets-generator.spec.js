@@ -3,13 +3,15 @@
 
 const mock = require('mock-require');
 const glob = require('glob');
-const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 const localeAssetsProcessor = require('../lib/locale-assets-processor');
 
 describe('SKY UX Builder assets generator', () => {
   let mockLocaleProcessor;
+  let skyPagesConfigUtil;
 
   beforeEach(() => {
+    skyPagesConfigUtil = mock.reRequire('../config/sky-pages/sky-pages.config');
+
     mockLocaleProcessor = {
       getDefaultLocaleFiles: localeAssetsProcessor.getDefaultLocaleFiles,
       isLocaleFile() {
@@ -43,7 +45,7 @@ describe('SKY UX Builder assets generator', () => {
     const source = generator.getSource();
 
     expect(source).toBe(
-`export class ${generator.getClassName()} {
+      `export class ${generator.getClassName()} {
   public getUrl(filePath: string): string {
     const pathMap: {[key: string]: any} = {
       'a/b/c/d.jpg': '~/assets/a/b/c/d.jpg',
@@ -72,7 +74,7 @@ describe('SKY UX Builder assets generator', () => {
     // This test ensures that the file name (and lookup key)
     // is governed by the locale assets processor.
     expect(source).toBe(
-`export class SkyAppAssetsImplService {
+      `export class SkyAppAssetsImplService {
   public getUrl(filePath: string): string {
     const pathMap: {[key: string]: any} = {
       'locales/BASENAME': '~/assets/BASENAME',
@@ -102,7 +104,7 @@ describe('SKY UX Builder assets generator', () => {
     // This test ensures that the file name (and lookup key)
     // is governed by the locale assets processor.
     expect(source).toBe(
-`export class SkyAppAssetsImplService {
+      `export class SkyAppAssetsImplService {
   public getUrl(filePath: string): string {
     const pathMap: {[key: string]: any} = {
       'locales/BASENAME': '~/assets/BASENAME'

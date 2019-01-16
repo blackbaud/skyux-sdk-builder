@@ -4,19 +4,17 @@ import {
 
 import {
   SkyAppWindowRef
-} from '../window-ref';
+} from '@skyux/core';
 
 import {
-  Observable
-} from 'rxjs/Observable';
-
-import {
-  SkyAppLocaleInfo
-} from './locale-info';
-
-import {
+  SkyAppLocaleInfo,
   SkyAppLocaleProvider
-} from './locale-provider';
+} from '@skyux/i18n';
+
+import {
+  Observable,
+  of
+} from 'rxjs';
 
 @Injectable()
 export class SkyAppHostLocaleProvider extends SkyAppLocaleProvider {
@@ -38,7 +36,7 @@ export class SkyAppHostLocaleProvider extends SkyAppLocaleProvider {
 
     locale = locale || this.defaultLocale;
 
-    return Observable.of({
+    return of({
       locale: locale
     });
   }

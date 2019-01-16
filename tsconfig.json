@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
+    "importHelpers": true,
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "noUnusedLocals": true,
@@ -22,8 +23,8 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@blackbaud/skyux-builder/*": [
-        "./node_modules/@blackbaud/skyux-builder/*",
+      "@skyux-sdk/builder/*": [
+        "./node_modules/@skyux-sdk/builder/*",
         "./*"
       ],
       ".skypageslocales/*": [

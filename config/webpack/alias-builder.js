@@ -5,6 +5,11 @@ const fs = require('fs');
 const path = require('path');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 
+// This will fix a mapping bug for the latest version of rxjs-compat.
+// See: https://github.com/ReactiveX/rxjs/issues/4070#issuecomment-429191227
+const rxPaths = require('rxjs/_esm5/path-mapping')();
+rxPaths['rxjs/internal/Observable'] = 'rxjs/_esm5/internal/Observable';
+
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
 }
@@ -21,32 +26,22 @@ function outPath() {
  * @param {String} moduleName
  * @param {String} path
  */
-function setSpaAlias(alias, moduleName, path) {
-  let resolvedPath = spaPath(path);
+function setSpaAlias(alias, moduleName, filePath) {
+  let resolvedPath = spaPath(filePath);
 
   if (!fs.existsSync(resolvedPath)) {
-    resolvedPath = outPath(path);
+    resolvedPath = outPath(filePath);
   }
 
   alias['sky-pages-internal/' + moduleName] = resolvedPath;
 }
 
 module.exports = {
-  buildAliasList: function (skyPagesConfig) {
+  buildAliasList: function () {
     let alias = {
       'sky-pages-spa/src': spaPath('src'),
       'sky-pages-internal/runtime': outPath('runtime')
     };
-
-    // Order here is very important; the more specific CSS alias must go before
-    // the more generic dist one.
-    if (skyPagesConfig.skyux.cssPath) {
-      alias['@skyux/theme/css/sky.css'] = spaPath(skyPagesConfig.skyux.cssPath);
-    }
-
-    if (skyPagesConfig.skyux.importPath) {
-      alias['@blackbaud/skyux/dist'] = spaPath(skyPagesConfig.skyux.importPath);
-    }
 
     setSpaAlias(
       alias,
@@ -55,6 +50,8 @@ module.exports = {
     );
 
     setSpaAlias(alias, 'src/main', path.join('src', 'main.ts'));
+
+    Object.assign(alias, rxPaths);
 
     return alias;
   }

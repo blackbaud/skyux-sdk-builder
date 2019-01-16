@@ -57,7 +57,7 @@ function getEntryPointFiles() {
 }
 
 function writeTSConfig() {
-  var config = {
+  const config = {
     'compilerOptions': {
       'target': 'es5',
       'module': 'es2015',
@@ -66,6 +66,8 @@ function writeTSConfig() {
       'experimentalDecorators': true,
       'allowSyntheticDefaultImports': true,
       'sourceMap': true,
+      'importHelpers': true,
+      'noEmitHelpers': true,
       'noImplicitAny': true,
       'declaration': true,
       'skipLibCheck': true,
@@ -81,7 +83,7 @@ function writeTSConfig() {
       'rootDir': skyPagesConfigUtil.spaPathTemp(),
       'baseUrl': '.',
       'paths': {
-        '@blackbaud/skyux-builder/*': [
+        '@skyux-sdk/builder/*': [
           '*'
         ],
         '.skypageslocales/*': [

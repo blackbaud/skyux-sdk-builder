@@ -37,6 +37,10 @@ describe('SKY UX Builder module generator', () => {
       }
     };
 
+    mockLogger = {
+      warn() {}
+    };
+
     mockRouteGenerator = {
       getRoutes() {
         return {
@@ -83,20 +87,6 @@ describe('SKY UX Builder module generator', () => {
     });
 
     expect(source).toContain(expectedImport);
-  });
-
-  it('should export modules from the runtimeModuleExports', () => {
-    const generator = mock.reRequire(GENERATOR_PATH);
-    const expectedExport = 'SkyAppRuntimeModule';
-
-    const source = generator.getSource({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: runtimeUtils.getDefaultSkyux()
-    });
-
-    const moduleExports = getModuleList('exports', source);
-
-    expect(moduleExports).toContain(expectedExport);
   });
 
   it('should import modules from the runtimeModuleImports', () => {
@@ -162,45 +152,7 @@ describe('SKY UX Builder module generator', () => {
     );
   });
 
-  it('should allow the SKY UX path alias to be overridden', () => {
-    const generator = mock.reRequire(GENERATOR_PATH);
-    const source = generator.getSource({
-      runtime: runtimeUtils.getDefaultRuntime({
-        skyuxPathAlias: 'custom'
-      }),
-      skyux: runtimeUtils.getDefaultSkyux()
-    });
-
-    expect(source).toContain(
-      `import {
-  SkyModule
-} from 'custom/core';`
-    );
-  });
-
-  it('should import individual SKY UX modules from config', () => {
-    const generator = mock.reRequire(GENERATOR_PATH);
-    const source = generator.getSource({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: runtimeUtils.getDefaultSkyux({
-        skyuxModules: [
-          'SkyAlertModule',
-          'SkyErrorModule',
-          'SkyModalModule'
-        ]
-      })
-    });
-
-    expect(source).toContain(
-      `import {
-  SkyAlertModule,
-  SkyErrorModule,
-  SkyModalModule
-} from '@blackbaud/skyux/dist/core';`
-    );
-  });
-
-  it('should only import the SkyAuthHttpModule if the app is configured to use auth', () => {
+  it('should only provide the SkyAuthHttp service if the app is configured to use auth', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedImport = `{ SkyAuthHttp }`;
     const expectedProvider = `{
@@ -278,13 +230,12 @@ describe('SKY UX Builder module generator', () => {
 
     expect(moduleImports).toContain(expectedImport);
 
-    let sourceWithoutRouting = generator.getSource(
-      {
-        runtime: runtimeUtils.getDefaultRuntime({
-          includeRouteModule: false
-        }),
-        skyux: runtimeUtils.getDefaultSkyux()
-      });
+    const sourceWithoutRouting = generator.getSource({
+      runtime: runtimeUtils.getDefaultRuntime({
+        includeRouteModule: false
+      }),
+      skyux: runtimeUtils.getDefaultSkyux()
+    });
 
     moduleImports = getModuleList('imports', sourceWithoutRouting);
 
@@ -302,7 +253,8 @@ describe('SKY UX Builder module generator', () => {
 
     expect(source).toContain(
       `import { enableProdMode } from '@angular/core';
-enableProdMode();`);
+enableProdMode();`
+    );
   });
 
   it('should put auth-client in mock mode if the command is e2e', () => {
@@ -316,7 +268,8 @@ enableProdMode();`);
 
     expect(source).toContain(
       `import { BBAuth } from '@blackbaud/auth-client';
-BBAuth.mock = true;`);
+BBAuth.mock = true;`
+    );
   });
 
   it('should add routes to skyPagesConfig.runtime', () => {
@@ -429,7 +382,6 @@ require('style-loader!src/styles/custom.css');
     const generator = mock.reRequire(GENERATOR_PATH);
     const spy = spyOn(mockLogger, 'warn').and.callThrough();
     const expectedRequire = '';
-
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
       skyux: runtimeUtils.getDefaultSkyux()

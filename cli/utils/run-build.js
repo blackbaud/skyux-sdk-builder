@@ -16,7 +16,7 @@ const runCompiler = require('./run-compiler');
 const tsLinter = require('./ts-linter');
 
 function writeTSConfig() {
-  var config = {
+  const config = {
     'compilerOptions': {
       'target': 'es5',
       'module': 'es2015',
@@ -24,9 +24,9 @@ function writeTSConfig() {
       'emitDecoratorMetadata': true,
       'experimentalDecorators': true,
       'sourceMap': true,
+      'importHelpers': true,
       'noEmitHelpers': true,
       'noImplicitAny': true,
-      'rootDir': '.',
       'inlineSources': true,
       'declaration': true,
       'skipLibCheck': true,
@@ -34,13 +34,14 @@ function writeTSConfig() {
         'es2015',
         'dom'
       ],
-      'types': [
-        'jasmine',
-        'node'
+      'typeRoots': [
+        skyPagesConfigUtil.spaPath('node_modules/@types')
       ]
     },
-    'files': [
-      './app/app.module.ts'
+    'include': [
+      skyPagesConfigUtil.outPath('runtime', '**', '*'),
+      skyPagesConfigUtil.outPath('src', '**', '*'),
+      skyPagesConfigUtil.spaPathTempSrc('**', '*')
     ],
     'exclude': [
       'node_modules',
@@ -48,12 +49,7 @@ function writeTSConfig() {
       '**/*.spec.ts'
     ],
     'compileOnSave': false,
-    'buildOnSave': false,
-    'angularCompilerOptions': {
-      'debug': true,
-      'genDir': './ngfactory',
-      'skipMetadataEmit': true
-    }
+    'buildOnSave': false
   };
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'), config);
@@ -69,14 +65,10 @@ function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
       // Node package name rather than a local path; otherwise TypeScript will treat them as
       // different types and Angular will throw an error when trying to inject an instance
       // of a class (such as SkyAuthHttp) by its type.
-      runtimeAlias: '@blackbaud/skyux-builder/runtime',
+      runtimeAlias: '@skyux-sdk/builder/runtime',
       useTemplateUrl: true
     }
   };
-
-  if (skyPagesConfig && skyPagesConfig.skyux && skyPagesConfig.skyux.importPath) {
-    skyPagesConfigOverrides.runtime.skyuxPathAlias = '../../' + skyPagesConfig.skyux.importPath;
-  }
 
   const spaPathTempSrc = skyPagesConfigUtil.spaPathTempSrc();
 
@@ -92,7 +84,23 @@ function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
   // before writing the file to disk.
   skyPagesModuleSource = assetsProcessor.processAssets(
     skyPagesModuleSource,
-    assetsProcessor.getAssetsUrl(skyPagesConfig, assetsBaseUrl, assetsRel)
+    assetsProcessor.getAssetsUrl(skyPagesConfig, assetsBaseUrl, assetsRel),
+    (filePathWithHash, physicalFilePath) => {
+
+      // File contents are not respected by @ngtools/webpack,
+      // so we need to write the locale files ourselves.
+      // See: https://github.com/angular/angular-cli/issues/6701
+      // See: https://github.com/angular/angular-cli/issues/8870
+      const path = require('path');
+      const newPath = path.resolve(
+        skyPagesConfigUtil.spaPath('dist'),
+        filePathWithHash
+      );
+
+      fs.ensureFileSync(newPath);
+      const contents = fs.readFileSync(physicalFilePath, { encoding: 'utf-8' });
+      fs.writeFileSync(newPath, contents);
+    }
   );
 
   fs.copySync(
@@ -119,6 +127,10 @@ function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
 
 function cleanupAot() {
   fs.removeSync(skyPagesConfigUtil.spaPathTemp());
+}
+
+function cleanupDist() {
+  fs.removeSync(skyPagesConfigUtil.spaPath('dist'));
 }
 
 function buildServe(argv, skyPagesConfig, webpack, isAot) {
@@ -170,6 +182,7 @@ function buildCompiler(argv, skyPagesConfig, webpack, isAot) {
  * @param {*} cancelProcessExit
  */
 function build(argv, skyPagesConfig, webpack) {
+  cleanupDist();
 
   const lintResult = tsLinter.lintSync();
   const isAot = skyPagesConfig &&
@@ -178,12 +191,12 @@ function build(argv, skyPagesConfig, webpack) {
 
   if (lintResult.exitCode > 0) {
     return Promise.reject(lintResult.errors);
-  } else {
-    localeAssetsProcessor.prepareLocaleFiles();
-    const name = argv.serve ? buildServe : buildCompiler;
-
-    return name(argv, skyPagesConfig, webpack, isAot);
   }
+
+  localeAssetsProcessor.prepareLocaleFiles();
+  const name = argv.serve ? buildServe : buildCompiler;
+
+  return name(argv, skyPagesConfig, webpack, isAot);
 }
 
 module.exports = build;

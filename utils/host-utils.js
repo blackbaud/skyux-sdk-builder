@@ -33,7 +33,7 @@ function resolve(url, localUrl, chunks, skyPagesConfig) {
   }
 
   const delimeter = url.indexOf('?') === -1 ? '?' : '&';
-  const encoded = new Buffer(JSON.stringify(config)).toString('base64');
+  const encoded = Buffer.from(JSON.stringify(config)).toString('base64');
   const base = skyPagesConfigUtil.getAppBase(skyPagesConfig);
   const resolved = `${host}${base}${url}${delimeter}local=true&_cfg=${encoded}`;
 
@@ -52,11 +52,14 @@ function getScripts(chunks) {
     return chunks.metadata;
   }
 
-  sorter.dependency(chunks).forEach((chunk) => {
+  sorter.dependency(chunks, undefined, {}).forEach((chunk) => {
     scripts.push({
       name: chunk.files[0]
     });
   });
+
+  // Webpack reversed the order of these scripts
+  scripts.reverse();
 
   return scripts;
 }
