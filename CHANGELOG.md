@@ -1,3 +1,7 @@
+# 3.0.0-rc.0 (2019-01-16)
+
+- Release candidate for SKY UX 3.
+
 # 1.30.0 (2018-11-26)
 
 - Added `SkyAuthHttpClientModule` that can be used in conjunction with Angular's `HttpClient` to make authenticated calls to services backed by Blackbaud ID. [blackbaud/skyux-http#11](https://github.com/blackbaud/skyux-http/pull/11)
