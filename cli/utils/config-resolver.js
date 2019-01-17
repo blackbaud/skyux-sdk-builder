@@ -40,7 +40,7 @@ function resolve(command, argv) {
     command,
     platform,
     process.cwd(),
-    'node_modules/**/skyux-sdk-builder-config/'
+    'node_modules/**/@skyux-sdk/builder-config/'
   ));
 
   let config;
