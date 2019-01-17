@@ -38,9 +38,14 @@ function writeTSConfig() {
         skyPagesConfigUtil.spaPath('node_modules/@types')
       ]
     },
+    'files': [
+      skyPagesConfigUtil.outPath('runtime', 'i18n', 'host-locale-provider.ts'),
+      skyPagesConfigUtil.outPath('runtime', 'bootstrapper.ts'),
+      skyPagesConfigUtil.outPath('runtime', 'config.ts'),
+      skyPagesConfigUtil.outPath('runtime', 'index.ts'),
+      skyPagesConfigUtil.outPath('runtime', 'runtime.module.ts')
+    ],
     'include': [
-      skyPagesConfigUtil.outPath('runtime', '**', '*'),
-      skyPagesConfigUtil.outPath('src', '**', '*'),
       skyPagesConfigUtil.spaPathTempSrc('**', '*')
     ],
     'exclude': [
