@@ -169,9 +169,14 @@ describe('cli utils run build', () => {
     expect(writeJSONSpy).toHaveBeenCalledWith(
       skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'),
       jasmine.objectContaining({
-        'include': [
-          skyPagesConfigUtil.outPath('runtime', '**', '*'),
-          skyPagesConfigUtil.outPath('src', '**', '*'),
+        files: [
+          skyPagesConfigUtil.outPath('runtime', 'i18n', 'host-locale-provider.ts'),
+          skyPagesConfigUtil.outPath('runtime', 'bootstrapper.ts'),
+          skyPagesConfigUtil.outPath('runtime', 'config.ts'),
+          skyPagesConfigUtil.outPath('runtime', 'index.ts'),
+          skyPagesConfigUtil.outPath('runtime', 'runtime.module.ts')
+        ],
+        include: [
           skyPagesConfigUtil.spaPathTempSrc('**', '*')
         ]
       })
