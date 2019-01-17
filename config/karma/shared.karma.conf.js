@@ -43,11 +43,13 @@ function getConfig(config) {
   // Using __dirname so this file can be extended from other configuration file locations
   const specBundle = `${__dirname}/../../utils/spec-bundle.js`;
   const specStyles = `${__dirname}/../../utils/spec-styles.js`;
+  const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
 
   const preprocessors = {};
 
   preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
+  preprocessors[polyfillsBundle] = ['webpack'];
 
   let onWriteReportIndex = -1;
   let coverageFailed;
@@ -63,6 +65,10 @@ function getConfig(config) {
       },
       {
         pattern: specStyles,
+        watched: false
+      },
+      {
+        pattern: polyfillsBundle,
         watched: false
       }
     ],
