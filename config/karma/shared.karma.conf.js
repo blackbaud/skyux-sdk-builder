@@ -47,9 +47,9 @@ function getConfig(config) {
 
   const preprocessors = {};
 
+  preprocessors[polyfillsBundle] = ['webpack'];
   preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
-  preprocessors[polyfillsBundle] = ['webpack'];
 
   let onWriteReportIndex = -1;
   let coverageFailed;
@@ -60,15 +60,15 @@ function getConfig(config) {
     exclude: [],
     files: [
       {
+        pattern: polyfillsBundle,
+        watched: false
+      },
+      {
         pattern: specBundle,
         watched: false
       },
       {
         pattern: specStyles,
-        watched: false
-      },
-      {
-        pattern: polyfillsBundle,
         watched: false
       }
     ],
