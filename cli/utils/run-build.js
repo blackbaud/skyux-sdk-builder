@@ -33,6 +33,9 @@ function writeTSConfig() {
       'lib': [
         'es2015',
         'dom'
+      ],
+      'typeRoots': [
+        '../../node_modules/@types'
       ]
     },
     'include': [
