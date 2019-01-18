@@ -33,24 +33,14 @@ function writeTSConfig() {
       'lib': [
         'es2015',
         'dom'
-      ],
-      'typeRoots': [
-        skyPagesConfigUtil.spaPath('node_modules/@types')
       ]
     },
-    'files': [
-      skyPagesConfigUtil.outPath('runtime', 'i18n', 'host-locale-provider.ts'),
-      skyPagesConfigUtil.outPath('runtime', 'bootstrapper.ts'),
-      skyPagesConfigUtil.outPath('runtime', 'config.ts'),
-      skyPagesConfigUtil.outPath('runtime', 'index.ts'),
-      skyPagesConfigUtil.outPath('runtime', 'runtime.module.ts')
-    ],
     'include': [
-      skyPagesConfigUtil.spaPathTempSrc('**', '*')
+      '../../node_modules/@skyux-sdk/builder/runtime/**/*',
+      '**/*'
     ],
     'exclude': [
       'node_modules',
-      skyPagesConfigUtil.outPath('node_modules'),
       '**/*.spec.ts'
     ],
     'compileOnSave': false,
