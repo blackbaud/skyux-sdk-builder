@@ -10,7 +10,7 @@
     "coverage:src-app": "node ./utils/cli-test.js dev-src-app",
     "e2e": "webdriver-manager update --standalone false --gecko false && npm run protractor",
     "protractor": "protractor ./config/protractor/protractor-dev.conf.js",
-    "lint": "node ./node_modules/.bin/eslint -c .eslintrc.json cli config lib loader plugin utils index.js",
+    "lint": "eslint -c .eslintrc.json cli config lib loader plugin utils index.js",
     "test": "npm run lint && npm run coverage && npm run e2e"
   },
   "repository": {
