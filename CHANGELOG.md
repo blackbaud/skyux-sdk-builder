@@ -1,3 +1,8 @@
+# 3.0.0-rc.1 (2019-01-22)
+
+- Added support for `@skyux-sdk/builder-config`. [#4](https://github.com/blackbaud/skyux-sdk-builder/pull/4)
+- Bugfix to address problems running `skyux build` and `skyux test` on Windows machines. [#4](https://github.com/blackbaud/skyux-sdk-builder/pull/4)
+
 # 3.0.0-rc.0 (2019-01-16)
 
 - Release candidate for SKY UX 3.
