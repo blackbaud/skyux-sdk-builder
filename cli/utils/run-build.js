@@ -35,17 +35,15 @@ function writeTSConfig() {
         'dom'
       ],
       'typeRoots': [
-        skyPagesConfigUtil.spaPath('node_modules/@types')
+        '../../node_modules/@types'
       ]
     },
     'include': [
-      skyPagesConfigUtil.outPath('runtime', '**', '*'),
-      skyPagesConfigUtil.outPath('src', '**', '*'),
-      skyPagesConfigUtil.spaPathTempSrc('**', '*')
+      '../../node_modules/@skyux-sdk/builder/runtime/**/*',
+      '**/*'
     ],
     'exclude': [
       'node_modules',
-      skyPagesConfigUtil.outPath('node_modules'),
       '**/*.spec.ts'
     ],
     'compileOnSave': false,

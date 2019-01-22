@@ -35,12 +35,12 @@ function resolve(command, argv) {
     ''
   );
 
-  // Using glob so we can find skyux-builder-config regardless of npm install location
+  // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
   let external = glob.sync(getPath(
     command,
     platform,
     process.cwd(),
-    'node_modules/**/skyux-builder-config/'
+    'node_modules/**/@skyux-sdk/builder-config/'
   ));
 
   let config;

@@ -169,10 +169,9 @@ describe('cli utils run build', () => {
     expect(writeJSONSpy).toHaveBeenCalledWith(
       skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'),
       jasmine.objectContaining({
-        'include': [
-          skyPagesConfigUtil.outPath('runtime', '**', '*'),
-          skyPagesConfigUtil.outPath('src', '**', '*'),
-          skyPagesConfigUtil.spaPathTempSrc('**', '*')
+        include: [
+          '../../node_modules/@skyux-sdk/builder/runtime/**/*',
+          '**/*'
         ]
       })
     );

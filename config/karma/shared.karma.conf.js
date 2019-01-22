@@ -43,9 +43,11 @@ function getConfig(config) {
   // Using __dirname so this file can be extended from other configuration file locations
   const specBundle = `${__dirname}/../../utils/spec-bundle.js`;
   const specStyles = `${__dirname}/../../utils/spec-styles.js`;
+  const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
 
   const preprocessors = {};
 
+  preprocessors[polyfillsBundle] = ['webpack'];
   preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
 
@@ -57,6 +59,10 @@ function getConfig(config) {
     frameworks: ['jasmine'],
     exclude: [],
     files: [
+      {
+        pattern: polyfillsBundle,
+        watched: false
+      },
       {
         pattern: specBundle,
         watched: false
