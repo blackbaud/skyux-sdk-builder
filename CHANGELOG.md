@@ -1,3 +1,7 @@
+# 3.0.0 (2019-01-23)
+
+- Major version release.
+
 # 3.0.0-rc.1 (2019-01-22)
 
 - Added support for `@skyux-sdk/builder-config`. [#4](https://github.com/blackbaud/skyux-sdk-builder/pull/4)
