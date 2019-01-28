@@ -14,13 +14,6 @@ import 'core-js/es6/map';
 import 'core-js/es6/weak-map';
 import 'core-js/es6/set';
 
-/* IE11 implements the `String.matches` function using a non-standard name. */
-// See: https://stackoverflow.com/a/53600646/6178885
-if (!Element.prototype.matches) {
-  Element.prototype.matches = (<any>Element.prototype).msMatchesSelector ||
-    Element.prototype.webkitMatchesSelector;
-}
-
 /* IE10 and IE11 requires the following for the Reflect API. */
 import 'core-js/es6/reflect';
 
