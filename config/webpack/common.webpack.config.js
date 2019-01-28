@@ -203,6 +203,19 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
           }
         }
       }
+    },
+
+    /**
+     * Angular 7 animations module has an internal check to determine if the environment is
+     * using Node. If it is, it manually removes the `String.matches` polyfill to avoid
+     * conflicts with Node's native matches function. Angular CLI automatically handles this
+     * behavior, but we need to manually unset Node's `process` property since we're using a custom
+     * webpack config (Angular checks if `process` exists on the global object to determine
+     * if the environment is running in Node).
+     * See: https://github.com/angular/angular/issues/24769#issuecomment-405498008
+     */
+    node: {
+      process: false
     }
   };
 }
