@@ -153,7 +153,7 @@
 
 - SKY UX libraries can now define their own locale files for localizing strings.  [#379](https://github.com/blackbaud/skyux-builder/pull/379)
 
-- Changed the Webpack source map devtool from `cheap-module-eval-source-map` to `source-map`.  This fixes source maps in Firefox.  [#384](https://github.com/blackbaud/skyux-builder/pull/384)
+- Changed the webpack source map devtool from `cheap-module-eval-source-map` to `source-map`.  This fixes source maps in Firefox.  [#384](https://github.com/blackbaud/skyux-builder/pull/384)
 
 - Added the ability to resolve a missing environment ID context before rendering the application.  For instance, if the `envid` parameter is required by your application, but none is supplied either through the query string or the SPA's `skyuxconfig.json` file, the user will be presented with a screen to select an environment. If the user is only in one environment, the application will automatically be reloaded with that environment.  [#399](https://github.com/blackbaud/skyux-builder/pull/399)
 
