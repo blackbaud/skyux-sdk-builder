@@ -1,3 +1,8 @@
+# 3.1.0 (2019-01-29)
+
+- Added support for `@skyux/config@3.3.0`. [#8](https://github.com/blackbaud/skyux-sdk-builder/pull/8)
+- Fixed webpack config to include `String.matches` polyfill in Internet Explorer 11. [#9](https://github.com/blackbaud/skyux-sdk-builder/pull/9)
+
 # 3.0.0 (2019-01-23)
 
 - Major version release.
