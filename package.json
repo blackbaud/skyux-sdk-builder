@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
