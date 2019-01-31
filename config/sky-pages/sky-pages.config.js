@@ -85,16 +85,17 @@ module.exports = {
 
     // Manually set after as it depends on properties set above
     config.runtime.app.base = this.getAppBase(config);
+    config.runtime.app.name = this.getAppName(config);
     return config;
   },
 
   /**
    * Reads the name field of package.json.
-   * Removes "blackbaud-skyux-spa-" and wraps in "/".
+   * Removes "blackbaud-skyux-spa-".
    * @name getAppName
    * @returns {String} appName
    */
-  getAppBase: function (skyPagesConfig) {
+  getAppName: function (skyPagesConfig) {
     let name = '';
 
     if (skyPagesConfig.skyux.name) {
@@ -111,7 +112,17 @@ module.exports = {
       }
     }
 
-    return '/' + name.replace(/blackbaud-skyux-spa-/gi, '') + '/';
+    return name;
+  },
+
+  /**
+   * Reads the name field of package.json.
+   * Removes "blackbaud-skyux-spa-" and wraps in "/".
+   * @name getAppName
+   * @returns {String} appName
+   */
+  getAppBase: function (skyPagesConfig) {
+    return '/' + this.getAppName(skyPagesConfig) + '/';
   },
 
   /**
