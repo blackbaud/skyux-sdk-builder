@@ -1,3 +1,7 @@
+# 3.2.0 (2019-02-01)
+
+- Added support for `@skyux/config@3.4.0` which exposes `config.runtime.app.name` property. [#14](https://github.com/blackbaud/skyux-sdk-builder/pull/14)
+
 # 3.1.0 (2019-01-29)
 
 - Added support for `@skyux/config@3.3.0`. [#8](https://github.com/blackbaud/skyux-sdk-builder/pull/8)
