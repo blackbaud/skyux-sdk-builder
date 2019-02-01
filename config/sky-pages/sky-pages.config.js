@@ -112,7 +112,7 @@ module.exports = {
       }
     }
 
-    return name;
+    return name.replace(/blackbaud-skyux-spa-/gi, '');
   },
 
   /**
