@@ -133,7 +133,7 @@
     "@skyux-sdk/pact": "3.1.0",
     "@skyux-sdk/testing": "3.1.0",
     "@skyux/assets": "3.0.0",
-    "@skyux/config": "3.3.0",
+    "@skyux/config": "3.4.0",
     "@skyux/core": "3.5.1",
     "@skyux/http": "3.2.0",
     "@skyux/i18n": "3.5.0",
