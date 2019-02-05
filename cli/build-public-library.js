@@ -64,14 +64,20 @@ function writeTSConfig() {
       'moduleResolution': 'node',
       'emitDecoratorMetadata': true,
       'experimentalDecorators': true,
+      'allowSyntheticDefaultImports': true,
       'sourceMap': true,
       'importHelpers': true,
+      'noEmitHelpers': true,
       'noImplicitAny': true,
       'declaration': true,
+      'skipLibCheck': true,
       'inlineSources': true,
       'lib': [
         'dom',
         'es6'
+      ],
+      'typeRoots': [
+        'node_modules/@types'
       ],
       'outDir': skyPagesConfigUtil.spaPath('dist'),
       'rootDir': skyPagesConfigUtil.spaPathTemp(),
@@ -98,7 +104,8 @@ function writeTSConfig() {
       'strictMetadataEmit': true,
       'strictInjectionParameters': true,
       'enableResourceInlining': true
-    }
+    },
+    'compileOnSave': false
   };
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.json'), config);
