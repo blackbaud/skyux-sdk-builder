@@ -98,7 +98,8 @@ function writeTSConfig() {
     'exclude': [
       'node_modules',
       '**/*.spec.ts',
-      '**/*.e2e-spec.ts'
+      '**/*.e2e-spec.ts',
+      '**/*.pact-spec.ts'
     ],
     'angularCompilerOptions': {
       'annotateForClosureCompiler': true,
