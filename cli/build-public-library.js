@@ -79,6 +79,9 @@ function writeTSConfig() {
       'typeRoots': [
         'node_modules/@types'
       ],
+      'types': [
+        'node'
+      ],
       'outDir': skyPagesConfigUtil.spaPath('dist'),
       'rootDir': skyPagesConfigUtil.spaPathTemp(),
       'baseUrl': '.',
