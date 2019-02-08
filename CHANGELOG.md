@@ -1,6 +1,7 @@
 # 3.2.1 (2019-02-07)
 
 - Fixed issue with resolving dependencies when building public libraries. [#16](https://github.com/blackbaud/skyux-sdk-builder/pull/16)
+- Fixed issue where saving a file would not trigger a refresh when running `skyux serve`. [#19](https://github.com/blackbaud/skyux-sdk-builder/pull/19)
 
 # 3.2.0 (2019-02-01)
 
