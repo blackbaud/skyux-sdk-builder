@@ -1,3 +1,8 @@
+# 3.2.1 (2019-02-07)
+
+- Fixed issue with resolving dependencies when building public libraries. [#16](https://github.com/blackbaud/skyux-sdk-builder/pull/16)
+- Fixed issue where saving file did not trigger refresh when running `skyux serve`. [#19](https://github.com/blackbaud/skyux-sdk-builder/pull/19)
+
 # 3.2.0 (2019-02-01)
 
 - Added support for `@skyux/config@3.4.0`, which exposes `config.runtime.app.name` property. [#14](https://github.com/blackbaud/skyux-sdk-builder/pull/14)
