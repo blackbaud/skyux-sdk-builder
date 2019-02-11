@@ -1,3 +1,7 @@
+# 3.2.2 (2019-02-11)
+
+- Fixed TypeScript config to properly locate type roots when building public libraries. [#20](https://github.com/blackbaud/skyux-sdk-builder/pull/20)
+
 # 3.2.1 (2019-02-07)
 
 - Fixed issue with resolving dependencies when building public libraries. [#16](https://github.com/blackbaud/skyux-sdk-builder/pull/16)
