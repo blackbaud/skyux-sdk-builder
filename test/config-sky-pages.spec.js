@@ -14,13 +14,36 @@ describe('config sky-pages', () => {
   it('should read name from skyuxconfig.json else package.json', () => {
     const name = 'sky-pages-name';
     const lib = require('../config/sky-pages/sky-pages.config');
-    const appBase = lib.getAppBase({
+    const config = {
       skyux: {
         name: name,
         mode: 'advanced'
       }
-    });
+    };
+
+    const appBase = lib.getAppBase(config);
+    const appName = lib.getAppName(config);
+
     expect(appBase).toEqual('/' + name + '/');
+    expect(appName).toEqual(name);
+  });
+
+  it('should remove "blackbaud-skyux-spa" from the name and base', () => {
+    const name = 'blackbaud-skyux-spa-my-custom-spa';
+    const lib = require('../config/sky-pages/sky-pages.config');
+    const config = {
+      skyux: {
+        name: name,
+        mode: 'advanced'
+      }
+    };
+
+    const appBase = lib.getAppBase(config);
+    const appName = lib.getAppName(config);
+    const cleanName = name.replace(/blackbaud-skyux-spa-/gi, '');
+
+    expect(appBase).toEqual('/' + cleanName + '/');
+    expect(appName).toEqual(cleanName);
   });
 
   it('should load the config files that exist in order', () => {

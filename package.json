@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.1.0",
+  "version": "3.2.2",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -108,6 +108,7 @@
     "source-map-inline-loader": "1.0.0",
     "source-map-loader": "0.2.4",
     "style-loader": "0.23.1",
+    "tsickle": "0.34.2",
     "url": "0.11.0",
     "util": "0.11.1",
     "webpack": "4.29.0",
@@ -132,7 +133,7 @@
     "@skyux-sdk/pact": "3.1.0",
     "@skyux-sdk/testing": "3.1.0",
     "@skyux/assets": "3.0.0",
-    "@skyux/config": "3.3.0",
+    "@skyux/config": "3.4.0",
     "@skyux/core": "3.5.1",
     "@skyux/http": "3.2.0",
     "@skyux/i18n": "3.5.0",

@@ -71,13 +71,13 @@ function writeTSConfig() {
       'noImplicitAny': true,
       'declaration': true,
       'skipLibCheck': true,
+      'inlineSources': true,
       'lib': [
         'dom',
         'es6'
       ],
-      'types': [
-        'jasmine',
-        'node'
+      'typeRoots': [
+        skyPagesConfigUtil.spaPath('node_modules', '@types')
       ],
       'outDir': skyPagesConfigUtil.spaPath('dist'),
       'rootDir': skyPagesConfigUtil.spaPathTemp(),
@@ -91,7 +91,22 @@ function writeTSConfig() {
         ]
       }
     },
-    'files': getEntryPointFiles()
+    'files': getEntryPointFiles(),
+    'exclude': [
+      'node_modules',
+      '**/*.spec.ts',
+      '**/*.e2e-spec.ts',
+      '**/*.pact-spec.ts'
+    ],
+    'angularCompilerOptions': {
+      'annotateForClosureCompiler': true,
+      'fullTemplateTypeCheck': false,
+      'skipTemplateCodegen': true,
+      'strictMetadataEmit': true,
+      'strictInjectionParameters': true,
+      'enableResourceInlining': true
+    },
+    'compileOnSave': false
   };
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.json'), config);

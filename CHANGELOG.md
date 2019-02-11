@@ -1,3 +1,16 @@
+# 3.2.2 (2019-02-11)
+
+- Fixed TypeScript config to properly locate type roots when building public libraries. [#20](https://github.com/blackbaud/skyux-sdk-builder/pull/20)
+
+# 3.2.1 (2019-02-07)
+
+- Fixed issue with resolving dependencies when building public libraries. [#16](https://github.com/blackbaud/skyux-sdk-builder/pull/16)
+- Fixed issue where saving file did not trigger refresh when running `skyux serve`. [#19](https://github.com/blackbaud/skyux-sdk-builder/pull/19)
+
+# 3.2.0 (2019-02-01)
+
+- Added support for `@skyux/config@3.4.0`, which exposes `config.runtime.app.name` property. [#14](https://github.com/blackbaud/skyux-sdk-builder/pull/14)
+
 # 3.1.0 (2019-01-29)
 
 - Added support for `@skyux/config@3.3.0`. [#8](https://github.com/blackbaud/skyux-sdk-builder/pull/8)

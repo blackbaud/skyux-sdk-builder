@@ -93,10 +93,6 @@ function getWebpackConfig(argv, skyPagesConfig) {
         key: fs.readFileSync(path.join(__dirname, '../../ssl/server.key')),
         cert: fs.readFileSync(path.join(__dirname, '../../ssl/server.crt'))
       },
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000
-      },
       publicPath: skyPagesConfigUtil.getAppBase(skyPagesConfig)
     },
 
