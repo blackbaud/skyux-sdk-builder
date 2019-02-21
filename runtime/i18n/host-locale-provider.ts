@@ -18,13 +18,7 @@ import {
 
 @Injectable()
 export class SkyAppHostLocaleProvider extends SkyAppLocaleProvider {
-  constructor(
-    private windowRef: SkyAppWindowRef
-  ) {
-    super();
-  }
-
-  public getLocaleInfo(): Observable<SkyAppLocaleInfo> {
+  public get currentLocale(): string {
     let locale: string | undefined;
 
     const skyuxHost = (this.windowRef.nativeWindow as any).SKYUX_HOST;
@@ -36,8 +30,20 @@ export class SkyAppHostLocaleProvider extends SkyAppLocaleProvider {
 
     locale = locale || this.defaultLocale;
 
-    return of({
-      locale: locale
-    });
+    return locale;
+  }
+
+  constructor(
+    private windowRef: SkyAppWindowRef
+  ) {
+    super();
+  }
+
+  public getLocaleInfo(): Observable<SkyAppLocaleInfo> {
+    const localeInfo: SkyAppLocaleInfo = {
+      locale: this.currentLocale
+    };
+
+    return of(localeInfo);
   }
 }
