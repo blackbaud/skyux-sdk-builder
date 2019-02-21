@@ -43,8 +43,10 @@ function writeTSConfig() {
       '**/*'
     ],
     'exclude': [
+      'fixtures',
       'node_modules',
-      '**/*.spec.ts'
+      '**/*.spec.ts',
+      '**/*.fixture.ts'
     ],
     'compileOnSave': false,
     'buildOnSave': false
