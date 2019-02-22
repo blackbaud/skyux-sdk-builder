@@ -1,3 +1,9 @@
+# 3.3.0 (2019-02-22)
+
+- Updated package dependencies. [#21](https://github.com/blackbaud/skyux-sdk-builder/pull/21)
+- Removed `web-animations-js` from dependencies since Angular no longer requires it for older browsers. [#12](https://github.com/blackbaud/skyux-sdk-builder/pull/12)
+- Fixed `skyux build` to not include test fixtures in the bundle. [#40](https://github.com/blackbaud/skyux-sdk-builder/pull/40)
+
 # 3.2.2 (2019-02-11)
 
 - Fixed TypeScript config to properly locate type roots when building public libraries. [#20](https://github.com/blackbaud/skyux-sdk-builder/pull/20)
