@@ -10,7 +10,7 @@ import { SkyAppResourcesService } from '@skyux/i18n';
 import { SkyAppResourcesTestService } from '@skyux/i18n/testing';
 
 @NgModule({
-  imports: [
+  exports: [
     RouterTestingModule,
     SkyPagesModule
   ],
