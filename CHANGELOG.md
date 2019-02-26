@@ -1,3 +1,8 @@
+# 3.4.0 (2019-02-26)
+
+- Added support for `@blackbaud/skyux-lib-help@2.0.0`. [#45](https://github.com/blackbaud/skyux-sdk-builder/pull/45)
+- Fixed `SkyAppTestModule` to properly export its components. [#41](https://github.com/blackbaud/skyux-sdk-builder/pull/41)
+
 # 3.3.0 (2019-02-22)
 
 - Updated package dependencies. [#21](https://github.com/blackbaud/skyux-sdk-builder/pull/21)
