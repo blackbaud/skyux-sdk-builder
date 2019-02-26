@@ -14,6 +14,10 @@ import { SkyAppResourcesTestService } from '@skyux/i18n/testing';
     RouterTestingModule,
     SkyPagesModule
   ],
+  exports: [
+    RouterTestingModule,
+    SkyPagesModule
+  ],
   providers: [
     {
       provide: APP_BASE_HREF,
