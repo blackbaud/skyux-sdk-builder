@@ -192,7 +192,7 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
             priority: -3 // zero is default
           },
           polyfill: {
-            test: /[\\/]node_modules[\\/](core-js|web-animations-js|zone\.js)[\\/]/,
+            test: /[\\/]node_modules[\\/](core-js|zone\.js)[\\/]/,
             name: 'pollyfill', // Chunk names cannot match an entry point.
             priority: -2
           },
