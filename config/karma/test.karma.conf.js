@@ -8,18 +8,24 @@
  */
 function getConfig(config) {
   require('./shared.karma.conf')(config);
+
   let configuration = {
-    browsers: [
-      'ChromeNoSandbox'
-    ],
     customLaunchers: {
-      ChromeNoSandbox: {
+      SimpleChrome: {
         base: 'Chrome',
-        flags: ['--no-sandbox']
+        flags: [
+          '--ignore-certificate-errors',
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-web-security',
+          '--disable-gpu',
+          '--hide-scrollbars'
+        ]
       }
-    },
-    concurrency: Infinity
+    }
   };
+
+  configuration.browsers = ['SimpleChrome'];
 
   config.set(configuration);
 }
