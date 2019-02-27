@@ -10,19 +10,16 @@ function getConfig(config) {
   require('./shared.karma.conf')(config);
   let configuration = {
     browsers: [
-      'Chrome'
+      'ChromeNoSandbox'
     ],
     customLaunchers: {
-      Chrome_travis_ci: {
+      ChromeNoSandbox: {
         base: 'Chrome',
         flags: ['--no-sandbox']
       }
-    }
+    },
+    concurrency: Infinity
   };
-
-  if (process.env.TRAVIS) {
-    configuration.browsers = ['Chrome_travis_ci'];
-  }
 
   config.set(configuration);
 }
