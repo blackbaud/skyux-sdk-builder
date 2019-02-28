@@ -32,11 +32,11 @@ function getConfig(config) {
   const path = require('path');
   const srcPath = path.join(process.cwd(), 'src');
 
+  const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
   const testWebpackConfig = require('../webpack/test.webpack.config');
   const remapIstanbul = require('remap-istanbul');
 
   const utils = require('istanbul').utils;
-  const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 
   // See minimist documentation regarding `argv._` https://github.com/substack/minimist
   const skyPagesConfig = skyPagesConfigUtil.getSkyPagesConfig(argv._[0]);
@@ -44,11 +44,11 @@ function getConfig(config) {
   // Using __dirname so this file can be extended from other configuration file locations
   const specBundle = `${__dirname}/../../utils/spec-bundle.js`;
   const specStyles = `${__dirname}/../../utils/spec-styles.js`;
-  // const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
+  const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
 
   const preprocessors = {};
 
-  // preprocessors[polyfillsBundle] = ['webpack'];
+  preprocessors[polyfillsBundle] = ['webpack'];
   preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
 
@@ -62,10 +62,10 @@ function getConfig(config) {
     frameworks: ['jasmine'],
     exclude: [],
     files: [
-      // {
-      //   pattern: polyfillsBundle,
-      //   watched: false
-      // },
+      {
+        pattern: polyfillsBundle,
+        watched: false
+      },
       {
         pattern: specBundle,
         watched: false
@@ -196,6 +196,9 @@ function getConfig(config) {
       level: 'log'
     },
     reporters: ['mocha', 'coverage'],
+    mochaReporter: {
+      ignoreSkipped: true
+    },
     port: 9876,
     colors: logger.logColor,
     logLevel: config.LOG_INFO,

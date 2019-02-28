@@ -45,6 +45,11 @@ function getWebpackConfig(skyPagesConfig, argv) {
 
   let config = {
     watch: true,
+    watchOptions: {
+      ignored: [
+        'node_modules'
+      ]
+    },
 
     mode: 'development',
 
