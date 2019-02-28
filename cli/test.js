@@ -10,7 +10,6 @@ function test(command, argv) {
   const Server = require('karma').Server;
   const path = require('path');
   const glob = require('glob');
-  const tsLinter = require('./utils/ts-linter');
   const configResolver = require('./utils/config-resolver');
   const localeAssetsProcessor = require('../lib/locale-assets-processor');
 
@@ -23,38 +22,9 @@ function test(command, argv) {
   const specsPath = path.resolve(process.cwd(), 'src/app/**/*.spec.ts');
   const specsGlob = glob.sync(specsPath);
 
-  let lintResult;
-
-  const onRunStart = () => {
-    localeAssetsProcessor.prepareLocaleFiles();
-    lintResult = tsLinter.lintSync();
-  };
-
-  const onRunComplete = () => {
-    if (lintResult && lintResult.exitCode > 0) {
-      // Pull the logger out of the execution stream to let it print
-      // after karma's coverage reporter.
-      setTimeout(() => {
-        logger.error('Process failed due to linting errors:');
-        lintResult.errors.forEach(error => logger.error(error));
-      }, 10);
-    }
-  };
-
   const onExit = (exitCode) => {
-    if (exitCode === 0) {
-      if (lintResult) {
-        exitCode = lintResult.exitCode;
-      }
-    }
-
     logger.info(`Karma has exited with ${exitCode}.`);
     process.exit(exitCode);
-  };
-
-  const onBrowserError = () => {
-    const stopper = require('karma').stopper;
-    stopper.stop({}, () => onExit(1));
   };
 
   if (specsGlob.length === 0) {
@@ -62,10 +32,9 @@ function test(command, argv) {
     return onExit(0);
   }
 
+  localeAssetsProcessor.prepareLocaleFiles();
+
   const server = new Server(karmaConfig, onExit);
-  server.on('run_start', onRunStart);
-  server.on('run_complete', onRunComplete);
-  server.on('browser_error', onBrowserError);
   server.start();
 }
 

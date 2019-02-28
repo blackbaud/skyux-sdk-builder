@@ -44,6 +44,8 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let alias = aliasBuilder.buildAliasList(skyPagesConfig);
 
   let config = {
+    watch: true,
+
     mode: 'development',
 
     devtool: 'inline-source-map',
