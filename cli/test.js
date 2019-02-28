@@ -26,27 +26,27 @@ function test(command, argv) {
   let lintResult;
 
   const onRunStart = () => {
-    localeAssetsProcessor.prepareLocaleFiles();
-    lintResult = tsLinter.lintSync();
+    // localeAssetsProcessor.prepareLocaleFiles();
+    // lintResult = tsLinter.lintSync();
   };
 
   const onRunComplete = () => {
-    if (lintResult && lintResult.exitCode > 0) {
-      // Pull the logger out of the execution stream to let it print
-      // after karma's coverage reporter.
-      setTimeout(() => {
-        logger.error('Process failed due to linting errors:');
-        lintResult.errors.forEach(error => logger.error(error));
-      }, 10);
-    }
+    // if (lintResult && lintResult.exitCode > 0) {
+    //   // Pull the logger out of the execution stream to let it print
+    //   // after karma's coverage reporter.
+    //   setTimeout(() => {
+    //     logger.error('Process failed due to linting errors:');
+    //     lintResult.errors.forEach(error => logger.error(error));
+    //   }, 10);
+    // }
   };
 
   const onExit = (exitCode) => {
-    if (exitCode === 0) {
-      if (lintResult) {
-        exitCode = lintResult.exitCode;
-      }
-    }
+    // if (exitCode === 0) {
+    //   if (lintResult) {
+    //     exitCode = lintResult.exitCode;
+    //   }
+    // }
 
     logger.info(`Karma has exited with ${exitCode}.`);
     process.exit(exitCode);
