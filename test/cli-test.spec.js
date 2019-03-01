@@ -22,6 +22,7 @@ describe('cli test', () => {
     spyOn(process, 'exit').and.returnValue();
     spyOn(logger, 'info').and.returnValue();
     spyOn(logger, 'error').and.returnValue();
+    spyOn(logger, 'warn').and.returnValue();
 
     mock('../cli/utils/ts-linter', {
       lintSync: () => {
@@ -292,9 +293,8 @@ describe('cli test', () => {
     });
     const test = mock.reRequire('../cli/test');
     test('test');
-    expect(logger.info).toHaveBeenCalledWith(
-      'Karma has exited with 1.'
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Experienced a browser error, but letting karma retry.'
     );
-    expect(process.exit).toHaveBeenCalledWith(1);
   });
 });

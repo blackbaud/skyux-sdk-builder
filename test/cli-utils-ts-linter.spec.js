@@ -9,6 +9,51 @@ describe('cli util ts-linter', () => {
     mock.stopAll();
   });
 
+  function setupMockLint(output, failures, throwError) {
+    const spyLinter = function() {
+      const instance = jasmine.createSpyObj('linter', [
+        'lint',
+        'getResult'
+      ]);
+
+      instance.getResult.and.returnValue({
+        errorCount: failures.length,
+        failures: failures,
+        output: output
+      });
+
+      if (throwError) {
+        instance.lint.and.callFake(() => {
+          throw new Error(throwError);
+        });
+      }
+
+      return instance;
+    };
+
+    spyLinter.createProgram = jasmine.createSpy('createProgram').and.returnValue({
+      getSourceFile: () => ({
+        getFullText: () => {}
+      })
+    });
+
+    spyLinter.getFileNames = jasmine.createSpy('getFileNames').and.returnValue([
+      'some-file.js'
+    ]);
+
+    mock('tslint', {
+      Configuration: {
+        findConfiguration: () => ({
+          results: {}
+        })
+      },
+      Formatters: jasmine.createSpy('formatter'),
+      Linter: spyLinter
+    });
+
+    return spyLinter;
+  }
+
   it('should expose a lintSync method', () => {
     spyOn(logger, 'info').and.returnValue();
     mock('../config/sky-pages/sky-pages.config', {
@@ -18,43 +63,40 @@ describe('cli util ts-linter', () => {
     expect(typeof tsLinter.lintSync).toEqual('function');
   });
 
-  it('should spawn tslint', () => {
-    let _executed = false;
-    spyOn(logger, 'info').and.returnValue();
-    mock('../config/sky-pages/sky-pages.config', {
-      spaPath: (filePath) => filePath
-    });
-    mock('cross-spawn', {
-      sync: () => {
-        _executed = true;
-        return {
-          status: 0,
-          output: [new Buffer('some error')]
-        };
-      }
-    });
-    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync();
-    expect(_executed).toEqual(true);
-    expect(result.exitCode).toEqual(0);
-  });
-
-  it('should log an error if linting errors found', () => {
+  it('should catch a fatal error', () => {
+    const error = 'custom-thrown-error';
     spyOn(logger, 'info').and.returnValue();
     spyOn(logger, 'error').and.returnValue();
     mock('../config/sky-pages/sky-pages.config', {
       spaPath: (filePath) => filePath
     });
-    mock('cross-spawn', {
-      sync: () => {
-        return {
-          status: 1,
-          output: [new Buffer('some error'), new Buffer('another error')]
-        };
-      }
-    });
+
+    const instance = setupMockLint('', [], error);
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     const result = tsLinter.lintSync();
+
+    expect(result.errorOutput.toString()).toEqual(`Error: ${ error }`);
+    expect(result.exitCode).toEqual(2);
+  });
+
+  it('should log an error if linting errors found', () => {
+    const output = 'TEST OUTPUT';
+    const errors = ['TEST ERROR'];
+
+    spyOn(logger, 'info').and.returnValue();
+    spyOn(logger, 'error').and.returnValue();
+    mock('../config/sky-pages/sky-pages.config', {
+      spaPath: (filePath) => filePath
+    });
+
+    setupMockLint(output, errors);
+
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    const result = tsLinter.lintSync();
+
+    expect(result.errors).toEqual(errors)
+    expect(result.errorOutput).toEqual('\n' + output);
+
     expect(result.exitCode).toEqual(1);
     expect(logger.error).toHaveBeenCalled();
   });
@@ -62,19 +104,17 @@ describe('cli util ts-linter', () => {
   it('should not log an error if linting errors are not found', () => {
     spyOn(logger, 'info').and.returnValue();
     spyOn(logger, 'error').and.returnValue();
+
     mock('../config/sky-pages/sky-pages.config', {
       spaPath: (filePath) => filePath
     });
-    mock('cross-spawn', {
-      sync: () => {
-        return {
-          status: 0,
-          output: [null, new Buffer('')]
-        };
-      }
-    });
+    setupMockLint('', []);
+
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     const result = tsLinter.lintSync();
+
+    expect(result.errors).toEqual([]);
+    expect(result.errorOutput).toEqual('');
     expect(result.exitCode).toEqual(0);
     expect(logger.error).not.toHaveBeenCalled();
   });

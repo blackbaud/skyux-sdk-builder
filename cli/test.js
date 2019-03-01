@@ -31,12 +31,11 @@ function test(command, argv) {
   };
 
   const onRunComplete = () => {
+    // Print linting errors again after coverage reporter
     if (lintResult && lintResult.exitCode > 0) {
-      // Pull the logger out of the execution stream to let it print
-      // after karma's coverage reporter.
       setTimeout(() => {
-        logger.error('Process failed due to linting errors:');
-        lintResult.errors.forEach(error => logger.error(error));
+        logger.error('TSLlint errors displayed again for convenience:');
+        logger.error(lintResult.errorOutput);
       }, 10);
     }
   };
@@ -52,6 +51,10 @@ function test(command, argv) {
     process.exit(exitCode);
   };
 
+  const onBrowserError = () => {
+    logger.warn('Experienced a browser error, but letting karma retry.');
+  };
+
   if (specsGlob.length === 0) {
     logger.info('No spec files located. Skipping test command.');
     return onExit(0);
@@ -60,6 +63,7 @@ function test(command, argv) {
   const server = new Server(karmaConfig, onExit);
   server.on('run_start', onRunStart);
   server.on('run_complete', onRunComplete);
+  server.on('browser_error', onBrowserError);
   server.start();
 }
 
