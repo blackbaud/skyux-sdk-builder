@@ -1,51 +1,58 @@
 /*jslint node: true */
 'use strict';
 
-const spawn = require('cross-spawn');
 const logger = require('@blackbaud/skyux-logger');
+const tslint = require('tslint');
+const { Configuration, Linter } = tslint;
+
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
-const flags = [
-  '--project',
-  skyPagesConfigUtil.spaPath('tsconfig.json'),
-  '--config',
-  skyPagesConfigUtil.spaPath('tslint.json'),
-  '--exclude',
-  '**/node_modules/**/*.ts'
-];
+const options = {
+  fix: false,
+  formatter: tslint.Formatters.StylishFormatter
+};
 
-function lintSync() {
-  logger.info('Starting TSLint...');
+const lintJson = skyPagesConfigUtil.spaPath('tslint.json')
+const configJson = skyPagesConfigUtil.spaPath('tsconfig.json');
+const program = Linter.createProgram(configJson, '.');
+const linter = new Linter(options, program);
 
-  const spawnResult = spawn.sync('./node_modules/.bin/tslint', flags);
+function plural(word, arr) {
+  return `${ arr.length } ${ word }${ arr.length === 1 ? '' : 's' }`;
+}
 
-  // Convert buffers to strings.
-  let output = [];
-  spawnResult.output.forEach((buffer) => {
-    if (buffer === null) {
-      return;
-    }
-
-    const str = buffer.toString().trim();
-    if (str) {
-      output.push(str);
-    }
-  });
-
-  // Convert multi-line errors into single errors.
+function lintSync () {
   let errors = [];
-  output.forEach((str) => {
-    errors = errors.concat(str.split(/\r?\n/));
-  });
+  let exitCode = 0;
 
-  // Print linting results to console.
-  errors.forEach(error => logger.error(error));
-  const plural = (errors.length === 1) ? '' : 's';
-  logger.info(`TSLint finished with ${errors.length} error${plural}.`);
+  try {
+    const files = Linter.getFileNames(program);
+    logger.info(`TSLint started. Found ${ plural('file', files) }.`);
+
+    files.forEach((file) => {
+      logger.verbose(`Linting ${file}.`);
+      const contents = program.getSourceFile(file).getFullText();
+      const config = Configuration.findConfiguration(lintJson, file).results;
+      linter.lint(file, contents, config);
+    });
+
+    const result = linter.getResult();
+    logger.info(`TSLint finished. Found ${ plural('error', result.failures) }.`);
+
+    if (result.errorCount) {
+      errors = result.failures;
+      logger.error(`\n${ result.output }`);
+      exitCode = 1;
+    }
+
+  } catch (err) {
+    logger.error(err);
+    exitCode = 2;
+  }
 
   return {
-    exitCode: spawnResult.status,
-    errors: errors
+    errors: errors,
+    exitCode: exitCode
   };
 }
 
