@@ -6,11 +6,12 @@ const tslint = require('tslint');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
 const { Configuration, Linter, Formatters } = tslint;
-const lintJson = skyPagesConfigUtil.spaPath('tslint.json')
+const lintJson = skyPagesConfigUtil.spaPath('tslint.json');
 const configJson = skyPagesConfigUtil.spaPath('tsconfig.json');
 
 function plural(word, arr) {
-  return `${ arr.length } ${ word }${ arr.length === 1 ? '' : 's' }`;
+  const suffix = arr.length === 1 ? '' : 's';
+  return `${arr.length} ${word}${suffix}`;
 }
 
 function lintSync() {
@@ -27,7 +28,7 @@ function lintSync() {
 
   try {
     const files = Linter.getFileNames(program);
-    logger.info(`TSLint started. Found ${ plural('file', files) }.`);
+    logger.info(`TSLint started. Found ${plural('file', files)}.`);
 
     files.forEach((file) => {
       logger.verbose(`Linting ${file}.`);
@@ -37,7 +38,7 @@ function lintSync() {
     });
 
     const result = instance.getResult();
-    logger.info(`TSLint finished. Found ${ plural('error', result.failures) }.`);
+    logger.info(`TSLint finished. Found ${plural('error', result.failures)}.`);
 
     if (result.errorCount) {
       errors = result.failures;
