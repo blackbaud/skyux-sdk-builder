@@ -34,7 +34,7 @@ function test(command, argv) {
     // Print linting errors again after coverage reporter
     if (lintResult && lintResult.exitCode > 0) {
       setTimeout(() => {
-        logger.error('TSLlint errors displayed again for convenience:');
+        logger.error('TSLint errors displayed again for convenience:');
         logger.error(lintResult.errorOutput);
       }, 10);
     }
