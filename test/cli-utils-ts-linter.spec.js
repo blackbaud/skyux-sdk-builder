@@ -9,8 +9,17 @@ describe('cli util ts-linter', () => {
     mock.stopAll();
   });
 
-  function setupMockLint(output, failures, throwError) {
-    const spyLinter = function() {
+  function setupTest(output, failures, fixes, throwError) {
+    spyOn(logger, 'info').and.returnValue();
+    spyOn(logger, 'error').and.returnValue();
+
+    mock('../config/sky-pages/sky-pages.config', {
+      spaPath: (filePath) => filePath
+    });
+
+    const spyLinter = jasmine.createSpy('tslint');
+
+    spyLinter.and.callFake(() => {
       const instance = jasmine.createSpyObj('linter', [
         'lint',
         'getResult'
@@ -19,7 +28,8 @@ describe('cli util ts-linter', () => {
       instance.getResult.and.returnValue({
         errorCount: failures.length,
         failures: failures,
-        output: output
+        output: output,
+        fixes: fixes
       });
 
       if (throwError) {
@@ -29,7 +39,7 @@ describe('cli util ts-linter', () => {
       }
 
       return instance;
-    };
+    });
 
     spyLinter.createProgram = jasmine.createSpy('createProgram').and.returnValue({
       getSourceFile: () => ({
@@ -41,13 +51,22 @@ describe('cli util ts-linter', () => {
       'some-file.js'
     ]);
 
+    const spyFormat = jasmine.createSpy('format');
+    spyLinter.spyFormat = spyFormat;
+
     mock('tslint', {
+      findFormatter: () => {
+        return function () {
+          return {
+            format: spyFormat
+          }
+        }
+      },
       Configuration: {
         findConfiguration: () => ({
           results: {}
         })
       },
-      Formatters: jasmine.createSpy('formatter'),
       Linter: spyLinter
     });
 
@@ -55,44 +74,31 @@ describe('cli util ts-linter', () => {
   }
 
   it('should expose a lintSync method', () => {
-    spyOn(logger, 'info').and.returnValue();
-    mock('../config/sky-pages/sky-pages.config', {
-      spaPath: (filePath) => filePath
-    });
+    setupTest('', [], []);
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     expect(typeof tsLinter.lintSync).toEqual('function');
   });
 
   it('should catch a fatal error', () => {
-    const error = 'custom-thrown-error';
-    spyOn(logger, 'info').and.returnValue();
-    spyOn(logger, 'error').and.returnValue();
-    mock('../config/sky-pages/sky-pages.config', {
-      spaPath: (filePath) => filePath
-    });
 
-    const instance = setupMockLint('', [], error);
+    const error = 'custom-thrown-error';
+    const instance = setupTest('', [], [], error);
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync();
+    const result = tsLinter.lintSync({});
 
     expect(result.errorOutput.toString()).toEqual(`Error: ${ error }`);
     expect(result.exitCode).toEqual(2);
   });
 
   it('should log an error if linting errors found', () => {
+
     const output = 'TEST OUTPUT';
     const errors = ['TEST ERROR'];
 
-    spyOn(logger, 'info').and.returnValue();
-    spyOn(logger, 'error').and.returnValue();
-    mock('../config/sky-pages/sky-pages.config', {
-      spaPath: (filePath) => filePath
-    });
-
-    setupMockLint(output, errors);
+    setupTest(output, errors, []);
 
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync();
+    const result = tsLinter.lintSync({});
 
     expect(result.errors).toEqual(errors)
     expect(result.errorOutput).toEqual('\n' + output);
@@ -102,20 +108,35 @@ describe('cli util ts-linter', () => {
   });
 
   it('should not log an error if linting errors are not found', () => {
-    spyOn(logger, 'info').and.returnValue();
-    spyOn(logger, 'error').and.returnValue();
 
-    mock('../config/sky-pages/sky-pages.config', {
-      spaPath: (filePath) => filePath
-    });
-    setupMockLint('', []);
+    setupTest('', [], []);
 
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync();
+    const result = tsLinter.lintSync({});
 
-    expect(result.errors).toEqual([]);
-    expect(result.errorOutput).toEqual('');
     expect(result.exitCode).toEqual(0);
     expect(logger.error).not.toHaveBeenCalled();
+  });
+
+  it('should pass argv.fix to options and log fixes', () => {
+    const fixes = ['simple-fix'];
+
+    const instance = setupTest('', [], fixes);
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    const result = tsLinter.lintSync({ fix: true });
+
+    expect(instance.spyFormat.calls.mostRecent().args[0]).toEqual(fixes);
+    expect(instance.calls.mostRecent().args[0]).toEqual({
+      fix: true,
+      formatter: 'stylish'
+    });
+  });
+
+  it('should set formatter to vso if platform flag is vsts', () => {
+    const instance = setupTest('', [], []);
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    const result = tsLinter.lintSync({ platform: 'vsts' });
+
+    expect(instance.calls.mostRecent().args[0].formatter).toBe('vso');
   });
 });

@@ -5,7 +5,7 @@ const logger = require('@blackbaud/skyux-logger');
 const tslint = require('tslint');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
-const { Configuration, Linter, Formatters } = tslint;
+const { Configuration, Linter, findFormatter } = tslint;
 const lintJson = skyPagesConfigUtil.spaPath('tslint.json');
 const configJson = skyPagesConfigUtil.spaPath('tsconfig.json');
 
@@ -14,11 +14,24 @@ function plural(word, arr) {
   return `${arr.length} ${word}${suffix}`;
 }
 
-function lintSync() {
+function getOptions(argv) {
   const options = {
-    fix: false,
-    formatter: Formatters.StylishFormatter
+    formatter: 'stylish'
   };
+
+  if (argv.fix) {
+    options.fix = true;
+  }
+
+  if (argv.platform === 'vsts') {
+    options.formatter = 'vso';
+  }
+
+  return options;
+}
+
+function lintSync(argv) {
+  const options = getOptions(argv);
   const program = Linter.createProgram(configJson, skyPagesConfigUtil.spaPath());
   const instance = new Linter(options, program);
 
@@ -40,6 +53,16 @@ function lintSync() {
     const result = instance.getResult();
     logger.info(`TSLint finished. Found ${plural('error', result.failures)}.`);
 
+    // Necessary since stylish report doesn't handle fixes
+    // This passes in the fixes as if they were errors to the formatter.
+    if (result.fixes.length) {
+      const Formatter = findFormatter(options.formatter);
+      const formatter = new Formatter();
+
+      logger.info(`TSLint fixed ${plural('error', result.fixes)}.\n`);
+      logger.info(formatter.format(result.fixes));
+    }
+
     if (result.errorCount) {
       errors = result.failures;
       errorOutput = '\n' + result.output;
@@ -48,6 +71,7 @@ function lintSync() {
     }
 
   } catch (err) {
+    console.log(err);
     errorOutput = err;
     logger.error(err);
     exitCode = 2;

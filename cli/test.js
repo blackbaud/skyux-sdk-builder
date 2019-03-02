@@ -27,7 +27,7 @@ function test(command, argv) {
 
   const onRunStart = () => {
     localeAssetsProcessor.prepareLocaleFiles();
-    lintResult = tsLinter.lintSync();
+    lintResult = tsLinter.lintSync(argv);
   };
 
   const onRunComplete = () => {

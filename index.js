@@ -40,7 +40,7 @@ module.exports = {
         require('./cli/serve')(argv, getConfig(command), webpack, WebpackDevServer);
         break;
       case 'lint':
-        require('./cli/lint')();
+        require('./cli/lint')(argv);
         break;
       case 'pact':
         require('./cli/pact')(command, argv);
