@@ -1,11 +1,10 @@
 /*jslint node: true */
 'use strict';
 
+const { Configuration, Linter, findFormatter } = require('tslint');
 const logger = require('@blackbaud/skyux-logger');
-const tslint = require('tslint');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
-const { Configuration, Linter, findFormatter } = tslint;
 const lintJson = skyPagesConfigUtil.spaPath('tslint.json');
 const configJson = skyPagesConfigUtil.spaPath('tsconfig.json');
 
