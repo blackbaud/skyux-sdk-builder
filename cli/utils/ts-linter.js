@@ -30,6 +30,7 @@ function getOptions(argv) {
 }
 
 function lintSync(argv) {
+  const startTime = (new Date()).getTime();
   const options = getOptions(argv);
   const program = Linter.createProgram(configJson, skyPagesConfigUtil.spaPath());
   const instance = new Linter(options, program);
@@ -50,7 +51,6 @@ function lintSync(argv) {
     });
 
     const result = instance.getResult();
-    logger.info(`TSLint finished. Found ${plural('error', result.failures)}.`);
 
     // Necessary since stylish report doesn't handle fixes
     // This passes in the fixes as if they were errors to the formatter.
@@ -62,6 +62,11 @@ function lintSync(argv) {
       logger.info(formatter.format(result.fixes));
     }
 
+    const executionTime = (new Date()).getTime() - startTime;
+    logger.info(
+      `TSLint finished in ${executionTime}ms. Found ${plural('error', result.failures)}.`
+    );
+
     if (result.errorCount) {
       errors = result.failures;
       errorOutput = '\n' + result.output;
@@ -70,7 +75,6 @@ function lintSync(argv) {
     }
 
   } catch (err) {
-    console.log(err);
     errorOutput = err;
     logger.error(err);
     exitCode = 2;

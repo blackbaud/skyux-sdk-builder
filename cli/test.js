@@ -27,17 +27,13 @@ function test(command, argv) {
 
   const onRunStart = () => {
     localeAssetsProcessor.prepareLocaleFiles();
-    lintResult = tsLinter.lintSync(argv);
   };
 
   const onRunComplete = () => {
-    // Print linting errors again after coverage reporter
-    if (lintResult && lintResult.exitCode > 0) {
-      setTimeout(() => {
-        logger.error('TSLint errors displayed again for convenience:');
-        logger.error(lintResult.errorOutput);
-      }, 10);
-    }
+    // Print linting errors after code coverage
+    setTimeout(() => {
+      lintResult = tsLinter.lintSync(argv);
+    }, 10);
   };
 
   const onExit = (exitCode) => {

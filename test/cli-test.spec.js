@@ -141,7 +141,7 @@ describe('cli test', () => {
     expect(process.exit).toHaveBeenCalledWith(1);
   });
 
-  it('should execute tslint before each karma run and pass the exit code', () => {
+  it('should execute tslint after each karma run and pass the exit code', () => {
     let _hooks = [];
     let _exitCode;
     let _onExit;
@@ -172,7 +172,7 @@ describe('cli test', () => {
     const test = mock.reRequire('../cli/test');
     test('test');
     _onExit(0);
-    expect(_hooks[0]).toEqual('run_start');
+    expect(_hooks[1]).toEqual('run_complete');
     expect(_exitCode).toEqual(1);
     expect(process.exit).toHaveBeenCalledWith(1);
   });
