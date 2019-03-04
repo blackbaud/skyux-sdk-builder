@@ -12,8 +12,8 @@ const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 const runCompiler = require('./utils/run-compiler');
 const tsLinter = require('./utils/ts-linter');
 
-function runLinter() {
-  const lintResult = tsLinter.lintSync();
+function runLinter(argv) {
+  const lintResult = tsLinter.lintSync(argv);
   if (lintResult.exitCode > 0) {
     process.exit(lintResult.exitCode);
   }
@@ -179,8 +179,8 @@ function transpile() {
   });
 }
 
-module.exports = (skyPagesConfig, webpack) => {
-  runLinter();
+module.exports = (argv, skyPagesConfig, webpack) => {
+  runLinter(argv);
   cleanAll();
   stageTypeScriptFiles();
   writeTSConfig();

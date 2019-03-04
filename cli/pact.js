@@ -118,7 +118,7 @@ function pact(command, argv) {
       let lintResult;
 
       const onRunStart = () => {
-        lintResult = tsLinter.lintSync();
+        lintResult = tsLinter.lintSync(argv);
       };
 
       const onRunComplete = () => {
