@@ -115,37 +115,47 @@ function pact(command, argv) {
       const karmaConfigPath = configResolver.resolve(command, argv);
       const karmaConfig = karmaConfigUtil.parseConfig(karmaConfigPath);
 
-      let lintResult;
+      let tsLinterLastExitCode = 0;
+      let tsLinterPromise;
 
       const onRunStart = () => {
-        lintResult = tsLinter.lintSync(argv);
+        if (tsLinterPromise) {
+          logger.warn('TSLint abandoning previous run.');
+        }
+
+        localeAssetsProcessor.prepareLocaleFiles();
+        tsLinterPromise = tsLinter.lintAsync(argv);
       };
 
+      // Escape as soon as possible to minimize disconnects.
       const onRunComplete = () => {
-        if (lintResult && lintResult.exitCode > 0) {
-          // Pull the logger out of the execution stream to let it print
-          // after karma's coverage reporter.
-          setTimeout(() => {
-            logger.error('Process failed due to linting errors:');
-            lintResult.errors.forEach(error => logger.error(error));
-          }, 10);
-        }
+        setTimeout(() => {
+          logger.info(`TSLint spawned from ${command} command.`);
+          tsLinterPromise.then(result => {
+            tsLinterLastExitCode = result.exitCode;
+            logger.error(result.output);
+            logger.info('TSLint completed.');
+          });
+        }, 10);
       };
 
       const onExit = (exitCode) => {
-        if (exitCode === 0) {
-          if (lintResult) {
-            exitCode = lintResult.exitCode;
-          }
+        if (exitCode === 0 && tsLinterLastExitCode !== 0) {
+          exitCode = tsLinterLastExitCode;
         }
 
         logger.info(`Karma has exited with ${exitCode}.`);
         process.exit(exitCode);
       };
 
+      const onBrowserError = () => {
+        logger.warn('Experienced a browser error, but letting karma retry.');
+      };
+
       const server = new Server(karmaConfig, onExit);
       server.on('run_start', onRunStart);
       server.on('run_complete', onRunComplete);
+      server.on('browser_error', onBrowserError);
       server.start();
     });
 

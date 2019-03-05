@@ -23,24 +23,45 @@ function test(command, argv) {
   const specsPath = path.resolve(process.cwd(), 'src/app/**/*.spec.ts');
   const specsGlob = glob.sync(specsPath);
 
-  let lintResult;
+  let tsLinterLastExitCode = 0;
+  let tsLinterQueue = [];
 
   const onRunStart = () => {
+    tsLinterQueue.push(tsLinter.lintAsync(argv));
     localeAssetsProcessor.prepareLocaleFiles();
   };
 
+  // Escape as soon as possible to minimize disconnects.
   const onRunComplete = () => {
-    // Print linting errors after code coverage
+
+    // Used to display messages after coverage reporter
     setTimeout(() => {
-      lintResult = tsLinter.lintSync(argv);
+
+      logger.info(`TSLint started asynchronously from ${command} command.`);
+      const tsLinterInstance = tsLinterQueue.shift();
+
+      // Could have already been removed if there was a browser error
+      if (!tsLinterInstance) {
+        logger.verbose(`TSLint instance invalid.  Ignoring results.`);
+      } else {
+        tsLinterInstance.then(result => {
+          if (tsLinterQueue.length > 0) {
+            logger.verbose(`TSLint completed in ${result.executionTime}ms.`);
+            logger.verbose(`Message hidden.  Queue length: ${tsLinterQueue.length}`);
+          } else {
+            tsLinterLastExitCode = result.exitCode;
+            logger.error(result.output);
+            logger.info(`TSLint completed in ${result.executionTime}ms.`);
+          }
+        });
+      }
+
     }, 10);
   };
 
   const onExit = (exitCode) => {
-    if (exitCode === 0) {
-      if (lintResult) {
-        exitCode = lintResult.exitCode;
-      }
+    if (exitCode === 0 && tsLinterLastExitCode !== 0) {
+      exitCode = tsLinterLastExitCode;
     }
 
     logger.info(`Karma has exited with ${exitCode}.`);
@@ -48,6 +69,7 @@ function test(command, argv) {
   };
 
   const onBrowserError = () => {
+    tsLinterQueue.shift();
     logger.warn('Experienced a browser error, but letting karma retry.');
   };
 

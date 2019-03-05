@@ -30,7 +30,10 @@ describe('cli test', () => {
           exitCode: 0,
           errors: []
         };
-      }
+      },
+      lintAsync: () => Promise.resolve({
+        exitCode: 0
+      })
     });
 
     mock('../config/sky-pages/sky-pages.config', {
@@ -141,19 +144,16 @@ describe('cli test', () => {
     expect(process.exit).toHaveBeenCalledWith(1);
   });
 
-  it('should execute tslint after each karma run and pass the exit code', () => {
-    let _hooks = [];
+  it('should execute tslint after each karma run and pass the exit code', (done) => {
+    let _hooks = {};
     let _exitCode;
     let _onExit;
     mock.stop('../cli/utils/ts-linter');
     mock('../cli/utils/ts-linter', {
-      lintSync: () => {
-        _exitCode = 1;
-        return {
-          exitCode: 1,
-          errors: ['foo']
-        };
-      }
+      lintAsync: () => Promise.resolve({
+        output: '',
+        exitCode: 1
+      })
     });
     mock('karma', {
       config: {
@@ -162,19 +162,27 @@ describe('cli test', () => {
       Server: function (config, onExit) {
         _onExit = onExit;
         this.on = (hook, callback) => {
-          _hooks.push(hook);
-          callback();
+          _hooks[hook] = callback;
         };
         this.start = () => {};
       },
       stopper: { stop: () => {} }
     });
-    const test = mock.reRequire('../cli/test');
-    test('test');
-    _onExit(0);
-    expect(_hooks[1]).toEqual('run_complete');
-    expect(_exitCode).toEqual(1);
-    expect(process.exit).toHaveBeenCalledWith(1);
+    mock.reRequire('../cli/test')('test');
+
+    process.exit.and.callFake(exitCode => {
+      expect(logger.warn).toHaveBeenCalled();
+      expect(exitCode).toBe(1);
+      done();
+    });
+
+    logger.error.and.callFake(() => {
+      _onExit(0);
+    });
+
+    _hooks['run_start']();
+    _hooks['run_complete']();
+    _hooks['run_start']();
   });
 
   it('should not output a tslint error message if tslint passes', () => {
@@ -182,11 +190,10 @@ describe('cli test', () => {
     let _onExit;
     mock.stop('../cli/utils/ts-linter');
     mock('../cli/utils/ts-linter', {
-      lintSync: () => {
-        return {
-          exitCode: 0
-        };
-      }
+      lintAsync: () => Promise.resolve({
+        output: '',
+        exitCode: 0
+      })
     });
     mock('karma', {
       config: {
@@ -199,8 +206,7 @@ describe('cli test', () => {
           callback();
         };
         this.start = () => {};
-      },
-      stopper: { stop: () => {} }
+      }
     });
     const test = mock.reRequire('../cli/test');
     test('test');
@@ -214,9 +220,11 @@ describe('cli test', () => {
 
     mock.stop('../cli/utils/ts-linter');
 
-    // After SIGINT, lintSync returns undefined.
     mock('../cli/utils/ts-linter', {
-      lintSync: () => undefined
+      lintAsync: () => Promise.resolve({
+        exitCode: 0,
+        output: ''
+      })
     });
 
     mock('karma', {

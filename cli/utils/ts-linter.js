@@ -1,92 +1,66 @@
 /*jslint node: true */
 'use strict';
 
-const { Configuration, Linter, findFormatter } = require('tslint');
+const spawn = require('cross-spawn');
 const logger = require('@blackbaud/skyux-logger');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
+const tslintLocation = './node_modules/.bin/tslint';
 
-const lintJson = skyPagesConfigUtil.spaPath('tslint.json');
-const configJson = skyPagesConfigUtil.spaPath('tsconfig.json');
-
-function plural(word, arr) {
-  const suffix = arr.length === 1 ? '' : 's';
-  return `${arr.length} ${word}${suffix}`;
-}
-
-function getOptions(argv) {
-  const options = {
-    formatter: 'stylish'
-  };
+function getFlags(argv) {
+  const flags = [
+    '--project',
+    skyPagesConfigUtil.spaPath('tsconfig.json'),
+    '--config',
+    skyPagesConfigUtil.spaPath('tslint.json'),
+    '--exclude',
+    '**/node_modules/**/*.ts'
+  ];
 
   if (argv.fix) {
-    options.fix = true;
+    flags.push('--fix');
   }
 
-  if (argv.platform === 'vsts') {
-    options.formatter = 'vso';
+  return flags;
+}
+
+function lintAsync(argv, id) {
+  let output = '';
+
+  function handleBuffer(buffer) {
+    output += buffer.toString();
   }
 
-  return options;
+  return new Promise((resolve) => {
+    const startTime = (new Date()).getTime();
+    const tslint = spawn(tslintLocation, getFlags(argv));
+
+    tslint.stderr.on('data', handleBuffer);
+    tslint.stdout.on('data', handleBuffer);
+
+    tslint.on('exit', (exitCode) => {
+      const endTime = (new Date()).getTime();
+      resolve({
+        id,
+        output,
+        executionTime: (endTime - startTime),
+        exitCode
+      });
+    });
+
+  });
 }
 
 function lintSync(argv) {
+  logger.info('TSLint started synchronously.');
   const startTime = (new Date()).getTime();
-  const options = getOptions(argv);
-  const program = Linter.createProgram(configJson, skyPagesConfigUtil.spaPath());
-  const instance = new Linter(options, program);
+  const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
+  const endTime = (new Date()).getTime();
+  logger.info(`TSLint completed in ${endTime-startTime}ms.`);
 
-  let errors = [];
-  let errorOutput = '';
-  let exitCode = 0;
-
-  try {
-    const files = Linter.getFileNames(program);
-    logger.info(`TSLint started. Found ${plural('file', files)}.`);
-
-    files.forEach((file) => {
-      logger.verbose(`Linting ${file}.`);
-      const contents = program.getSourceFile(file).getFullText();
-      const config = Configuration.findConfiguration(lintJson, file).results;
-      instance.lint(file, contents, config);
-    });
-
-    const result = instance.getResult();
-
-    // Necessary since stylish report doesn't handle fixes
-    // This passes in the fixes as if they were errors to the formatter.
-    if (result.fixes.length) {
-      const Formatter = findFormatter(options.formatter);
-      const formatter = new Formatter();
-
-      logger.info(`TSLint fixed ${plural('error', result.fixes)}.\n`);
-      logger.info(formatter.format(result.fixes));
-    }
-
-    const executionTime = (new Date()).getTime() - startTime;
-    logger.info(
-      `TSLint finished in ${executionTime}ms. Found ${plural('error', result.failures)}.`
-    );
-
-    if (result.errorCount) {
-      errors = result.failures;
-      errorOutput = '\n' + result.output;
-      logger.error(errorOutput);
-      exitCode = 1;
-    }
-
-  } catch (err) {
-    errorOutput = err;
-    logger.error(err);
-    exitCode = 2;
-  }
-
-  return {
-    errors,
-    errorOutput,
-    exitCode
-  };
+  process.exit(tslint.exitCode);
 }
 
 module.exports = {
+  lintAsync,
   lintSync
 };

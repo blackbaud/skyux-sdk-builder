@@ -5,7 +5,7 @@ const mock = require('mock-require');
 const logger = require('@blackbaud/skyux-logger');
 const portfinder = require('portfinder');
 
-describe('cli pact', () => {
+fdescribe('cli pact', () => {
   let originalArgv = process.argv;
 
   function MockServer() { }
@@ -222,16 +222,15 @@ describe('cli pact', () => {
     test('pact');
   });
 
-  it('should not output a tslint error message if tslint passes', (done) => {
+  it('should not output a tslint error message if tslint passes', () => {
     let _hooks = [];
     let _onExit;
     mock.stop('../cli/utils/ts-linter');
     mock('../cli/utils/ts-linter', {
-      lintSync: () => {
-        return {
-          exitCode: 0
-        };
-      }
+      lintAsync: () => Promise.resolve({
+        output: '',
+        exitCode: 0
+      })
     });
     mock('karma', {
       config: {
@@ -247,7 +246,6 @@ describe('cli pact', () => {
           _onExit(0);
           expect(_hooks[1]).toEqual('run_complete');
           expect(process.exit).toHaveBeenCalledWith(0);
-          done();
         };
       }
     });
@@ -255,34 +253,36 @@ describe('cli pact', () => {
     test('pact');
   });
 
-  it('should handle signal interrupted', (done) => {
+  it('should handle signal interrupted', () => {
     let _onExit;
 
     mock.stop('../cli/utils/ts-linter');
 
-    // After SIGINT, lintSync returns undefined.
     mock('../cli/utils/ts-linter', {
-      lintSync: () => undefined
+      lintAsync: () => Promise.resolve({
+        exitCode: 0,
+        output: ''
+      })
     });
 
     mock('karma', {
       config: {
-        parseConfig: () => { }
+        parseConfig: () => {}
       },
       Server: function (config, onExit) {
         _onExit = onExit;
         this.on = (hook, callback) => callback();
-        this.start = () => {
-          _onExit(0);
-          expect(process.exit).toHaveBeenCalledWith(0);
-          done();
-        };
-      }
+        this.start = () => {};
+      },
+      stopper: { stop: () => {} }
     });
 
-    const test = mock.reRequire('../cli/pact');
+    const pact = mock.reRequire('../cli/test');
 
-    test('pact');
+    pact('pact');
+    _onExit(0);
+
+    expect(process.exit).toHaveBeenCalledWith(0);
   });
 
   it('handles error in port finding and exits process', (done) => {

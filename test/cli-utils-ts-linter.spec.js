@@ -5,138 +5,149 @@ const mock = require('mock-require');
 const logger = require('@blackbaud/skyux-logger');
 
 describe('cli util ts-linter', () => {
-  afterEach(() => {
-    mock.stopAll();
-  });
-
-  function setupTest(output, failures, fixes, throwError) {
-    spyOn(logger, 'info').and.returnValue();
-    spyOn(logger, 'error').and.returnValue();
+  beforeEach(() => {
+    spyOn(logger, 'info');
+    spyOn(logger, 'error');
 
     mock('../config/sky-pages/sky-pages.config', {
       spaPath: (filePath) => filePath
     });
 
-    const spyLinter = jasmine.createSpy('tslint');
+  });
 
-    spyLinter.and.callFake(() => {
-      const instance = jasmine.createSpyObj('linter', [
-        'lint',
-        'getResult'
-      ]);
-
-      instance.getResult.and.returnValue({
-        errorCount: failures.length,
-        failures: failures,
-        output: output,
-        fixes: fixes
-      });
-
-      if (throwError) {
-        instance.lint.and.callFake(() => {
-          throw new Error(throwError);
-        });
-      }
-
-      return instance;
-    });
-
-    spyLinter.createProgram = jasmine.createSpy('createProgram').and.returnValue({
-      getSourceFile: () => ({
-        getFullText: () => {}
-      })
-    });
-
-    spyLinter.getFileNames = jasmine.createSpy('getFileNames').and.returnValue([
-      'some-file.js'
-    ]);
-
-    const spyFormat = jasmine.createSpy('format');
-    spyLinter.spyFormat = spyFormat;
-
-    mock('tslint', {
-      findFormatter: () => {
-        return function () {
-          return {
-            format: spyFormat
-          }
-        }
-      },
-      Configuration: {
-        findConfiguration: () => ({
-          results: {}
-        })
-      },
-      Linter: spyLinter
-    });
-
-    return spyLinter;
-  }
+  afterEach(() => {
+    mock.stopAll();
+  });
 
   it('should expose a lintSync method', () => {
-    setupTest('', [], []);
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     expect(typeof tsLinter.lintSync).toEqual('function');
   });
 
-  it('should catch a fatal error', () => {
-
-    const error = 'custom-thrown-error';
-    const instance = setupTest('', [], [], error);
+  it('should expose a lintAsync method', () => {
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync({});
-
-    expect(result.errorOutput.toString()).toEqual(`Error: ${ error }`);
-    expect(result.exitCode).toEqual(2);
+    expect(typeof tsLinter.lintAsync).toEqual('function');
   });
 
-  it('should log an error if linting errors found', () => {
-
-    const output = 'TEST OUTPUT';
-    const errors = ['TEST ERROR'];
-
-    setupTest(output, errors, []);
-
-    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync({});
-
-    expect(result.errors).toEqual(errors)
-    expect(result.errorOutput).toEqual('\n' + output);
-
-    expect(result.exitCode).toEqual(1);
-    expect(logger.error).toHaveBeenCalled();
-  });
-
-  it('should not log an error if linting errors are not found', () => {
-
-    setupTest('', [], []);
-
-    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync({});
-
-    expect(result.exitCode).toEqual(0);
-    expect(logger.error).not.toHaveBeenCalled();
-  });
-
-  it('should pass argv.fix to options and log fixes', () => {
-    const fixes = ['simple-fix'];
-
-    const instance = setupTest('', [], fixes);
-    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync({ fix: true });
-
-    expect(instance.spyFormat.calls.mostRecent().args[0]).toEqual(fixes);
-    expect(instance.calls.mostRecent().args[0]).toEqual({
-      fix: true,
-      formatter: 'stylish'
+  it('should spawn tslint asynchronously', (done) => {
+    let exitCallback;
+    const spawnSpy = jasmine.createSpy('spawn').and.returnValue({
+      on: (evt, cb) => {
+        exitCallback = cb;
+      },
+      stderr: {
+        on: () => {}
+      },
+      stdout: {
+        on: () => {}
+      }
     });
-  });
 
-  it('should set formatter to vso if platform flag is vsts', () => {
-    const instance = setupTest('', [], []);
+    mock('cross-spawn', spawnSpy);
+
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    const result = tsLinter.lintSync({ platform: 'vsts' });
+    tsLinter.lintAsync({}).then(result => {
+      expect(spawnSpy).toHaveBeenCalled();
+      expect(result.exitCode).toEqual(0);
+      done();
+    });
 
-    expect(instance.calls.mostRecent().args[0].formatter).toBe('vso');
+    exitCallback(0);
   });
+
+  it('should spawn tslint synchronously', () => {
+    const spawnSpy = jasmine.createSpyObj('spawn', ['sync']);
+    mock('cross-spawn', spawnSpy);
+
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    tsLinter.lintSync({});
+
+    expect(spawnSpy.sync).toHaveBeenCalled();
+  });
+
+  function testAsyncOutput(sendErrors, done) {
+    const stderrError = 'first error';
+    const stdoutError = 'second error';
+    const stderrErrorBuffer = Buffer.from(stderrError);
+    const stdoutErrorBuffer = Buffer.from(stdoutError);
+    let exitCallback;
+    let stderrCallback;
+    let stdoutCallback;
+
+    mock('../config/sky-pages/sky-pages.config', {
+      spaPath: (filePath) => filePath
+    });
+    mock('cross-spawn', () => ({
+      on: (evt, cb) => {
+        exitCallback = cb;
+      },
+      stderr: {
+        on: (evt, cb) => {
+          stderrCallback = cb;
+        }
+      },
+      stdout: {
+        on: (evt, cb) => {
+          stdoutCallback = cb;
+        }
+      }
+    }));
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    tsLinter.lintAsync({}).then(result => {
+      expect(result.exitCode).toEqual(1);
+
+      if (sendErrors) {
+        expect(result.output).toContain(stderrError);
+        expect(result.output).toContain(stdoutError);
+      } else {
+        expect(result.output).not.toContain(stderrError);
+        expect(result.output).not.toContain(stdoutError);
+      }
+
+      done();
+    });
+
+    if (sendErrors) {
+      stderrCallback(stderrErrorBuffer);
+      stdoutCallback(stdoutErrorBuffer);
+    }
+
+    exitCallback(1);
+  }
+
+  it('should add linting errors to output', (done) => {
+    testAsyncOutput(true, done);
+  });
+
+  it('should not add linting errors to output', (done) => {
+    testAsyncOutput(false, done);
+  });
+
+
+  it('should push fix flag from argv', (done) => {
+    let spawnFlags;
+    let exitCallback;
+
+    mock('cross-spawn', (command, flags) => {
+      spawnFlags = flags;
+      return {
+        on: (evt, cb) => {
+          exitCallback = cb;
+        },
+        stderr: {
+          on: () => {}
+        },
+        stdout: {
+          on: () => {}
+        }
+      };
+    });
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    tsLinter.lintAsync({ fix: true }).then(result => {
+      expect(spawnFlags).toContain('--fix');
+      done();
+    });
+
+    exitCallback(0);
+  })
 });
