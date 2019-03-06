@@ -23,14 +23,14 @@ function getFlags(argv) {
   return flags;
 }
 
-function lintAsync(argv, id) {
-  let output = '';
-
-  function handleBuffer(buffer) {
-    output += buffer.toString();
-  }
-
+function lintAsync(argv) {
   return new Promise((resolve) => {
+    let output = '';
+
+    function handleBuffer(buffer) {
+      output += buffer.toString();
+    }
+
     const startTime = (new Date()).getTime();
     const tslint = spawn(tslintLocation, getFlags(argv));
 
@@ -40,7 +40,6 @@ function lintAsync(argv, id) {
     tslint.on('exit', (exitCode) => {
       const endTime = (new Date()).getTime();
       resolve({
-        id,
         output,
         executionTime: (endTime - startTime),
         exitCode
@@ -55,9 +54,9 @@ function lintSync(argv) {
   const startTime = (new Date()).getTime();
   const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
   const endTime = (new Date()).getTime();
-  logger.info(`TSLint completed in ${endTime-startTime}ms.`);
+  logger.info(`TSLint completed in ${endTime - startTime}ms.`);
 
-  process.exit(tslint.exitCode);
+  process.exit(tslint.status);
 }
 
 module.exports = {

@@ -56,13 +56,20 @@ describe('cli util ts-linter', () => {
   });
 
   it('should spawn tslint synchronously', () => {
+    const status = 1;
     const spawnSpy = jasmine.createSpyObj('spawn', ['sync']);
+    spawnSpy.sync.and.returnValue({
+      status
+    });
     mock('cross-spawn', spawnSpy);
+
+    spyOn(process, 'exit').and.callFake(exitCode => {
+      expect(spawnSpy.sync).toHaveBeenCalled();
+      expect(exitCode).toBe(status);
+    });
 
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     tsLinter.lintSync({});
-
-    expect(spawnSpy.sync).toHaveBeenCalled();
   });
 
   function testAsyncOutput(sendErrors, done) {

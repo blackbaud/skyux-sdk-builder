@@ -2,307 +2,46 @@
 'use strict';
 
 const mock = require('mock-require');
-const logger = require('@blackbaud/skyux-logger');
 
 describe('cli test', () => {
-  let originalArgv = process.argv;
-  let mockLocaleAssetsProcessor;
 
-  function MockServer() { }
+  const specPattern = 'src/app/**/*.spec.ts';
 
-  MockServer.prototype.on = function () {};
-  MockServer.prototype.start = function () {};
+  it('should pass command, argv, and specPattern to karmaUtils.run', () => {
+    const argv = { custom: true };
+    const command = 'custom-command1';
 
-  beforeEach(() => {
-    mockLocaleAssetsProcessor = {
-      prepareLocaleFiles: () => {}
-    };
-
-    spyOn(global, 'setTimeout').and.callFake(cb => cb());
-    spyOn(process, 'exit').and.returnValue();
-    spyOn(logger, 'info').and.returnValue();
-    spyOn(logger, 'error').and.returnValue();
-    spyOn(logger, 'warn').and.returnValue();
-
-    mock('../cli/utils/ts-linter', {
-      lintSync: () => {
-        return {
-          exitCode: 0,
-          errors: []
-        };
-      },
-      lintAsync: () => Promise.resolve({
-        exitCode: 0
-      })
-    });
-
-    mock('../config/sky-pages/sky-pages.config', {
-      outPath: (path) => path
-    });
-
-    mock('../cli/utils/config-resolver', {
-      resolve: (command) => `${command}-config.js`
-    });
-
-    mock('../lib/locale-assets-processor', mockLocaleAssetsProcessor);
-  });
-
-  afterEach(() => {
-    mock.stopAll();
-    process.argv = originalArgv;
-  });
-
-  it('should load the test config when running test command', () => {
-    let _configPath;
-    mock('karma', {
-      config: {
-        parseConfig: (configPath) => _configPath = configPath
-      },
-      Server: MockServer
-    });
-    const test = mock.reRequire('../cli/test');
-    test('test', {});
-    expect(_configPath).toEqual('test-config.js');
-  });
-
-  it('should load the watch config when running watch command', () => {
-    let _configPath;
-    mock('karma', {
-      config: {
-        parseConfig: (configPath) => _configPath = configPath
-      },
-      Server: MockServer
-    });
-    const test = mock.reRequire('../cli/test');
-    test('watch');
-    expect(_configPath).toEqual('watch-config.js');
-  });
-
-  it('should save the current command to argv', () => {
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: MockServer
-    });
-    const test = mock.reRequire('../cli/test');
-    const argv = {};
-    test('watch', argv);
-    expect(argv.command).toEqual('watch');
-  });
-
-  it('should start a karma server', () => {
-    spyOn(MockServer.prototype, 'start').and.returnValue();
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: MockServer
-    });
-    const test = mock.reRequire('../cli/test');
-    test('test');
-    expect(MockServer.prototype.start).toHaveBeenCalled();
-  });
-
-  it('should process the exit code from karma server', () => {
-    let _onExit;
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, onExit) {
-        this.on = (hook, callback) => {
-          if (hook === 'run_start') {
-            _onExit = () => {
-              onExit(0);
-            };
-            callback();
-          }
-        };
-        this.start = () => {};
-      }
-    });
-    const test = mock.reRequire('../cli/test');
-    test('test');
-    _onExit();
-    expect(process.exit).toHaveBeenCalledWith(0);
-  });
-
-  it('should not change the exit code if the server has already failed', () => {
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, callback) {
-        callback(1);
-        this.on = () => {};
-        this.start = () => {};
-      }
-    });
-    const test = mock.reRequire('../cli/test');
-    test('test');
-    expect(process.exit).toHaveBeenCalledWith(1);
-  });
-
-  it('should execute tslint after each karma run and pass the exit code', (done) => {
-    let _hooks = {};
-    let _exitCode;
-    let _onExit;
-    mock.stop('../cli/utils/ts-linter');
-    mock('../cli/utils/ts-linter', {
-      lintAsync: () => Promise.resolve({
-        output: '',
-        exitCode: 1
-      })
-    });
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, onExit) {
-        _onExit = onExit;
-        this.on = (hook, callback) => {
-          _hooks[hook] = callback;
-        };
-        this.start = () => {};
-      },
-      stopper: { stop: () => {} }
-    });
-    mock.reRequire('../cli/test')('test');
-
-    process.exit.and.callFake(exitCode => {
-      expect(logger.warn).toHaveBeenCalled();
-      expect(exitCode).toBe(1);
-      done();
-    });
-
-    logger.error.and.callFake(() => {
-      _onExit(0);
-    });
-
-    _hooks['run_start']();
-    _hooks['run_complete']();
-    _hooks['run_start']();
-  });
-
-  it('should not output a tslint error message if tslint passes', () => {
-    let _hooks = [];
-    let _onExit;
-    mock.stop('../cli/utils/ts-linter');
-    mock('../cli/utils/ts-linter', {
-      lintAsync: () => Promise.resolve({
-        output: '',
-        exitCode: 0
-      })
-    });
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, onExit) {
-        _onExit = onExit;
-        this.on = (hook, callback) => {
-          _hooks.push(hook);
-          callback();
-        };
-        this.start = () => {};
-      }
-    });
-    const test = mock.reRequire('../cli/test');
-    test('test');
-    _onExit(0);
-    expect(_hooks[1]).toEqual('run_complete');
-    expect(process.exit).toHaveBeenCalledWith(0);
-  });
-
-  it('should handle signal interrupted', () => {
-    let _onExit;
-
-    mock.stop('../cli/utils/ts-linter');
-
-    mock('../cli/utils/ts-linter', {
-      lintAsync: () => Promise.resolve({
-        exitCode: 0,
-        output: ''
-      })
-    });
-
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, onExit) {
-        _onExit = onExit;
-        this.on = (hook, callback) => callback();
-        this.start = () => {};
-      },
-      stopper: { stop: () => {} }
-    });
+    const karmaUtilsSpy = jasmine.createSpyObj('karmaUtils', ['run']);
+    mock('../cli/utils/karma-utils', karmaUtilsSpy);
 
     const test = mock.reRequire('../cli/test');
+    test(command, argv);
 
-    test('test');
-    _onExit(0);
-
-    expect(process.exit).toHaveBeenCalledWith(0);
-  });
-
-  it('should not continue if no test spec files exist', () => {
-    mock('glob', {
-      sync: path => []
-    });
-
-    mock.reRequire('../cli/test')('test');
-    expect(logger.info).toHaveBeenCalledWith(
-      'No spec files located. Skipping test command.'
+    expect(karmaUtilsSpy.run.calls.argsFor(0)[1].command).toBe(command);
+    expect(karmaUtilsSpy.run).toHaveBeenCalledWith(
+      command,
+      argv,
+      specPattern
     );
-    expect(process.exit).toHaveBeenCalledWith(0);
   });
 
-  it('should generate locale files before each karma run', () => {
-    const spy = spyOn(mockLocaleAssetsProcessor, 'prepareLocaleFiles').and.callThrough();
-    let _onExit;
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, onExit) {
-        _onExit = onExit;
-        this.on = (hook, callback) => {
-          callback();
-        };
-        this.start = () => {};
-      },
-      stopper: { stop: () => {} }
-    });
-    mock.reRequire('../cli/test')('test');
-    _onExit(0);
-    expect(spy).toHaveBeenCalled();
-  });
+  it('should use process.argv if no arguments passed in', () => {
+    const argvClean = process.argv;
+    const argv = { process: true };
+    const command = 'custom-command2';
+    const karmaUtilsSpy = jasmine.createSpyObj('karmaUtils', ['run']);
 
-  it('should handle browser errors', () => {
-    mock('karma', {
-      config: {
-        parseConfig: () => {}
-      },
-      Server: function (config, callback) {
-        this.on = (hook, cb) => {
-          if (hook === 'browser_error') {
-            cb();
-          }
-        };
-        this.start = () => {};
-      },
-      stopper: {
-        stop: (config, callback) => {
-          callback();
-        }
-      }
-    });
+    process.argv = argv;
+    mock('../cli/utils/karma-utils', karmaUtilsSpy);
+
     const test = mock.reRequire('../cli/test');
-    test('test');
-    expect(logger.warn).toHaveBeenCalledWith(
-      'Experienced a browser error, but letting karma retry.'
+    test(command);
+    expect(karmaUtilsSpy.run).toHaveBeenCalledWith(
+      command,
+      argv,
+      specPattern
     );
+
+    process.argv = argvClean;
   });
 });
