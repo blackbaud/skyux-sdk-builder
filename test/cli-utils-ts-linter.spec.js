@@ -6,6 +6,7 @@ const logger = require('@blackbaud/skyux-logger');
 
 describe('cli util ts-linter', () => {
   beforeEach(() => {
+    spyOn(process, 'exit');
     spyOn(logger, 'info');
     spyOn(logger, 'error');
 
@@ -63,13 +64,13 @@ describe('cli util ts-linter', () => {
     });
     mock('cross-spawn', spawnSpy);
 
-    spyOn(process, 'exit').and.callFake(exitCode => {
-      expect(spawnSpy.sync).toHaveBeenCalled();
-      expect(exitCode).toBe(status);
-    });
-
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    tsLinter.lintSync({});
+    const result = tsLinter.lintSync({});
+
+    expect(spawnSpy.sync).toHaveBeenCalled();
+    expect(result.exitCode).toBe(status);
+    expect(result.executionTime).toBeDefined();
+    expect(process.exit).not.toHaveBeenCalled();
   });
 
   function testAsyncOutput(sendErrors, done) {
@@ -111,6 +112,8 @@ describe('cli util ts-linter', () => {
         expect(result.output).not.toContain(stdoutError);
       }
 
+
+
       done();
     });
 
@@ -130,8 +133,7 @@ describe('cli util ts-linter', () => {
     testAsyncOutput(false, done);
   });
 
-
-  it('should push fix flag from argv', (done) => {
+  function testFlags(argv, cb) {
     let spawnFlags;
     let exitCallback;
 
@@ -150,11 +152,43 @@ describe('cli util ts-linter', () => {
       };
     });
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
-    tsLinter.lintAsync({ fix: true }).then(result => {
-      expect(spawnFlags).toContain('--fix');
-      done();
+    tsLinter.lintAsync(argv).then(result => {
+      cb(spawnFlags);
     });
 
     exitCallback(0);
+  }
+
+  it('should push fix flag from argv', (done) => {
+    testFlags({ fix: true }, flags => {
+      expect(flags).toContain('--fix');
+      expect(flags.indexOf('--fix')).toBe(flags.length - 1);
+      done();
+    });
+  });
+
+  it('should default to the stylish format', (done) => {
+    testFlags({}, flags => {
+      expect(flags).toContain('--format');
+      expect(flags[flags.length - 1]).toBe('stylish');
+      done();
+    });
+  })
+
+  it('should not add format flag if it already exists', (done) => {
+    testFlags({ format: 'custom' }, flags => {
+      expect(flags).toContain('--format');
+      expect(flags).toContain('custom');
+      expect(flags).not.toContain('stylish');
+      done();
+    });
+  });
+
+  it('should set format to vso if the platform flag is vsts', (done) => {
+    testFlags({ platform: 'vsts' }, flags => {
+      expect(flags).toContain('--format');
+      expect(flags).toContain('vso');
+      done();
+    });
   })
 });

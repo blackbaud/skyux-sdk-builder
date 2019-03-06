@@ -13,8 +13,17 @@ function getFlags(argv) {
     '--config',
     skyPagesConfigUtil.spaPath('tslint.json'),
     '--exclude',
-    '**/node_modules/**/*.ts'
+    '**/node_modules/**/*.ts',
+    '--format'
   ];
+
+  if (argv.format) {
+    flags.push(argv.format);
+  } else if (argv.platform === 'vsts') {
+    flags.push('vso');
+  } else {
+    flags.push('stylish');
+  }
 
   if (argv.fix) {
     flags.push('--fix');
@@ -54,9 +63,14 @@ function lintSync(argv) {
   const startTime = (new Date()).getTime();
   const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
   const endTime = (new Date()).getTime();
+  const executionTime = endTime - startTime;
   logger.info(`TSLint completed in ${endTime - startTime}ms.`);
 
-  process.exit(tslint.status);
+  return {
+    executionTime,
+    exitCode: tslint.status,
+    output: tslint.output
+  };
 }
 
 module.exports = {

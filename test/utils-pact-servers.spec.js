@@ -14,7 +14,7 @@ describe('pact-servers', () => {
     expect(pactServers.getPactServer('test-provider').fullUrl).toEqual('http://localhost:1234');
     expect(pactServers.getPactServer('test-provider').host).toEqual('localhost');
     expect(pactServers.getPactServer('test-provider').port).toEqual('1234');
-    console.log(pactServers.getAllPactServers());
+
     expect(pactServers.getAllPactServers()).toEqual({
       'test-provider': {
         host: 'localhost',
