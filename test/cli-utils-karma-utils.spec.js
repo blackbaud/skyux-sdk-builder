@@ -18,6 +18,7 @@ describe('cli util run-karma', () => {
     spyOn(logger, 'warn');
     spyOn(logger, 'error');
     spyOn(logger, 'verbose');
+    spyOn(global, 'setTimeout').and.callFake(cb => cb());
 
     mock('../config/sky-pages/sky-pages.config', {
       outPath: (path) => path
@@ -36,7 +37,10 @@ describe('cli util run-karma', () => {
 
     serverSpy = jasmine.createSpy('server');
     serverStartSpy = jasmine.createSpy('server-start');
-    serverSpy.prototype.on = (evt, cb) => karmaHooks[evt] = cb;
+    serverSpy.prototype.on = (evt, cb) => {
+      karmaHooks[evt] = karmaHooks[evt] || [];
+      karmaHooks[evt].push(cb);
+    };
     serverSpy.prototype.start = serverStartSpy;
     karmaHooks = {};
 
@@ -55,32 +59,51 @@ describe('cli util run-karma', () => {
     mock.stopAll();
   });
 
-  it('should start linter and locale processor in run_start', () => {
-    const argv = { 'custom': true };
-
-    mock.reRequire('../cli/utils/karma-utils').run('', argv, '');
-    karmaHooks['run_start']();
-
-    expect(tslinterSpy.lintAsync).toHaveBeenCalledWith(argv);
-    expect(localeAssetsProcessorSpy.prepareLocaleFiles).toHaveBeenCalled();
-  });
-
   it('should exit if no specs found', (done) => {
     const command = 'custom';
 
     globSpy.sync.and.returnValue([]);
-    spyOn(process, 'exit').and.callFake((exitCode) => {
-      expect(exitCode).toBe(0);
-      expect(logger.info).toHaveBeenCalledWith(
-        `No spec files located. Skipping ${command} command.`
-      );
-      done();
-    });
-
-    mock.reRequire('../cli/utils/karma-utils').run(command, {}, '');
+    mock.reRequire('../cli/utils/karma-utils')
+      .run(command, {}, '')
+      .then(exitCode => {
+        expect(exitCode).toBe(0);
+        expect(logger.info).toHaveBeenCalledWith(
+          `No spec files located. Skipping ${command} command.`
+        );
+        done();
+      });
   });
 
-  it('should call setTimeout from run_complete and pass exitCode', (done) => {
+  it('should start locale processor in run_start', () => {
+    mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
+    karmaHooks['run_start'][0]();
+    expect(localeAssetsProcessorSpy.prepareLocaleFiles).toHaveBeenCalled();
+  });
+
+  it('should start tslinter in run_start if watch', () => {
+    const argv = { custom: true };
+    mock.reRequire('../cli/utils/karma-utils').run('watch', argv, '');
+    karmaHooks['run_start'][1]();
+    expect(tslinterSpy.lintAsync).toHaveBeenCalledWith(argv);
+  });
+
+  it('should log a warning in browser_error', () => {
+    mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
+    karmaHooks['browser_error'][0]();
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Experienced a browser disconnect error.  Karma will retry up to 3 times.'
+    );
+  });
+
+  it('should log an additioanl warning in browser_error if watch', () => {
+    mock.reRequire('../cli/utils/karma-utils').run('watch', {}, '');
+    karmaHooks['browser_error'][1]();
+    expect(logger.warn).toHaveBeenCalledWith(
+      'You may be interested in using the `--no-lint` flag or refactoring your SPA.'
+    );
+  });
+
+  it('should call setTimeout from run_complete and resolve exitCode if watch', (done) => {
     const tslinterResults = {
       executionTime: 3,
       exitCode: 2,
@@ -91,39 +114,40 @@ describe('cli util run-karma', () => {
       then: (cb) => cb(tslinterResults)
     });
 
-    spyOn(global, 'setTimeout').and.callFake(cb => cb());
-    spyOn(process, 'exit').and.callFake((exitCode) => {
-      expect(logger.error).toHaveBeenCalledWith(tslinterResults.output);
-      expect(logger.info).toHaveBeenCalledWith(
-        `TSLint completed in ${tslinterResults.executionTime}ms.`
-      );
-      expect(exitCode).toBe(tslinterResults.exitCode);
-      done();
-    });
-    mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
-    karmaHooks['run_start']();
-    karmaHooks['run_complete']();
+    mock.reRequire('../cli/utils/karma-utils')
+      .run('watch', {}, '')
+      .then(exitCode => {
+        expect(logger.error).toHaveBeenCalledWith(tslinterResults.output);
+        expect(logger.info).toHaveBeenCalledWith(
+          `TSLint completed in ${tslinterResults.executionTime}ms.`
+        );
+        expect(exitCode).toBe(tslinterResults.exitCode);
+        done();
+      });
+
+    karmaHooks['run_start'][1]();
+    karmaHooks['run_complete'][0]();
     serverSpy.calls.allArgs()[0][1](0);
   });
 
-  it('should remove the first tslint promise and log a warning on browser_error', () => {
-    spyOn(global, 'setTimeout').and.callFake(cb => cb());
-    mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
+  it('should remove the first tslint promise and log a warning on browser_error', (done) => {
+    mock.reRequire('../cli/utils/karma-utils')
+      .run('watch', {}, '')
+      .then(exitCode => {
+        expect(logger.verbose).toHaveBeenCalledWith(
+          `TSLint instance invalid.  Ignoring results.`
+        );
+        done();
+      });
 
-    karmaHooks['run_start']();
-    karmaHooks['browser_error']();
-    karmaHooks['run_complete']();
-
-    expect(logger.warn).toHaveBeenCalledWith(
-      `Experienced a browser error, but letting karma retry.`
-    );
-    expect(logger.verbose).toHaveBeenCalledWith(
-      `TSLint instance invalid.  Ignoring results.`
-    );
+    karmaHooks['run_start'][1]();
+    karmaHooks['browser_error'][1]();
+    karmaHooks['run_complete'][0]();
+    serverSpy.calls.allArgs()[0][1](1);
   });
 
-  it('should log verbose if another run is already scheduled', () => {
-    const runStartCount = 3;
+  it('should log verbose if another run is already scheduled', (done) => {
+
     const tslinterResults = {
       executionTime: 4
     };
@@ -132,19 +156,22 @@ describe('cli util run-karma', () => {
       then: (cb) => cb(tslinterResults)
     });
 
-    spyOn(global, 'setTimeout').and.callFake(cb => cb());
-    mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
+    mock.reRequire('../cli/utils/karma-utils')
+      .run('watch', {}, '')
+      .then(exitCode => {
+        expect(logger.verbose).toHaveBeenCalledWith(
+          `TSLint completed in ${tslinterResults.executionTime}ms.`
+        );
+        expect(logger.verbose).toHaveBeenCalledWith(
+          `Message hidden.  Queue length: 1`
+        );
+        expect()
+        done();
+      });
 
-    for (let i = 0; i < runStartCount; i++) {
-      karmaHooks['run_start']();
-    }
-    karmaHooks['run_complete']();
-
-    expect(logger.verbose).toHaveBeenCalledWith(
-      `TSLint completed in ${tslinterResults.executionTime}ms.`
-    );
-    expect(logger.verbose).toHaveBeenCalledWith(
-      `Message hidden.  Queue length: ${runStartCount - 1}`
-    );
+    karmaHooks['run_start'][1]();
+    karmaHooks['run_start'][1]();
+    karmaHooks['run_complete'][0]();
+    serverSpy.calls.allArgs()[0][1](1);
   });
 });

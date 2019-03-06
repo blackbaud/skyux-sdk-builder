@@ -4,16 +4,13 @@
 const tsLinter = require('../cli/utils/ts-linter');
 const mock = require('mock-require');
 
-describe('cli test', () => {
+describe('cli watch', () => {
 
   const specPattern = 'src/app/**/*.spec.ts';
   let karmaUtilsSpy;
 
   beforeEach(() => {
     spyOn(process, 'exit');
-    spyOn(tsLinter, 'lintSync').and.returnValue({
-      exitCode: 2
-    });
 
     karmaUtilsSpy = jasmine.createSpyObj('karmaUtils', ['run']);
     mock('../cli/utils/karma-utils', karmaUtilsSpy);
@@ -23,7 +20,7 @@ describe('cli test', () => {
     mock.stopAll();
   });
 
-  it('should call process.exit with the exitCodes of karma and tslinter bitwise OR', (done) => {
+  it('should call process.exit with the exitCodes of karma', (done) => {
     const argv = { custom: true };
     const command = 'custom-command1';
 
@@ -37,12 +34,12 @@ describe('cli test', () => {
           argv,
           specPattern
         );
-        expect(process.exit).toHaveBeenCalledWith(1 || 2);
+        expect(process.exit).toHaveBeenCalledWith(1);
         done();
       }
     });
 
-    const test = mock.reRequire('../cli/test');
+    const test = mock.reRequire('../cli/watch');
     test(command, argv);
   });
 
@@ -59,13 +56,13 @@ describe('cli test', () => {
           argv,
           specPattern
         );
-        expect(process.exit).toHaveBeenCalledWith(0 || 2);
+        expect(process.exit).toHaveBeenCalledWith(0);
         done();
       }
     });
 
     process.argv = argv;
-    const test = mock.reRequire('../cli/test');
+    const test = mock.reRequire('../cli/watch');
 
     test(command);
     process.argv = argvClean;

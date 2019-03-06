@@ -14,6 +14,8 @@ function pact(command, argv) {
 
   const pactServers = require('../utils/pact-servers');
   const karmaUtils = require('./utils/karma-utils');
+  const tsLinter = require('./utils/ts-linter');
+
   const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 
   const skyPagesConfig = skyPagesConfigUtil.getSkyPagesConfig(command);
@@ -24,7 +26,6 @@ function pact(command, argv) {
   // get a free port for every config entry, plus one for the proxy
   if (!skyPagesConfig.skyux.pacts) {
     logger.error('skyux pact failed! pacts does not exist on configuration file.');
-    process.exit();
     return;
   }
 
@@ -83,7 +84,12 @@ function pact(command, argv) {
 
     // for use by consuming app
     pactServers.savePactProxyServer(`http://localhost:${ports[ports.length - 1]}`);
-    karmaUtils.run(command, argv, 'src/app/**/*.pact-spec.ts');
+
+    karmaUtils.run(command, argv, 'src/app/**/*.pact-spec.ts')
+      .then(exitCode => {
+        const tsLinterExitCode = tsLinter.lintSync(argv).exitCode;
+        process.exit(exitCode || tsLinterExitCode);
+      });
   });
 }
 

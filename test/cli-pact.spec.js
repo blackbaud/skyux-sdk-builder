@@ -14,6 +14,7 @@ describe('cli pact', () => {
   let httpSpy;
   let portfinderSpy;
   let karmaUtilsSpy;
+  let tsLinterSpy;
 
   beforeEach(() => {
 
@@ -38,6 +39,12 @@ describe('cli pact', () => {
       getSkyPagesConfig: getSkyPagesConfigSpy
     });
 
+    tsLinterSpy = jasmine.createSpyObj('tslinter', ['lintSync']);
+    tsLinterSpy.lintSync.and.returnValue({
+      exitCode: 0
+    });
+    mock('../cli/utils/ts-linter', tsLinterSpy);
+
     portfinderSpy = jasmine.createSpyObj('portfinder', ['getPorts']);
     portfinderSpy.getPorts.and.callFake((count, options, cb) => {
       cb(undefined, [0]);
@@ -45,6 +52,9 @@ describe('cli pact', () => {
     mock('portfinder', portfinderSpy);
 
     karmaUtilsSpy = jasmine.createSpyObj('karmaUtils', ['run']);
+    karmaUtilsSpy.run.and.returnValue({
+      then: cb => cb()
+    });
     mock('../cli/utils/karma-utils', karmaUtilsSpy);
 
     httpProxySpy = jasmine.createSpyObj('http-proxy', ['createProxyServer']);
@@ -75,7 +85,6 @@ describe('cli pact', () => {
     expect(logger.error).toHaveBeenCalledWith(
       'skyux pact failed! pacts does not exist on configuration file.'
     );
-    expect(process.exit).toHaveBeenCalled();
   });
 
   it('exit if portfinder returns error', (done) => {
@@ -289,19 +298,28 @@ describe('cli pact', () => {
     );
   });
 
-  it('should pass command, argv, and specPattern to karmaUtils.run', () => {
+  it('should pass command, argv, and specPattern to karmaUtils.run', (done) => {
     const argv = { custom: true };
     const command = 'custom-command1';
+    const tsLinterExitCode = 3;
+
+    tsLinterSpy.lintSync.and.returnValue({
+      exitCode: tsLinterExitCode
+    });
+
+    process.exit.and.callFake(exitCode => {
+      expect(exitCode).toBe(0 || tsLinterExitCode);
+      expect(karmaUtilsSpy.run.calls.argsFor(0)[1].command).toBe(command);
+      expect(karmaUtilsSpy.run).toHaveBeenCalledWith(
+        command,
+        argv,
+        specPattern
+      );
+      done();
+    });
+
     const pact = mock.reRequire('../cli/pact');
-
     pact(command, argv);
-
-    expect(karmaUtilsSpy.run.calls.argsFor(0)[1].command).toBe(command);
-    expect(karmaUtilsSpy.run).toHaveBeenCalledWith(
-      command,
-      argv,
-      specPattern
-    );
   });
 
   it('should use process.argv if no arguments passed in', () => {

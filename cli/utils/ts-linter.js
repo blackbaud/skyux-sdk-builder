@@ -32,13 +32,17 @@ function getFlags(argv) {
   return flags;
 }
 
+function getSkipOutput() {
+  return 'TSLint skipped.  Manually run `skyux lint` to catch linting errors.';
+}
+
 function lintAsync(argv) {
 
   if (argv.lint === false) {
     return Promise.resolve({
       executionTime: 0,
       exitCode: 0,
-      output: 'TSLint asynchronous skipped.'
+      output: getSkipOutput()
     });
   }
 
@@ -70,7 +74,7 @@ function lintAsync(argv) {
 function lintSync(argv) {
 
   if (argv.lint === false) {
-    logger.info('TSLint synchronous skipped.');
+    logger.warn(getSkipOutput());
     return {
       executionTime: 0,
       exitCode: 0,
@@ -83,7 +87,7 @@ function lintSync(argv) {
   const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
   const endTime = (new Date()).getTime();
   const executionTime = endTime - startTime;
-  logger.info(`TSLint completed in ${endTime - startTime}ms.`);
+  logger.info(`TSLint exited with ${tslint.status} in ${endTime - startTime}ms.`);
 
   return {
     executionTime,

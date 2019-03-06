@@ -46,8 +46,10 @@ module.exports = {
         require('./cli/pact')(command, argv);
         break;
       case 'test':
-      case 'watch':
         require('./cli/test')(command, argv);
+        break;
+      case 'watch':
+        require('./cli/watch')(command, argv);
         break;
       case 'version':
         require('./cli/version')();

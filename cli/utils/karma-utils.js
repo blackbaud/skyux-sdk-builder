@@ -17,63 +17,67 @@ function run(command, argv, specsPattern) {
   let tsLinterLastExitCode = 0;
   let tsLinterQueue = [];
 
-  const onRunStart = () => {
-    tsLinterQueue.push(tsLinter.lintAsync(argv));
-    localeAssetsProcessor.prepareLocaleFiles();
-  };
+  return new Promise(resolve => {
 
-  // Escape as soon as possible to minimize disconnects.
-  const onRunComplete = () => {
-
-    // Used to display messages after coverage reporter
-    setTimeout(() => {
-
-      logger.info(`TSLint started asynchronously from ${command} command.`);
-      const tsLinterInstance = tsLinterQueue.shift();
-
-      // Could have already been removed if there was a browser error
-      if (!tsLinterInstance) {
-        logger.verbose(`TSLint instance invalid.  Ignoring results.`);
-      } else {
-        tsLinterInstance.then(result => {
-          if (tsLinterQueue.length > 0) {
-            logger.verbose(`TSLint completed in ${result.executionTime}ms.`);
-            logger.verbose(`Message hidden.  Queue length: ${tsLinterQueue.length}`);
-          } else {
-            tsLinterLastExitCode = result.exitCode;
-            logger.error(result.output);
-            logger.info(`TSLint completed in ${result.executionTime}ms.`);
-          }
-        });
-      }
-
-    }, 10);
-  };
-
-  const onExit = (exitCode) => {
-    if (exitCode === 0 && tsLinterLastExitCode !== 0) {
-      exitCode = tsLinterLastExitCode;
+    // Short-circuit running Karma if there are no spec files
+    if (specsGlob.length === 0) {
+      logger.info(`No spec files located. Skipping ${command} command.`);
+      return resolve(0);
     }
 
-    logger.info(`Karma has exited with ${exitCode}.`);
-    process.exit(exitCode);
-  };
+    const server = new Server(karmaConfig, exitCode => {
+      if (exitCode === 0 && tsLinterLastExitCode !== 0) {
+        exitCode = tsLinterLastExitCode;
+      }
 
-  const onBrowserError = () => {
-    tsLinterQueue.shift();
-    logger.warn('Experienced a browser error, but letting karma retry.');
-  };
+      logger.info(`Karma has exited with ${exitCode}.`);
+      resolve(exitCode);
+    });
 
-  if (specsGlob.length === 0) {
-    logger.info(`No spec files located. Skipping ${command} command.`);
-    return onExit(0);
-  }
+    server.on('run_start', () => {
+      localeAssetsProcessor.prepareLocaleFiles();
+    });
 
-  const server = new Server(karmaConfig, onExit);
-  server.on('run_start', onRunStart);
-  server.on('run_complete', onRunComplete);
-  server.on('browser_error', onBrowserError);
-  server.start();
+    server.on('browser_error', () => {
+      logger.warn('Experienced a browser disconnect error.  Karma will retry up to 3 times.');
+    });
+
+    // Add extra handlers to run tslint asynchronously
+    if (command === 'watch') {
+      server.on('run_start', () => {
+        tsLinterQueue.push(tsLinter.lintAsync(argv));
+      });
+
+      // Used to display messages after coverage reporter
+      server.on('run_complete', () => setTimeout(() => {
+        logger.info(`TSLint started asynchronously from ${command} command.`);
+        const tsLinterInstance = tsLinterQueue.shift();
+
+        // Could have already been removed if there was a browser error
+        if (!tsLinterInstance) {
+          logger.verbose(`TSLint instance invalid.  Ignoring results.`);
+        } else {
+          tsLinterInstance.then(result => {
+            if (tsLinterQueue.length > 0) {
+              logger.verbose(`TSLint completed in ${result.executionTime}ms.`);
+              logger.verbose(`Message hidden.  Queue length: ${tsLinterQueue.length}`);
+            } else {
+              tsLinterLastExitCode = result.exitCode;
+              logger.error(result.output);
+              logger.info(`TSLint completed in ${result.executionTime}ms.`);
+            }
+          });
+        }
+      }, 10));
+
+      server.on('browser_error', () => {
+        logger.warn('You may be interested in using the `--no-lint` flag or refactoring your SPA.');
+        tsLinterQueue.shift();
+      });
+    }
+
+    server.start();
+  });
 }
 
 module.exports = {

@@ -8,6 +8,7 @@ describe('cli util ts-linter', () => {
   beforeEach(() => {
     spyOn(process, 'exit');
     spyOn(logger, 'info');
+    spyOn(logger, 'warn');
     spyOn(logger, 'error');
 
     mock('../config/sky-pages/sky-pages.config', {
@@ -76,8 +77,8 @@ describe('cli util ts-linter', () => {
   it('should abort linting synchronously', () => {
     const tsLinter = mock.reRequire('../cli/utils/ts-linter');
     const result = tsLinter.lintSync({ lint: false });
-    expect(logger.info).toHaveBeenCalledWith(
-      'TSLint synchronous skipped.'
+    expect(logger.warn).toHaveBeenCalledWith(
+      'TSLint skipped.  Manually run `skyux lint` to catch linting errors.'
     );
     expect(result).toEqual({
       executionTime: 0,
@@ -92,7 +93,7 @@ describe('cli util ts-linter', () => {
       expect(result).toEqual({
         executionTime: 0,
         exitCode: 0,
-        output: 'TSLint asynchronous skipped.'
+        output: 'TSLint skipped.  Manually run `skyux lint` to catch linting errors.'
       });
       done();
     });
