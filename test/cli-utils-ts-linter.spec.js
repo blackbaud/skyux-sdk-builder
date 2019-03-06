@@ -73,6 +73,31 @@ describe('cli util ts-linter', () => {
     expect(process.exit).not.toHaveBeenCalled();
   });
 
+  it('should abort linting synchronously', () => {
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    const result = tsLinter.lintSync({ lint: false });
+    expect(logger.info).toHaveBeenCalledWith(
+      'TSLint synchronous skipped.'
+    );
+    expect(result).toEqual({
+      executionTime: 0,
+      exitCode: 0,
+      output: ''
+    });
+  });
+
+  it('should abort linting asychronously', (done) => {
+    const tsLinter = mock.reRequire('../cli/utils/ts-linter');
+    tsLinter.lintAsync({ lint: false }).then(result => {
+      expect(result).toEqual({
+        executionTime: 0,
+        exitCode: 0,
+        output: 'TSLint asynchronous skipped.'
+      });
+      done();
+    });
+  });
+
   function testAsyncOutput(sendErrors, done) {
     const stderrError = 'first error';
     const stdoutError = 'second error';

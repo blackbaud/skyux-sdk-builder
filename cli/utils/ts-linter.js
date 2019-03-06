@@ -33,6 +33,15 @@ function getFlags(argv) {
 }
 
 function lintAsync(argv) {
+
+  if (argv.lint === false) {
+    return Promise.resolve({
+      executionTime: 0,
+      exitCode: 0,
+      output: 'TSLint asynchronous skipped.'
+    });
+  }
+
   return new Promise((resolve) => {
     let output = '';
 
@@ -59,6 +68,16 @@ function lintAsync(argv) {
 }
 
 function lintSync(argv) {
+
+  if (argv.lint === false) {
+    logger.info('TSLint synchronous skipped.');
+    return {
+      executionTime: 0,
+      exitCode: 0,
+      output: ''
+    };
+  }
+
   logger.info('TSLint started synchronously.');
   const startTime = (new Date()).getTime();
   const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
