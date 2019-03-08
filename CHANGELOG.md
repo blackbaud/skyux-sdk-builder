@@ -1,3 +1,11 @@
+# 3.5.0 (2019-03-08)
+
+- Added `--no-lint` flag to `skyux watch` command to disable TSLint from firing after every test run. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
+- Added `--fix` flag to `skyux lint` command to automatically fix any linting errors found. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
+- Added configuration option to allow for custom module resolution at build time. [#56](https://github.com/blackbaud/skyux-sdk-builder/pull/56)
+- Upgraded package dependencies. [#53](https://github.com/blackbaud/skyux-sdk-builder/pull/53)
+- Fixed `skyux watch` command to properly handle browser disconnects. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
+
 # 3.4.0 (2019-02-26)
 
 - Added support for `@blackbaud/skyux-lib-help@2.0.0`. [#45](https://github.com/blackbaud/skyux-sdk-builder/pull/45)
@@ -5,7 +13,7 @@
 
 # 3.3.0 (2019-02-22)
 
-- Updated package dependencies. [#21](https://github.com/blackbaud/skyux-sdk-builder/pull/21)
+- Upgraded package dependencies. [#21](https://github.com/blackbaud/skyux-sdk-builder/pull/21)
 - Removed `web-animations-js` from dependencies since Angular no longer requires it for older browsers. [#12](https://github.com/blackbaud/skyux-sdk-builder/pull/12)
 - Fixed `skyux build` to not include test fixtures in the bundle. [#40](https://github.com/blackbaud/skyux-sdk-builder/pull/40)
 
