@@ -92,7 +92,7 @@ describe('cli build-public-library', () => {
   it('should copy the runtime folder before compiling then clean it before packaging', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'copySync').and.callThrough();
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(spy).toHaveBeenCalledWith('runtime', 'runtime');
       expect(rimraf.sync).toHaveBeenCalledTimes(4);
       done();
@@ -101,7 +101,7 @@ describe('cli build-public-library', () => {
 
   it('should clean the dist and temp directories', (done) => {
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(rimraf.sync).toHaveBeenCalled();
       expect(skyPagesConfigUtil.spaPathTemp).toHaveBeenCalled();
       expect(skyPagesConfigUtil.spaPath).toHaveBeenCalledWith('dist');
@@ -112,7 +112,7 @@ describe('cli build-public-library', () => {
   it('should write a tsconfig.json file', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       const firstArg = spy.calls.argsFor(0)[0];
       expect(firstArg).toEqual('tsconfig.json');
       done();
@@ -122,7 +122,7 @@ describe('cli build-public-library', () => {
   it('should write a placeholder module file', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'writeFileSync').and.callThrough();
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       const args = spy.calls.argsFor(0);
       expect(args[0]).toEqual('main.ts');
       expect(args[1]).toEqual(`import { NgModule } from '@angular/core';
@@ -136,7 +136,7 @@ export class SkyLibPlaceholderModule {}
 
   it('should pass config to webpack', (done) => {
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(webpackConfig).toEqual(jasmine.any(Object));
       expect(webpackConfig.entry).toEqual(jasmine.any(String));
       done();
@@ -152,7 +152,7 @@ export class SkyLibPlaceholderModule {}
       };
     };
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(logger.error).toHaveBeenCalledWith(errorMessage);
       done();
     });
@@ -168,7 +168,7 @@ export class SkyLibPlaceholderModule {}
       }
     });
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(process.exit).toHaveBeenCalledWith(1);
       done();
     });
@@ -180,7 +180,7 @@ export class SkyLibPlaceholderModule {}
     spyOn(mockSpawn, 'sync').and.returnValue({
       err: 'something bad happened'
     });
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(spy).toHaveBeenCalledWith('something bad happened');
       done();
     });
@@ -193,7 +193,7 @@ export class SkyLibPlaceholderModule {}
       err: null,
       status: 1
     });
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(spy).toHaveBeenCalledWith(
         new Error(`Angular compiler (ngc) exited with status code 1.`)
       );
@@ -205,7 +205,7 @@ export class SkyLibPlaceholderModule {}
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockPluginFileProcessor, 'processFiles').and.callThrough();
 
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(spy).toHaveBeenCalled();
       done();
     });
@@ -215,7 +215,7 @@ export class SkyLibPlaceholderModule {}
     spyOn(mockFs, 'existsSync').and.returnValue(true);
     const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, mockWebpack).then(() => {
+    cliCommand({}, {}, mockWebpack).then(() => {
       expect(spy).toHaveBeenCalled();
       const files = spy.calls.argsFor(0)[1].files;
       expect(files[1]).toEqual('testing/index.ts');

@@ -53,7 +53,7 @@ describe('@skyux-sdk/builder', () => {
       },
       'watch': {
         cmd: 'watch',
-        lib: 'test'
+        lib: 'watch'
       },
       'version': {
         cmd: 'version',

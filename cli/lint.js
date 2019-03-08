@@ -1,9 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-function lint() {
+function lint(argv) {
   const tsLinter = require('./utils/ts-linter');
-  const result = tsLinter.lintSync();
+  const result = tsLinter.lintSync(argv);
 
   process.exit(result.exitCode);
 }
