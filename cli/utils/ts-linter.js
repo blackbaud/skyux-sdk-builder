@@ -4,51 +4,99 @@
 const spawn = require('cross-spawn');
 const logger = require('@blackbaud/skyux-logger');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
+const tslintLocation = './node_modules/.bin/tslint';
 
-const flags = [
-  '--project',
-  skyPagesConfigUtil.spaPath('tsconfig.json'),
-  '--config',
-  skyPagesConfigUtil.spaPath('tslint.json'),
-  '--exclude',
-  '**/node_modules/**/*.ts'
-];
+function getFlags(argv) {
+  const flags = [
+    '--project',
+    skyPagesConfigUtil.spaPath('tsconfig.json'),
+    '--config',
+    skyPagesConfigUtil.spaPath('tslint.json'),
+    '--exclude',
+    '**/node_modules/**/*.ts',
+    '--format'
+  ];
 
-function lintSync() {
-  logger.info('Starting TSLint...');
+  if (argv.format) {
+    flags.push(argv.format);
+  } else if (argv.platform === 'vsts') {
+    flags.push('vso');
+  } else {
+    flags.push('stylish');
+  }
 
-  const spawnResult = spawn.sync('./node_modules/.bin/tslint', flags);
+  if (argv.fix) {
+    flags.push('--fix');
+  }
 
-  // Convert buffers to strings.
-  let output = [];
-  spawnResult.output.forEach((buffer) => {
-    if (buffer === null) {
-      return;
+  return flags;
+}
+
+function getSkipOutput() {
+  return 'TSLint skipped.  Manually run `skyux lint` to catch linting errors.';
+}
+
+function lintAsync(argv) {
+
+  if (argv.lint === false) {
+    return Promise.resolve({
+      executionTime: 0,
+      exitCode: 0,
+      output: getSkipOutput()
+    });
+  }
+
+  return new Promise((resolve) => {
+    let output = '';
+
+    function handleBuffer(buffer) {
+      output += buffer.toString();
     }
 
-    const str = buffer.toString().trim();
-    if (str) {
-      output.push(str);
-    }
-  });
+    const startTime = (new Date()).getTime();
+    const tslint = spawn(tslintLocation, getFlags(argv));
 
-  // Convert multi-line errors into single errors.
-  let errors = [];
-  output.forEach((str) => {
-    errors = errors.concat(str.split(/\r?\n/));
-  });
+    tslint.stderr.on('data', handleBuffer);
+    tslint.stdout.on('data', handleBuffer);
 
-  // Print linting results to console.
-  errors.forEach(error => logger.error(error));
-  const plural = (errors.length === 1) ? '' : 's';
-  logger.info(`TSLint finished with ${errors.length} error${plural}.`);
+    tslint.on('exit', (exitCode) => {
+      const endTime = (new Date()).getTime();
+      resolve({
+        output,
+        executionTime: (endTime - startTime),
+        exitCode
+      });
+    });
+
+  });
+}
+
+function lintSync(argv) {
+
+  if (argv.lint === false) {
+    logger.warn(getSkipOutput());
+    return {
+      executionTime: 0,
+      exitCode: 0,
+      output: ''
+    };
+  }
+
+  logger.info('TSLint started synchronously.');
+  const startTime = (new Date()).getTime();
+  const tslint = spawn.sync(tslintLocation, getFlags(argv), { stdio: 'inherit' });
+  const endTime = (new Date()).getTime();
+  const executionTime = endTime - startTime;
+  logger.info(`TSLint exited with ${tslint.status} in ${endTime - startTime}ms.`);
 
   return {
-    exitCode: spawnResult.status,
-    errors: errors
+    executionTime,
+    exitCode: tslint.status,
+    output: tslint.output
   };
 }
 
 module.exports = {
+  lintAsync,
   lintSync
 };
