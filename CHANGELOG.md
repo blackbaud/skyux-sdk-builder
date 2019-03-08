@@ -1,5 +1,7 @@
 # 3.5.0 (2019-03-08)
 
+- Added `--no-lint` flag to `skyux watch` command to disable TSLint from firing after every test run. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
+- Added `--fix` flag to `skyux lint` command to automatically fix any linting errors found. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
 - Added configuration option to allow for custom module resolution at build time. [#56](https://github.com/blackbaud/skyux-sdk-builder/pull/56)
 - Upgraded package dependencies. [#53](https://github.com/blackbaud/skyux-sdk-builder/pull/53)
 - Fixed `skyux watch` command to properly handle browser disconnects. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
