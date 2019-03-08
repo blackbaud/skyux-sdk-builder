@@ -2,7 +2,6 @@
 'use strict';
 
 const karmaUtils = require('./utils/karma-utils');
-const tsLinter = require('./utils/ts-linter');
 
 /**
  * Spawns the karma test command.
@@ -13,11 +12,9 @@ function test(command, argv) {
   argv = argv || process.argv;
   argv.command = command;
 
+  // tslint is run asynchronously in the context of Karma
   karmaUtils.run(command, argv, 'src/app/**/*.spec.ts')
-    .then(exitCode => {
-      const tsLinterExitCode = tsLinter.lintSync(argv).exitCode;
-      process.exit(exitCode || tsLinterExitCode);
-    });
+    .then(exitCode => process.exit(exitCode));
 }
 
 module.exports = test;

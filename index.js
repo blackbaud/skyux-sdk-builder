@@ -31,7 +31,7 @@ module.exports = {
         require('./cli/build')(argv, getConfig(command), webpack);
         break;
       case 'build-public-library':
-        require('./cli/build-public-library')(getConfig(command), webpack);
+        require('./cli/build-public-library')(argv, getConfig(command), webpack);
         break;
       case 'e2e':
         require('./cli/e2e')(command, argv, getConfig(command), webpack);
@@ -40,14 +40,16 @@ module.exports = {
         require('./cli/serve')(argv, getConfig(command), webpack, WebpackDevServer);
         break;
       case 'lint':
-        require('./cli/lint')();
+        require('./cli/lint')(argv);
         break;
       case 'pact':
         require('./cli/pact')(command, argv);
         break;
       case 'test':
-      case 'watch':
         require('./cli/test')(command, argv);
+        break;
+      case 'watch':
+        require('./cli/watch')(command, argv);
         break;
       case 'version':
         require('./cli/version')();

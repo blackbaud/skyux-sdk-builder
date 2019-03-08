@@ -184,7 +184,7 @@ function buildCompiler(argv, skyPagesConfig, webpack, isAot) {
 function build(argv, skyPagesConfig, webpack) {
   cleanupDist();
 
-  const lintResult = tsLinter.lintSync();
+  const lintResult = tsLinter.lintSync(argv);
   const isAot = skyPagesConfig &&
     skyPagesConfig.skyux &&
     skyPagesConfig.skyux.compileMode === 'aot';
