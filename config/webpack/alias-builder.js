@@ -37,7 +37,7 @@ function setSpaAlias(alias, moduleName, filePath) {
 }
 
 module.exports = {
-  buildAliasList: function (skyPagesConfig, argv) {
+  buildAliasList: function (skyPagesConfig) {
     let alias = {
       'sky-pages-spa/src': spaPath('src'),
       'sky-pages-internal/runtime': outPath('runtime')
@@ -46,13 +46,19 @@ module.exports = {
     // Allow SPAs to provide custom module aliases.
     const moduleAliases = skyPagesConfig.skyux.moduleAliases;
     if (moduleAliases) {
-      const command = (argv && argv.command) ? argv.command : 'serve';
+      const command = skyPagesConfig.runtime.command;
 
       Object.keys(moduleAliases).forEach((key) => {
-        if (command === 'serve') {
-          alias[key] = spaPath(moduleAliases[key]);
-        } else {
-          alias[key] = skyPagesConfigUtil.spaPathTemp(moduleAliases[key]);
+        const modulePath = moduleAliases[key];
+
+        switch (command) {
+          case 'build':
+          case 'e2e':
+            alias[key] = skyPagesConfigUtil.spaPathTemp(modulePath);
+            break;
+          default:
+            alias[key] = spaPath(modulePath);
+            break;
         }
       });
     }
