@@ -1,3 +1,7 @@
+# 3.5.1 (2019-03-11)
+
+- Fixed module aliases to work properly for `skyux build` and `skyux e2e` commands. [#63](https://github.com/blackbaud/skyux-sdk-builder/pull/63)
+
 # 3.5.0 (2019-03-08)
 
 - Added `--no-lint` flag to `skyux watch` command to disable TSLint from firing after every test run. [#57](https://github.com/blackbaud/skyux-sdk-builder/pull/57)
