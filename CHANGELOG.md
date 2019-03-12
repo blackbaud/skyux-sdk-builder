@@ -1,3 +1,7 @@
+# 3.5.2 (2019-03-13)
+
+- Updated `e2e` tests to use [@skyux-sdk-template](https://github.com/blackbaud/skyux-sdk-template). [#65](https://github.com/blackbaud/skyux-sdk-builder/pull/65)
+
 # 3.5.1 (2019-03-11)
 
 - Fixed module aliases to work properly for `skyux build` and `skyux e2e` commands. [#63](https://github.com/blackbaud/skyux-sdk-builder/pull/63)
