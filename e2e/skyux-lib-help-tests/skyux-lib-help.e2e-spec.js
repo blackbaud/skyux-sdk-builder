@@ -81,14 +81,13 @@ function addModalToHomePage() {
   common.writeAppFile('home.component.html', content, 'utf8');
 }
 
-describe('skyux lib help', () => {
+fdescribe('skyux lib help', () => {
   beforeAll((done) => {
-    common.exec('npm', ['i', '--no-save', '@skyux/modals'])
-      .then(prepareBuild)
+    prepareBuild()
       .then(() => {
         done();
       });
-      addModalToHomePage();
+    addModalToHomePage();
   });
 
   afterAll(() => {
