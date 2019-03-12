@@ -12,48 +12,29 @@ const e2eRootPath = path.resolve(process.cwd(), 'e2e/skyux-lib-help-tests');
 let originalHomePage;
 
 // Add the SkyModalDemoFormComponent to the entryComponents in the app-extras module.
+// TODO Find a better way to test this functionality!
 const mockAppExtras = `
 import {
   NgModule
 } from '@angular/core';
 
 import {
-  SkyAvatarModule
-} from '@skyux/avatar';
-
-import {
-  SkyErrorModule
-} from '@skyux/errors';
-
-import {
-  SkyAlertModule,
-  SkyKeyInfoModule
-} from '@skyux/indicators';
-
-import {
   SkyModalModule
 } from '@skyux/modals';
+
+import {
+  AppSkyModule
+} from './app-sky.module';
 
 import {
   SkyModalDemoFormComponent
 } from './modal-fixtures/modal-form-fixture.component';
 
 @NgModule({
-  imports: [
-    SkyAlertModule,
-    SkyAvatarModule,
-    SkyErrorModule,
-    SkyKeyInfoModule,
-    SkyModalModule
-  ],
   exports: [
-    SkyAlertModule,
-    SkyAvatarModule,
-    SkyErrorModule,
-    SkyKeyInfoModule,
+    AppSkyModule,
     SkyModalModule
   ],
-  providers: [],
   entryComponents: [
     SkyModalDemoFormComponent
   ]
@@ -102,11 +83,12 @@ function addModalToHomePage() {
 
 describe('skyux lib help', () => {
   beforeAll((done) => {
-    prepareBuild()
-    .then(() => {
-      done();
-    });
-    addModalToHomePage();
+    common.exec('npm', ['i', '--no-save', '@skyux/modals'])
+      .then(prepareBuild)
+      .then(() => {
+        done();
+      });
+      addModalToHomePage();
   });
 
   afterAll(() => {
