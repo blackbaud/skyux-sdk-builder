@@ -220,7 +220,7 @@ describe('SKY UX Builder module generator', () => {
 
   it('should not include routing in the module imports if includeRouteModule is false', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
-    const expectedImport = `routing`;
+    const expectedImport = 'RouterModule.forRoot';
     let sourceWithRouting = generator.getSource({
       runtime: runtimeUtils.getDefaultRuntime(),
       skyux: runtimeUtils.getDefaultSkyux()
@@ -322,7 +322,7 @@ BBAuth.mock = true;`
       skyux: runtimeUtils.getDefaultSkyux({ useHashRouting: true })
     });
 
-    expect(source).toContain('routing = RouterModule.forRoot(routes, { useHash: true });');
+    expect(source).toContain('RouterModule.forRoot([], { useHash: true })');
   });
 
   it('should not use Hash routing if option is not specified in the skyuxconfig', () => {
@@ -332,7 +332,7 @@ BBAuth.mock = true;`
       skyux: runtimeUtils.getDefaultSkyux()
     });
 
-    expect(source).toContain('routing = RouterModule.forRoot(routes, { useHash: false });');
+    expect(source).toContain('RouterModule.forRoot([], { useHash: false })');
   });
 
   it('should add SkyPactService and override AuthTokenProvider if calling pact command', () => {

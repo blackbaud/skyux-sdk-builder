@@ -4,7 +4,7 @@
 const path = require('path');
 const mock = require('mock-require');
 
-describe('config karma shared', () => {
+xdescribe('config karma shared', () => {
 
   const testConfigFilename = '../config/webpack/test.webpack.config';
 

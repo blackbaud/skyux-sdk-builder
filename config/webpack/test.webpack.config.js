@@ -164,7 +164,14 @@ function getWebpackConfig(skyPagesConfig, argv) {
     config.module.rules.push({
       enforce: 'post',
       test: /\.(js|ts)$/,
-      use: ['istanbul-instrumenter-loader'],
+      use: [
+        {
+          loader: 'istanbul-instrumenter-loader',
+          options: {
+            esModules: true
+          }
+        }
+      ],
       include: srcPath,
       exclude: [
         /\.(e2e|spec)\.ts$/,
