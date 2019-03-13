@@ -88,7 +88,13 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.ts$/,
           use: [
             {
-              loader: 'awesome-typescript-loader'
+              loader: 'awesome-typescript-loader',
+              options: {
+                // Ignore the "Cannot find module" error that occurs when referencing
+                // an aliased file.  Webpack will still throw an error when a module
+                // cannot be resolved via a file path or alias.
+                ignoreDiagnostics: [2307]
+              }
             },
             {
               loader: 'angular2-template-loader'
@@ -158,14 +164,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
     config.module.rules.push({
       enforce: 'post',
       test: /\.(js|ts)$/,
-      use: [
-        {
-          loader: 'istanbul-instrumenter-loader',
-          options: {
-            esModules: true
-          }
-        }
-      ],
+      use: ['istanbul-instrumenter-loader'],
       include: srcPath,
       exclude: [
         /\.(e2e|spec)\.ts$/,
@@ -182,5 +181,5 @@ function getWebpackConfig(skyPagesConfig, argv) {
 }
 
 module.exports = {
-  getWebpackConfig
+  getWebpackConfig: getWebpackConfig
 };
