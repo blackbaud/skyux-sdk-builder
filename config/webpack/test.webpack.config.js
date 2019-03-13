@@ -46,7 +46,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let config = {
     mode: 'development',
 
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
 
     resolveLoader: {
       modules: resolves
@@ -88,15 +88,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.ts$/,
           use: [
             {
-              loader: 'awesome-typescript-loader',
-              options: {
-                // Ignore the "Cannot find module" error that occurs when referencing
-                // an aliased file.  Webpack will still throw an error when a module
-                // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307],
-                // Linting is handled by the sky-tslint loader.
-                transpileOnly: true
-              }
+              loader: 'awesome-typescript-loader'
             },
             {
               loader: 'angular2-template-loader'
@@ -172,9 +164,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
           options: {
             esModules: true
           }
-        },
-        {
-          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,
@@ -193,5 +182,5 @@ function getWebpackConfig(skyPagesConfig, argv) {
 }
 
 module.exports = {
-  getWebpackConfig: getWebpackConfig
+  getWebpackConfig
 };
