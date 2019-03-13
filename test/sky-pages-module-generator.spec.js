@@ -322,7 +322,7 @@ BBAuth.mock = true;`
       skyux: runtimeUtils.getDefaultSkyux({ useHashRouting: true })
     });
 
-    expect(source).toContain('RouterModule.forRoot([], { useHash: true })');
+    expect(source).toContain('RouterModule.forRoot(, { useHash: true })');
   });
 
   it('should not use Hash routing if option is not specified in the skyuxconfig', () => {
@@ -332,7 +332,7 @@ BBAuth.mock = true;`
       skyux: runtimeUtils.getDefaultSkyux()
     });
 
-    expect(source).toContain('RouterModule.forRoot([], { useHash: false })');
+    expect(source).toContain('RouterModule.forRoot(, { useHash: false })');
   });
 
   it('should add SkyPactService and override AuthTokenProvider if calling pact command', () => {
