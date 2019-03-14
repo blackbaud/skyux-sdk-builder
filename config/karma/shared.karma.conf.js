@@ -73,7 +73,12 @@ function getConfig(config) {
     webpack: testWebpackConfig.getWebpackConfig(skyPagesConfig, argv),
     coverageIstanbulReporter: {
       dir: path.join(process.cwd(), 'coverage'),
-      reports: ['html', 'json', 'lcov', 'text-summary'],
+      reports: [
+        'html',
+        'json',
+        'lcov',
+        'text-summary'
+      ],
       fixWebpackSourcePaths: true,
       thresholds: {
         global: {
