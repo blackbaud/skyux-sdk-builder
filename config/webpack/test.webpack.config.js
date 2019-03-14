@@ -88,12 +88,14 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.ts$/,
           use: [
             {
-              loader: 'ts-loader',
+              loader: 'awesome-typescript-loader',
               options: {
                 // Ignore the "Cannot find module" error that occurs when referencing
                 // an aliased file.  Webpack will still throw an error when a module
                 // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307]
+                ignoreDiagnostics: [2307],
+                useCache: true,
+                forceIsolatedModules: true
               }
             },
             {
@@ -163,13 +165,16 @@ function getWebpackConfig(skyPagesConfig, argv) {
   if (runCoverage) {
     config.module.rules.push({
       enforce: 'post',
-      test: /\.ts$/,
+      test: /\.(js|ts)$/,
       use: [
         {
           loader: 'istanbul-instrumenter-loader',
           options: {
             esModules: true
           }
+        },
+        {
+          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,

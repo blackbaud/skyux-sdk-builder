@@ -24,7 +24,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.ts$/,
           use: [
             {
-              loader: 'ts-loader',
+              loader: 'awesome-typescript-loader',
               options: {
                 // Ignore the "Cannot find module" error that occurs when referencing
                 // an aliased file.  Webpack will still throw an error when a module
