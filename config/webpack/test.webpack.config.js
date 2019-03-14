@@ -46,7 +46,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let config = {
     mode: 'development',
 
-    devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
 
     resolveLoader: {
       modules: resolves

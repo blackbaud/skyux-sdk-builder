@@ -100,7 +100,6 @@
     "protractor": "5.4.2",
     "raw-loader": "1.0.0",
     "reflect-metadata": "0.1.13",
-    "remap-istanbul": "0.13.0",
     "rimraf": "2.6.3",
     "sass-loader": "7.1.0",
     "selenium-standalone": "6.15.6",
