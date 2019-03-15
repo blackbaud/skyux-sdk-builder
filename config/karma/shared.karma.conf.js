@@ -33,9 +33,6 @@ function getConfig(config) {
   const srcPath = path.join(process.cwd(), 'src');
 
   const testWebpackConfig = require('../webpack/test.webpack.config');
-  const remapIstanbul = require('remap-istanbul');
-
-  const utils = require('istanbul').utils;
 
   // See minimist documentation regarding `argv._` https://github.com/substack/minimist
   const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
@@ -48,11 +45,10 @@ function getConfig(config) {
   const preprocessors = {};
 
   preprocessors[polyfillsBundle] = ['webpack'];
-  preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
+  preprocessors[specBundle] = ['webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
 
-  let onWriteReportIndex = -1;
-  let coverageFailed;
+  const codeCoverageThresholdPercent = getCoverageThreshold(skyPagesConfig);
 
   config.set({
     basePath: '',
@@ -75,93 +71,22 @@ function getConfig(config) {
     preprocessors: preprocessors,
     skyPagesConfig: skyPagesConfig,
     webpack: testWebpackConfig.getWebpackConfig(skyPagesConfig, argv),
-    coverageReporter: {
+    coverageIstanbulReporter: {
       dir: path.join(process.cwd(), 'coverage'),
-      reporters: [
-        { type: 'json' },
-        { type: 'html' },
-        { type: 'text-summary' },
-        { type: 'lcov' },
-        { type: 'in-memory' }
+      reports: [
+        'html',
+        'json',
+        'lcov',
+        'text-summary'
       ],
-      _onWriteReport: function (collector) {
-        onWriteReportIndex++;
-
-        const newCollector = remapIstanbul.remap(collector.getFinalCoverage());
-
-        const threshold = getCoverageThreshold(skyPagesConfig);
-
-        // The karma-coverage library does not use the coverage summary from the remapped source
-        // code, so its built-in code coverage check uses numbers that don't match what's reported
-        // to the user.  This will use the coverage summary generated from the remapped
-        // source code.
-        if (threshold) {
-          // When calling the _onWriteReport() method, karma-coverage loops through each reporter,
-          // then for each reporter loops through each browser.  Since karma-coverage doesn't
-          // supply this method with any information about the reporter or browser for which this
-          // method is being called, we must calculate it by looking at how many times the method
-          // has been called.
-          const browserIndex = Math.floor(onWriteReportIndex / this.reporters.length);
-
-          if (onWriteReportIndex % this.reporters.length === 0) {
-            // The karma-coverage library has moved to the next browser and has started the first
-            // reporter for that browser, so evaluate the code coverage now.
-            const browserName = config.browsers[browserIndex];
-
-            const summaries = [];
-
-            newCollector.files().forEach((file) => {
-              summaries.push(
-                utils.summarizeFileCoverage(
-                  newCollector.fileCoverageFor(file)
-                )
-              );
-            });
-
-            const remapCoverageSummary =
-              utils.mergeSummaryObjects.apply(
-                null,
-                summaries
-              );
-
-            const keys = [
-              'statements',
-              'branches',
-              'lines',
-              'functions'
-            ];
-
-            keys.forEach((key) => {
-              let actual = remapCoverageSummary[key].pct;
-
-              if (actual < threshold) {
-                coverageFailed = true;
-                logger.error(
-                  `Coverage in ${browserName} for ${key} (${actual}%) does not meet ` +
-                  `global threshold (${threshold}%)`
-                );
-              }
-            });
-          }
+      fixWebpackSourcePaths: true,
+      thresholds: {
+        global: {
+          statements: codeCoverageThresholdPercent,
+          lines: codeCoverageThresholdPercent,
+          branches: codeCoverageThresholdPercent,
+          functions: codeCoverageThresholdPercent
         }
-
-        // It's possible the user is running the watch command, so the field we're
-        // using to track the number of calls to _onWriteReport() needs to be reset
-        // after each run.
-        if (onWriteReportIndex === (this.reporters.length * config.browsers.length - 1)) {
-          onWriteReportIndex = -1;
-        }
-
-        return newCollector;
-      },
-
-      _onExit: function (done) {
-        if (coverageFailed) {
-          logger.info('Karma has exited with 1.');
-          process.exit(1);
-        }
-
-        done();
       }
     },
     webpackServer: {
@@ -192,7 +117,7 @@ function getConfig(config) {
     browserConsoleLogOptions: {
       level: 'log'
     },
-    reporters: ['mocha', 'coverage'],
+    reporters: ['mocha', 'coverage-istanbul'],
     port: 9876,
     colors: logger.logColor,
     logLevel: config.LOG_INFO,
