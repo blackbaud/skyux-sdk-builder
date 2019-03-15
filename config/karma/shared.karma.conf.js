@@ -72,6 +72,8 @@ function getConfig(config) {
     skyPagesConfig: skyPagesConfig,
     webpack: testWebpackConfig.getWebpackConfig(skyPagesConfig, argv),
     coverageIstanbulReporter: {
+      combineBrowserReports: true,
+      fixWebpackSourcePaths: true,
       dir: path.join(process.cwd(), 'coverage'),
       reports: [
         'html',
@@ -79,7 +81,6 @@ function getConfig(config) {
         'lcov',
         'text-summary'
       ],
-      fixWebpackSourcePaths: true,
       thresholds: {
         global: {
           statements: codeCoverageThresholdPercent,
