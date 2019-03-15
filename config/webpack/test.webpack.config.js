@@ -85,7 +85,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
             /\.(html|s?css)$/,
             /sky-pages\.module\.ts/
           ],
-          loader: outPath('loader', 'sky-assets')
+          loader: outPath('loader', 'sky-assets', 'mock-loader')
         },
         {
           enforce: 'pre',
