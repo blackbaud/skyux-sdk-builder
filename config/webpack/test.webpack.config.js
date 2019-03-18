@@ -84,6 +84,15 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
+
+        // Use strict type checking on the SPA's source and specs.
+        {
+          test: /\.ts$/,
+          use: ['awesome-typescript-loader', 'angular2-template-loader'],
+          exclude: excludes
+        },
+
+        // Do not check types from other libraries, or Builder's src folder.
         {
           test: /\.ts$/,
           use: [
@@ -93,14 +102,16 @@ function getWebpackConfig(skyPagesConfig, argv) {
                 // Ignore the "Cannot find module" error that occurs when referencing
                 // an aliased file.  Webpack will still throw an error when a module
                 // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307]
+                ignoreDiagnostics: [2307],
+                transpileOnly: true,
+                silent: true
               }
             },
             {
               loader: 'angular2-template-loader'
             }
           ],
-          exclude: [/\.e2e-spec\.ts$/]
+          exclude: [/\.e2e-spec\.ts$/, /\.spec\.ts$/]
         },
         {
           test: /\.s?css$/,
@@ -177,7 +188,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
       ],
       include: srcPath,
       exclude: [
-        /\.(e2e|spec)\.ts$/,
+        /\.(e2e-spec|spec)\.ts$/,
         /(\\|\/)node_modules(\\|\/)/,
         /(\\|\/)index\.ts/,
         /(\\|\/)fixtures(\\|\/)/,
