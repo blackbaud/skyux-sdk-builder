@@ -43,6 +43,19 @@ function getWebpackConfig(skyPagesConfig, argv) {
 
   let alias = aliasBuilder.buildAliasList(skyPagesConfig);
 
+  const awesomeTypescriptLoaderOptions = {
+    forceIsolatedModules: true,
+    // Ignore the "Cannot find module" error that occurs when referencing
+    // an aliased file.  Webpack will still throw an error when a module
+    // cannot be resolved via a file path or alias.
+    ignoreDiagnostics: [2307],
+    reportFiles: [
+      'src/app/**/*.ts'
+    ],
+    useCache: true,
+    usePrecompiledFiles: true
+  };
+
   let config = {
     mode: 'development',
 
@@ -85,33 +98,35 @@ function getWebpackConfig(skyPagesConfig, argv) {
           exclude: excludes
         },
 
-        // Use strict type checking on the SPA's source and specs.
         {
           test: /\.ts$/,
-          use: ['awesome-typescript-loader', 'angular2-template-loader'],
-          exclude: excludes
-        },
+          use: (info) => {
+            const isOutFile = (info.issuer && info.issuer.match(/node_modules\/@skyux-sdk\/builder\/src\//));
 
-        // Do not check types from other libraries, or Builder's src folder.
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'awesome-typescript-loader',
-              options: {
-                // Ignore the "Cannot find module" error that occurs when referencing
-                // an aliased file.  Webpack will still throw an error when a module
-                // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307],
-                transpileOnly: true,
-                silent: true
-              }
-            },
-            {
-              loader: 'angular2-template-loader'
+            // Do not check types from other libraries, or Builder's src folder.
+            if (isOutFile) {
+              return [
+                {
+                  loader: 'awesome-typescript-loader',
+                  options: Object.assign({}, awesomeTypescriptLoaderOptions, {
+                    transpileOnly: true,
+                    silent: true
+                  })
+                },
+                'angular2-template-loader'
+              ];
             }
-          ],
-          exclude: [/\.e2e-spec\.ts$/, /\.spec\.ts$/]
+
+            // Use strict type checking on the SPA's source and specs.
+            return [
+              {
+                loader: 'awesome-typescript-loader',
+                options: awesomeTypescriptLoaderOptions
+              },
+              'angular2-template-loader'
+            ];
+          },
+          exclude: [/\.e2e-spec\.ts$/]
         },
         {
           test: /\.s?css$/,
