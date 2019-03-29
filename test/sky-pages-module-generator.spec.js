@@ -398,4 +398,17 @@ require('style-loader!src/styles/custom.css');
     expect(source).not.toContain(`require('style-loader!https://google.com/styles.css');`);
     expect(spy.calls.first().args[0]).toContain('External style sheets are not permitted');
   });
+
+  it('should provide SkyAppWindowRef', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+    const expectedProvider = `providers: [
+    SkyAppWindowRef,`;
+
+    const source = generator.getSource({
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux()
+    });
+
+    expect(source).toContain(expectedProvider);
+  });
 });
