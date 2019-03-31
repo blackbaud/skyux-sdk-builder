@@ -262,14 +262,15 @@ describe('config karma shared', () => {
     });
 
     it('should handle codeCoverageThreshold set to "standard"', () => {
-      checkCodeCoverage('standard', 80, 79, false);
-      checkCodeCoverage('standard', 80, 80, true);
-      checkCodeCoverage('standard', 80, 81, true);
+      checkCodeCoverage('standard', 60, 59, false);
+      checkCodeCoverage('standard', 60, 60, true);
+      checkCodeCoverage('standard', 60, 61, true);
     });
 
     it('should handle codeCoverageThreshold set to "strict"', () => {
-      checkCodeCoverage('strict', 100, 99, false);
-      checkCodeCoverage('strict', 100, 100, true);
+      checkCodeCoverage('strict', 80, 79, false);
+      checkCodeCoverage('strict', 80, 80, true);
+      checkCodeCoverage('strict', 80, 81, true);
     });
   });
 

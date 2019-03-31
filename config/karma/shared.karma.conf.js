@@ -13,10 +13,10 @@ function getCoverageThreshold(skyPagesConfig) {
       return 0;
 
     case 'standard':
-      return 80;
+      return 60;
 
     case 'strict':
-      return 100;
+      return 80;
   }
 }
 
