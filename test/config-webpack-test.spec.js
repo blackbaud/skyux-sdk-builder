@@ -36,16 +36,6 @@ describe('config webpack test', () => {
     })[0];
   }
 
-  function getTypeScriptRule() {
-    const config = getConfig();
-
-    const found = config.module.rules.find((rule) => {
-      return (rule && typeof rule.use === 'function');
-    });
-
-    return found;
-  }
-
   it('should expose a getWebpackConfig method', () => {
     const lib = getLib();
     expect(typeof lib.getWebpackConfig).toEqual('function');
@@ -132,23 +122,5 @@ describe('config webpack test', () => {
 
     index = instrumentLoader.include.indexOf(path.resolve('src', 'app', 'public'));
     expect(index > -1).toEqual(true);
-  });
-
-  it('should run type checking on SPA files', function () {
-    const rule = getTypeScriptRule();
-    const result = rule.use({
-      issuer: 'src/app.component.ts'
-    });
-
-    expect(result[0].options.transpileOnly).toBeUndefined();
-  });
-
-  it('should not run type checking on Builder files', function () {
-    const rule = getTypeScriptRule();
-    const result = rule.use({
-      issuer: '/@skyux-sdk/builder/src/app.component.ts'
-    });
-
-    expect(result[0].options.transpileOnly).toEqual(true);
   });
 });

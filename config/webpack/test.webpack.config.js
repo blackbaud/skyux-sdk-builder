@@ -7,6 +7,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
+const tsLoaderUtil = require('./ts-loader-config');
 
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
@@ -42,18 +43,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
   skyPagesConfig.runtime.includeRouteModule = false;
 
   let alias = aliasBuilder.buildAliasList(skyPagesConfig);
-
-  const awesomeTypescriptLoaderOptions = {
-    forceIsolatedModules: true,
-    // Ignore the "Cannot find module" error that occurs when referencing
-    // an aliased file.  Webpack will still throw an error when a module
-    // cannot be resolved via a file path or alias.
-    ignoreDiagnostics: [2307],
-    reportFiles: [
-      'src/app/**/*.ts'
-    ],
-    usePrecompiledFiles: true
-  };
 
   let config = {
     mode: 'development',
@@ -96,39 +85,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
-        {
-          test: /\.ts$/,
-          use: (info) => {
-            const isOutFile = (
-              info.issuer &&
-              info.issuer.match(/[\/\\]@skyux-sdk[\/\\]builder[\/\\]src[\/\\]/)
-            );
-
-            // Do not check types from other libraries, or Builder's src folder.
-            if (isOutFile) {
-              return [
-                {
-                  loader: 'awesome-typescript-loader',
-                  options: Object.assign({}, awesomeTypescriptLoaderOptions, {
-                    transpileOnly: true,
-                    silent: true
-                  })
-                },
-                'angular2-template-loader'
-              ];
-            }
-
-            // Use strict type checking on the SPA's source and specs.
-            return [
-              {
-                loader: 'awesome-typescript-loader',
-                options: awesomeTypescriptLoaderOptions
-              },
-              'angular2-template-loader'
-            ];
-          },
-          exclude: [/\.e2e-spec\.ts$/]
-        },
+        tsLoaderUtil.getConfig(),
         {
           test: /\.s?css$/,
           use: ['raw-loader', 'sass-loader']
