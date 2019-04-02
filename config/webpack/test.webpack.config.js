@@ -85,7 +85,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
-        tsLoaderUtil.getConfig(),
+        tsLoaderUtil.getConfig(skyPagesConfig.runtime.command),
         {
           test: /\.s?css$/,
           use: ['raw-loader', 'sass-loader']

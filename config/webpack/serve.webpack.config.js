@@ -55,7 +55,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
 
     module: {
       rules: [
-        tsLoaderUtil.getConfig()
+        tsLoaderUtil.getConfig(skyPagesConfig.runtime.command)
       ]
     },
 

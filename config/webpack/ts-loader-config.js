@@ -1,21 +1,32 @@
 module.exports = {
-  getConfig() {
-    const awesomeTypescriptLoaderOptions = {
-      forceIsolatedModules: true,
+  getConfig(command) {
+    const options = {
       // Ignore the "Cannot find module" error that occurs when referencing
-      // an aliased file.  Webpack will still throw an error when a module
+      // an aliased file. Webpack will still throw an error when a module
       // cannot be resolved via a file path or alias.
       ignoreDiagnostics: [
         2307
       ],
+
+      // Only run type checking for these files.
       reportFiles: [
         'src/app/**/*.ts'
       ],
+
+      forceIsolatedModules: true,
       usePrecompiledFiles: true
     };
 
+    // Exclude test specs from type checking during a serve.
+    if (command === 'serve') {
+      options.reportFiles = [
+        'src/app/**/!(*.spec).ts'
+      ];
+    }
+
     return {
       test: /\.ts$/,
+
       use: (info) => {
         const isOutFile = (
           info.issuer &&
@@ -27,7 +38,7 @@ module.exports = {
           return [
             {
               loader: 'awesome-typescript-loader',
-              options: Object.assign({}, awesomeTypescriptLoaderOptions, {
+              options: Object.assign({}, options, {
                 transpileOnly: true,
                 silent: true
               })
@@ -40,7 +51,7 @@ module.exports = {
         return [
           {
             loader: 'awesome-typescript-loader',
-            options: awesomeTypescriptLoaderOptions
+            options
           },
           'angular2-template-loader'
         ];
