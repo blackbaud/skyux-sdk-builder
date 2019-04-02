@@ -1,5 +1,5 @@
 module.exports = {
-  getConfig(command) {
+  getRule(command) {
     const options = {
       // Ignore the "Cannot find module" error that occurs when referencing
       // an aliased file. Webpack will still throw an error when a module

@@ -11,7 +11,7 @@ const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlug
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const browser = require('../../cli/utils/browser');
 
-const tsLoaderUtil = require('./ts-loader-config');
+const tsLoaderUtil = require('./ts-loader-rule');
 
 /**
  * Returns the default webpackConfig.
@@ -55,7 +55,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
 
     module: {
       rules: [
-        tsLoaderUtil.getConfig(skyPagesConfig.runtime.command)
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command)
       ]
     },
 

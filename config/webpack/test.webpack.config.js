@@ -7,7 +7,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
-const tsLoaderUtil = require('./ts-loader-config');
+const tsLoaderUtil = require('./ts-loader-rule');
 
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
@@ -85,7 +85,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
-        tsLoaderUtil.getConfig(skyPagesConfig.runtime.command),
+
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
+
         {
           test: /\.s?css$/,
           use: ['raw-loader', 'sass-loader']
