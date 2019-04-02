@@ -52,7 +52,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
     reportFiles: [
       'src/app/**/*.ts'
     ],
-    useCache: true,
     usePrecompiledFiles: true
   };
 
@@ -97,11 +96,13 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
-
         {
           test: /\.ts$/,
           use: (info) => {
-            const isOutFile = (info.issuer && info.issuer.match(/node_modules\/@skyux-sdk\/builder\/src\//));
+            const isOutFile = (
+              info.issuer &&
+              info.issuer.match(/[\/\\]@skyux-sdk[\/\\]builder[\/\\]src[\/\\]/)
+            );
 
             // Do not check types from other libraries, or Builder's src folder.
             if (isOutFile) {
