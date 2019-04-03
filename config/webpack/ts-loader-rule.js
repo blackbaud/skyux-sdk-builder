@@ -56,7 +56,7 @@ function getRule(command) {
     test: /\.ts$/,
 
     use: (info) => {
-      const outFileRegExp = /[\/\\]@skyux-sdk[\/\\]builder[\/\\]src[\/\\]/;
+      const outFileRegExp = /node_modules/;
 
       const isOutFile = (
         info.issuer &&

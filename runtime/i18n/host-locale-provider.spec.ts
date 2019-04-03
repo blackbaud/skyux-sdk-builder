@@ -35,4 +35,17 @@ describe('Host locale provider', () => {
       });
     }
   );
+
+  it('should fall back to default local if the global SKYUX_HOST variable is not set',
+    function (done) {
+      mockWindowRef.nativeWindow.SKYUX_HOST = undefined;
+
+      const localeProvider = new SkyAppHostLocaleProvider(mockWindowRef);
+
+      localeProvider.getLocaleInfo().subscribe((info: any) => {
+        expect(info.locale).toBe('en-US');
+        done();
+      });
+    }
+  );
 });

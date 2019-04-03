@@ -2,7 +2,7 @@ const tsConfigUtil = require('../config/webpack/ts-loader-rule');
 
 describe('Webpack TypeScript rule config', function () {
   const spaFile = 'src/app.component.ts';
-  const outFile = '/@skyux-sdk/builder/src/app.component.ts';
+  const outFile = 'node_modules/@skyux-sdk/builder/src/app.component.ts';
 
   function getAwesomeTypescriptLoader(filePath, command = 'test') {
     const rule = tsConfigUtil.getRule(command);
