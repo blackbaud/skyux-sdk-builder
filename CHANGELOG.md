@@ -1,3 +1,7 @@
+# 3.5.3 (2019-03-29)
+
+- Fixed `SkyPagesModule` to provide `SkyAppWindowRef`. [#74](https://github.com/blackbaud/skyux-sdk-builder/pull/74)
+
 # 3.5.2 (2019-03-13)
 
 - Updated `e2e` tests to use [@skyux-sdk-template](https://github.com/blackbaud/skyux-sdk-template). [#65](https://github.com/blackbaud/skyux-sdk-builder/pull/65)
