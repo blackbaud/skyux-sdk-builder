@@ -1,6 +1,8 @@
 /*jshint node: true*/
 'use strict';
 
+const minimist = require('minimist');
+
 /**
  * Requires the shared karma config and sets any local properties.
  * @name getConfig
@@ -8,9 +10,13 @@
  */
 function getConfig(config) {
   require('./shared.karma.conf')(config);
-  let configuration = {
+
+  const argv = minimist(process.argv.slice(2));
+  const browser = (argv.headless) ? 'ChromeHeadless' : 'Chrome';
+
+  const configuration = {
     browsers: [
-      'Chrome'
+      browser
     ],
     customLaunchers: {
       Chrome_travis_ci: {
