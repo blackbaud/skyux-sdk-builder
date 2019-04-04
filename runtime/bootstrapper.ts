@@ -15,9 +15,6 @@ export class SkyAppBootstrapper {
 
   public static config: SkyuxConfig;
 
-  /* istanbul ignore next */
-  constructor() { }
-
   public static processBootstrapConfig(): Promise<any> {
     if (SkyAppBootstrapper.config && SkyAppBootstrapper.config.auth) {
       return BBAuth.getToken()
