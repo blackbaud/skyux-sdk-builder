@@ -156,6 +156,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
           options: {
             esModules: true
           }
+        },
+        {
+          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,
