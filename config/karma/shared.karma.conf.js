@@ -9,6 +9,7 @@ const logger = require('@blackbaud/skyux-logger');
  */
 function getCoverageThreshold(skyPagesConfig) {
   switch (skyPagesConfig.skyux.codeCoverageThreshold) {
+    default:
     case 'none':
       return 0;
 
