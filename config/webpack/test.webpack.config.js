@@ -142,7 +142,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           'HMR': false
         },
         'ROOT_DIR': JSON.stringify(srcPath),
-        'skyPagesConfig': JSON.stringify(skyPagesConfig),
+        'skyPagesConfig': JSON.stringify(skyPagesConfig)
       }),
 
       new ContextReplacementPlugin(
@@ -172,9 +172,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
           options: {
             esModules: true
           }
-        },
-        {
-          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,
