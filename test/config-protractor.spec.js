@@ -1,14 +1,19 @@
 /*jshint jasmine: true, node: true */
 'use strict';
 
+const mock = require('mock-require');
+
 describe('config protractor test', () => {
-
-  const mock = require('mock-require');
-
   let lib;
   let config;
+  let mockArgv;
 
   beforeEach(() => {
+    mockArgv = {
+      _: ['e2e']
+    };
+    mock('minimist', () => mockArgv);
+
     lib = mock.reRequire('../config/protractor/protractor.conf.js');
     config = lib.config;
   });
@@ -51,5 +56,17 @@ describe('config protractor test', () => {
     mock('@blackbaud/skyux-logger', { logColor: false });
     lib = mock.reRequire('../config/protractor/protractor.conf.js');
     expect(lib.config.jasmineNodeOpts.showColors).toBe(false);
+  });
+
+  it('should use headless browser if --headless flag set', () => {
+    mockArgv.headless = false;
+    lib = mock.reRequire('../config/protractor/protractor.conf.js');
+    let chromeArgs = lib.config.capabilities.chromeOptions.args;
+    expect(chromeArgs.indexOf('--headless') > -1).toEqual(false);
+
+    mockArgv.headless = true;
+    lib = mock.reRequire('../config/protractor/protractor.conf.js');
+    chromeArgs = lib.config.capabilities.chromeOptions.args;
+    expect(chromeArgs.indexOf('--headless') > -1).toEqual(true);
   });
 });

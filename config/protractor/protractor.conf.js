@@ -10,6 +10,17 @@ const logger = require('@blackbaud/skyux-logger');
 const argv = minimist(process.argv.slice(2));
 const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
 
+const chromeArgs = [
+  '--disable-extensions',
+  '--ignore-certificate-errors'
+];
+
+if (argv.headless) {
+  chromeArgs.push(
+    '--headless'
+  );
+}
+
 exports.config = {
   skyPagesConfig: skyPagesConfig,
   allScriptsTimeout: 11000,
@@ -24,7 +35,7 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'chromeOptions': {
-      'args': ['--disable-extensions --ignore-certificate-errors']
+      'args': chromeArgs
     }
   },
   directConnect: true,
