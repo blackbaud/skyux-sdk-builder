@@ -1,6 +1,6 @@
 /**
  * Returns a webpack loader rule to handle TypeScript files.
- * @param {*} command The active CLI command
+ * @param {string} command The active CLI command
  */
 function getRule(command) {
 

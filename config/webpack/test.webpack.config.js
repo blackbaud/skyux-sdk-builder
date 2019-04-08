@@ -163,7 +163,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
       ],
       include: srcPath,
       exclude: [
-        /\.(e2e-spec|spec)\.ts$/,
+        /\.(e2e-|pact-)?spec\.ts$/,
         /(\\|\/)node_modules(\\|\/)/,
         /(\\|\/)index\.ts/,
         /(\\|\/)fixtures(\\|\/)/,
