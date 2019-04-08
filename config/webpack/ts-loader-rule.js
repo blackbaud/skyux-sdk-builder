@@ -18,10 +18,7 @@ function getRule(command) {
     // Only run type checking for these files.
     reportFiles: [
       'src/app/**/*.ts'
-    ],
-
-    forceIsolatedModules: true,
-    usePrecompiledFiles: true
+    ]
   };
 
   // Exclude test specs from type checking during a serve.
