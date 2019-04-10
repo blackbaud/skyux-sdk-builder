@@ -142,12 +142,18 @@ describe('SKY UX Builder component generator', () => {
     );
   });
 
-  it('should ignore components in the public directory', () => {
-    let config = runtimeUtils.getDefaultRuntime();
-    config.srcPath = path.resolve(__dirname, 'fixtures');
+  it('should ignore components in specific directories', () => {
+    const mockSrcPath = path.resolve(__dirname, 'fixtures/component-generator');
+
+    const config = runtimeUtils.getDefaultRuntime({
+      srcPath: mockSrcPath
+    });
+
     const components = generator.getComponents({
       runtime: config
     });
-    expect(components.names.length).toEqual(0);
+
+    // Only one of the files is a legitimate route component.
+    expect(components.names.length).toEqual(1);
   });
 });
