@@ -153,7 +153,7 @@ describe('SKY UX Builder component generator', () => {
       runtime: config
     });
 
-    // Only one of the files is a legitimate route component.
+    // Only one of the files should be declared by SkyPagesModule.
     expect(components.names.length).toEqual(1);
   });
 });
