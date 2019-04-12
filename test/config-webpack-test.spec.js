@@ -28,7 +28,11 @@ describe('config webpack test', () => {
     const config = getConfig(argv);
 
     return config.module.rules.filter(rule => {
-      return (rule.use && rule.use[0].loader === 'istanbul-instrumenter-loader');
+      return (
+        rule.use &&
+        Array.isArray(rule.use) &&
+        rule.use[0].loader === 'istanbul-instrumenter-loader'
+      );
     })[0];
   }
 
