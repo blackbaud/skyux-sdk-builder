@@ -1,3 +1,9 @@
+# 3.6.0 (2019-04-12)
+
+- Added support for headless browsers during unit and e2e tests. [#78](https://github.com/blackbaud/skyux-sdk-builder/pull/78)
+- Added TSLint rules to warn consumers when using skipped tests and throw error when using focused tests. [#79](https://github.com/blackbaud/skyux-sdk-builder/pull/79)
+- Fixed test coverage to properly cover TypeScript class constructors. [#70](https://github.com/blackbaud/skyux-sdk-builder/pull/70)
+
 # 3.5.3 (2019-03-29)
 
 - Fixed `SkyPagesModule` to provide `SkyAppWindowRef`. [#74](https://github.com/blackbaud/skyux-sdk-builder/pull/74)

@@ -44,7 +44,7 @@ function getConfig(config) {
 
   config.set({
     webpack: webpackConfig,
-    coverageReporter: {
+    coverageIstanbulReporter: {
       dir: path.join(process.cwd(), 'coverage', 'src-app')
     }
   });

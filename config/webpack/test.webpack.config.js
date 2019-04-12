@@ -7,6 +7,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
+const tsLoaderUtil = require('./ts-loader-rule');
 
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
@@ -84,26 +85,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'awesome-typescript-loader',
-              options: {
-                // Ignore the "Cannot find module" error that occurs when referencing
-                // an aliased file.  Webpack will still throw an error when a module
-                // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307],
-                // Linting is handled by the sky-tslint loader.
-                transpileOnly: true
-              }
-            },
-            {
-              loader: 'angular2-template-loader'
-            }
-          ],
-          exclude: [/\.e2e-spec\.ts$/]
-        },
+
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
+
         {
           test: /\.s?css$/,
           use: ['raw-loader', 'sass-loader']
@@ -179,7 +163,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
       ],
       include: srcPath,
       exclude: [
-        /\.(e2e|spec)\.ts$/,
+        /\.(e2e-|pact-)?spec\.ts$/,
         /(\\|\/)node_modules(\\|\/)/,
         /(\\|\/)index\.ts/,
         /(\\|\/)fixtures(\\|\/)/,
