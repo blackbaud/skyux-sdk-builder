@@ -6,15 +6,20 @@ const mock = require('mock-require');
 describe('config karma test', () => {
   const path = '../config/karma/shared.karma.conf';
   let called = false;
+  let mockArgv;
 
   beforeEach(() => {
+    mockArgv = {};
+
     mock(path, () => {
       called = true;
     });
+
+    mock('minimist', () => mockArgv);
   });
-  
+
   afterEach(() => {
-    mock.stop(path);
+    mock.stopAll();
   });
 
   it('should load the shared config', (done) => {
@@ -38,4 +43,16 @@ describe('config karma test', () => {
     });
   });
 
+  it('should use headless browser if --headless flag set', (done) => {
+    mockArgv = {
+      headless: true
+    };
+
+    require('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.browsers[0]).toBe('ChromeHeadless');
+        done();
+      }
+    });
+  });
 });
