@@ -11,6 +11,8 @@ const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlug
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const browser = require('../../cli/utils/browser');
 
+const tsLoaderUtil = require('./ts-loader-rule');
+
 /**
  * Returns the default webpackConfig.
  * @name getDefaultWebpackConfig
@@ -53,26 +55,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
 
     module: {
       rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'awesome-typescript-loader',
-              options: {
-                // Ignore the "Cannot find module" error that occurs when referencing
-                // an aliased file.  Webpack will still throw an error when a module
-                // cannot be resolved via a file path or alias.
-                ignoreDiagnostics: [2307],
-                transpileOnly: true,
-                silent: true
-              }
-            },
-            {
-              loader: 'angular2-template-loader'
-            }
-          ],
-          exclude: [/\.e2e\.ts$/]
-        }
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command)
       ]
     },
 
