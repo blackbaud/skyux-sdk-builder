@@ -10,9 +10,10 @@ const localeAssetsProcessor = require('../../lib/locale-assets-processor');
 
 function run(command, argv, specsPattern) {
 
-  // This must occur before parseConfig since it doesn't internally
-  // set the logLevel until after trying to parse.  D'oh.
-  // LOG_INFO is the default level inside that method, so calling it suffices.
+  // Karma calls this when the config class is internally instantiated.
+  // We must call it manually before calling parseConfig.  If not,
+  // the logLevel will default to LOG_DISABLED, meaning no parsing errors are shown.
+  // This method interally sets it to LOG_INFO.
   karmaLogger.setupFromConfig({});
 
   const karmaConfigPath = configResolver.resolve(command, argv);
