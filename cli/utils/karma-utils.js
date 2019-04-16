@@ -1,13 +1,19 @@
 const logger = require('@blackbaud/skyux-logger');
 const Server = require('karma').Server;
+const karmaConfigUtil = require('karma').config;
+const karmaLogger = require('karma/lib/logger');
 const path = require('path');
 const glob = require('glob');
 const tsLinter = require('./ts-linter');
 const configResolver = require('./config-resolver');
 const localeAssetsProcessor = require('../../lib/locale-assets-processor');
-const karmaConfigUtil = require('karma').config;
 
 function run(command, argv, specsPattern) {
+
+  // This must occur before parseConfig since it doesn't internally
+  // set the logLevel until after trying to parse.  D'oh.
+  // LOG_INFO is the default level inside that method, so calling it suffices.
+  karmaLogger.setupFromConfig({});
 
   const karmaConfigPath = configResolver.resolve(command, argv);
   const karmaConfig = karmaConfigUtil.parseConfig(karmaConfigPath);
