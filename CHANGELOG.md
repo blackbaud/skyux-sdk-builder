@@ -1,3 +1,7 @@
+# 3.6.1 (2019-04-18)
+
+- Fixed issue with image assets being incorrectly copied during `skyux build`. [#89](https://github.com/blackbaud/skyux-sdk-builder/pull/89)
+
 # 3.6.0 (2019-04-12)
 
 - Added support for headless browsers during unit and e2e tests. [#78](https://github.com/blackbaud/skyux-sdk-builder/pull/78)
