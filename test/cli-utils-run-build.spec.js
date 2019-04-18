@@ -176,10 +176,10 @@ describe('cli utils run build', () => {
       })
     );
 
-    expect(writeFileSpy).toHaveBeenCalledWith(
-      skyPagesConfigUtil.outPath('dist', 'file-with-hash.json'),
-      '{}'
-    );
+    expect(copySpy).toHaveBeenCalledWith(
+      'physical-file-path.json',
+      skyPagesConfigUtil.outPath('dist', 'file-with-hash.json')
+    )
   });
 
   it('should allow the assets base URL to be specified', (done) => {
