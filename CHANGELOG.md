@@ -1,5 +1,6 @@
 # 3.6.1 (2019-04-18)
 
+- Fixed default logging level when using external configuration during `skyux test`. [#87](https://github.com/blackbaud/skyux-sdk-builder/pull/87)
 - Fixed issue with image assets being incorrectly copied during `skyux build`. [#89](https://github.com/blackbaud/skyux-sdk-builder/pull/89)
 
 # 3.6.0 (2019-04-12)
