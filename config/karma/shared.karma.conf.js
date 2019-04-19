@@ -83,11 +83,6 @@ function getConfig(config) {
         'lcov',
         'text-summary'
       ],
-      'report-config': {
-        html: {
-          subdir: 'html'
-        }
-      },
       thresholds: {
         global: {
           statements: codeCoverageThresholdPercent,
