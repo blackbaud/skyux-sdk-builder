@@ -75,6 +75,7 @@ function getConfig(config) {
     coverageIstanbulReporter: {
       combineBrowserReports: true,
       fixWebpackSourcePaths: true,
+      skipFilesWithNoCoverage: true,
       dir: path.join(process.cwd(), 'coverage'),
       reports: [
         'html',
@@ -82,6 +83,11 @@ function getConfig(config) {
         'lcov',
         'text-summary'
       ],
+      'report-config': {
+        html: {
+          subdir: 'html'
+        }
+      },
       thresholds: {
         global: {
           statements: codeCoverageThresholdPercent,
