@@ -279,7 +279,7 @@ describe('AppComponent', () => {
         let loadOmnibarCallback: Function;
 
         const runOutsideAngularSpy = spyOn(zone, 'runOutsideAngular').and.callFake(
-          (cb: Function) => {
+          (cb: Function): any => {
             if (cb && cb.toString().indexOf('BBOmnibar') >= 0) {
               loadOmnibarCallback = cb;
             } else {
@@ -310,6 +310,7 @@ describe('AppComponent', () => {
 
       spyOn(BBOmnibar, 'load').and.callFake((config: BBOmnibarConfig) => {
         beforeNavCallback = config.nav.beforeNavCallback;
+        return Promise.resolve();
       });
 
       skyAppConfig.skyux.omnibar = {};
@@ -323,7 +324,7 @@ describe('AppComponent', () => {
         let zoneRunCallback: Function;
 
         const runSpy = spyOn(zone, 'run').and.callFake(
-          (cb: Function) => {
+          (cb: Function): any => {
             if (cb && cb.toString().indexOf('navigateByUrl') >= 0) {
               zoneRunCallback = cb;
             } else {
@@ -448,13 +449,13 @@ describe('AppComponent', () => {
     const spyOmnibar = spyOn(BBOmnibar, 'load');
     skyAppConfig.skyux.omnibar = {
       nav: {
-        junk: true
+        services: [{}]
       }
     };
 
     setup(skyAppConfig, false).then(() => {
       fixture.detectChanges();
-      expect(spyOmnibar.calls.first().args[0].nav.junk).toEqual(true);
+      expect(spyOmnibar.calls.first().args[0].nav.services.length).toEqual(1);
     });
   }));
 
@@ -577,11 +578,19 @@ describe('AppComponent', () => {
       fixture.detectChanges();
       const cb = spyOmnibar.calls.first().args[0].nav.beforeNavCallback;
 
-      const globalLink = cb({ url: 'asdf.com' });
+      const globalLink = cb({
+        title: 'foo',
+        url: 'asdf.com'
+      });
+
       expect(globalLink).toEqual(true);
       expect(navigateByUrlParams).not.toBeDefined();
 
-      const localLink = cb({ url: 'base.com/custom-base/new-place' });
+      const localLink = cb({
+        title: 'bar',
+        url: 'base.com/custom-base/new-place'
+      });
+
       expect(localLink).toEqual(false);
       expect(navigateByUrlParams).toEqual('/new-place');
     });
@@ -598,7 +607,11 @@ describe('AppComponent', () => {
       fixture.detectChanges();
       const cb = spyOmnibar.calls.first().args[0].nav.beforeNavCallback;
 
-      const globalLink = cb({ url: 'base.com/custom-base-2' });
+      const globalLink = cb({
+        title: 'foo',
+        url: 'base.com/custom-base-2'
+      });
+
       expect(globalLink).toEqual(true);
       expect(navigateByUrlParams).not.toBeDefined();
     });
@@ -615,7 +628,11 @@ describe('AppComponent', () => {
       fixture.detectChanges();
       const cb = spyOmnibar.calls.first().args[0].nav.beforeNavCallback;
 
-      const localLink = cb({ url: 'base.com/custom-base/new-place?envid=AbCd' });
+      const localLink = cb({
+        title: 'foo',
+        url: 'base.com/custom-base/new-place?envid=AbCd'
+      });
+
       expect(localLink).toEqual(false);
       expect(navigateByUrlParams).toEqual('/new-place?envid=AbCd');
     });
@@ -849,7 +866,7 @@ describe('AppComponent', () => {
       const badMessageType = 'navigate';
 
       const message = spyEventListener.calls.first().args[0];
-      const eventListener = spyEventListener.calls.first().args[1];
+      const eventListener: any = spyEventListener.calls.first().args[1];
 
       expect(message).toEqual('message');
       expect(spyEventListener).toHaveBeenCalled();

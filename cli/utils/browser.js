@@ -2,7 +2,7 @@
 'use strict';
 
 const util = require('util');
-const open = require('opn');
+const open = require('open');
 const logger = require('@blackbaud/skyux-logger');
 const hostUtils = require('../../utils/host-utils');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');

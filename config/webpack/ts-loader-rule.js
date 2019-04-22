@@ -24,7 +24,7 @@ function getRule(command) {
   // Exclude test specs from type checking during a serve.
   if (command === 'serve') {
     awesomeTypescriptLoaderOptions.reportFiles = [
-      'src/app/**/!(*.spec).ts'
+      'src/app/**/!(*.spec|*.fixture).ts'
     ];
   }
 

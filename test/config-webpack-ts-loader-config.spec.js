@@ -31,7 +31,7 @@ describe('Webpack TypeScript rule config', function () {
 
     loader = getAwesomeTypescriptLoader(outFile, 'serve');
     expect(loader.options.reportFiles).toEqual([
-      'src/app/**/!(*.spec).ts'
+      'src/app/**/!(*.spec|*.fixture).ts'
     ]);
   });
 });

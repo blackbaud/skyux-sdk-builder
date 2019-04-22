@@ -1,7 +1,7 @@
 /*jshint jasmine: true, node: true */
 'use strict';
 
-const url = require('url');
+const urlParser = require('url');
 const mock = require('mock-require');
 const merge = require('../utils/merge');
 const logger = require('@blackbaud/skyux-logger');
@@ -20,7 +20,7 @@ describe('browser utils', () => {
     openParamUrl = '';
     openParamBrowser = undefined;
 
-    mock('opn', (url, options) => {
+    mock('open', (url, options) => {
       openCalled = true;
       openParamUrl = url;
       openParamBrowser = options.app;
@@ -108,14 +108,15 @@ describe('browser utils', () => {
       }
     });
 
-    const parsed = url.parse(openParamUrl, true);
+    const parsed = urlParser.parse(openParamUrl, true);
     expect(parsed.query.envid).toBe(settings.argv.envid);
     expect(parsed.query.svcid).toBe(settings.argv.svcid);
     expect(parsed.query.noid).not.toBeDefined();
   });
 
   it(
-    'should pass through envid and svcid, but not other flags from the command line when ' + 'config specifies a params object',
+    'should pass through envid and svcid, but not other flags from the command line when ' +
+    'config specifies a params object',
     () => {
       const settings = bind({
         argv: {
@@ -137,7 +138,7 @@ describe('browser utils', () => {
         }
       });
 
-      const parsed = url.parse(openParamUrl, true);
+      const parsed = urlParser.parse(openParamUrl, true);
       expect(parsed.query.envid).toBe(settings.argv.envid);
       expect(parsed.query.svcid).toBe(settings.argv.svcid);
       expect(parsed.query.noid).not.toBeDefined();
