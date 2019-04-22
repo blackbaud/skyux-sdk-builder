@@ -279,7 +279,7 @@ describe('AppComponent', () => {
         let loadOmnibarCallback: Function;
 
         const runOutsideAngularSpy = spyOn(zone, 'runOutsideAngular').and.callFake(
-          function (cb: Function): any {
+          (cb: Function): any => {
             if (cb && cb.toString().indexOf('BBOmnibar') >= 0) {
               loadOmnibarCallback = cb;
             } else {
@@ -324,7 +324,7 @@ describe('AppComponent', () => {
         let zoneRunCallback: Function;
 
         const runSpy = spyOn(zone, 'run').and.callFake(
-          function (cb: Function): any {
+          (cb: Function): any => {
             if (cb && cb.toString().indexOf('navigateByUrl') >= 0) {
               zoneRunCallback = cb;
             } else {
