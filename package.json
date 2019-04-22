@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.6.0",
+  "version": "3.6.2",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -96,7 +96,7 @@
     "minimist": "1.2.0",
     "node-sass": "4.11.0",
     "node-sass-tilde-importer": "1.0.2",
-    "opn": "5.4.0",
+    "open": "6.1.0",
     "portfinder": "1.0.20",
     "protractor": "5.4.2",
     "raw-loader": "1.0.0",

@@ -1,3 +1,13 @@
+# 3.6.2 (2019-04-22)
+
+- Fixed `skyux serve` to ignore Typescript type checking for component test fixtures. [#92](https://github.com/blackbaud/skyux-sdk-builder/pull/92)
+- Fixed unit test coverage reports for Windows machines. [#94](https://github.com/blackbaud/skyux-sdk-builder/pull/94)
+
+# 3.6.1 (2019-04-18)
+
+- Fixed default logging level when using external configuration during `skyux test`. [#87](https://github.com/blackbaud/skyux-sdk-builder/pull/87)
+- Fixed issue with image assets being incorrectly copied during `skyux build`. [#89](https://github.com/blackbaud/skyux-sdk-builder/pull/89)
+
 # 3.6.0 (2019-04-12)
 
 - Added support for headless browsers during unit and e2e tests. [#78](https://github.com/blackbaud/skyux-sdk-builder/pull/78)

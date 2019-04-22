@@ -97,9 +97,7 @@ function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
         filePathWithHash
       );
 
-      fs.ensureFileSync(newPath);
-      const contents = fs.readFileSync(physicalFilePath, { encoding: 'utf-8' });
-      fs.writeFileSync(newPath, contents);
+      fs.copySync(physicalFilePath, newPath);
     }
   );
 

@@ -12,6 +12,7 @@ describe('cli util run-karma', () => {
   let serverStartSpy;
   let globSpy;
   let karmaHooks;
+  let karmaParseConfigSpy;
 
   beforeEach(() => {
     spyOn(logger, 'info');
@@ -44,9 +45,10 @@ describe('cli util run-karma', () => {
     serverSpy.prototype.start = serverStartSpy;
     karmaHooks = {};
 
+    karmaParseConfigSpy = jasmine.createSpy('parseConfig');
     mock('karma', {
       config: {
-        parseConfig: () => ''
+        parseConfig: karmaParseConfigSpy
       },
       Server: serverSpy
     });
@@ -95,7 +97,7 @@ describe('cli util run-karma', () => {
     );
   });
 
-  it('should log an additioanl warning in browser_error if watch', () => {
+  it('should log an additional warning in browser_error if watch', () => {
     mock.reRequire('../cli/utils/karma-utils').run('watch', {}, '');
     karmaHooks['browser_error'][1]();
     expect(logger.warn).toHaveBeenCalledWith(
@@ -173,5 +175,20 @@ describe('cli util run-karma', () => {
     karmaHooks['run_start'][1]();
     karmaHooks['run_complete'][0]();
     serverSpy.calls.allArgs()[0][1](1);
+  });
+
+  it('should call setupFromConfig before parseConfig', (done) => {
+    const karmaSetupFromConfigSpy = jasmine.createSpy('setupFromConfig');
+    mock('karma/lib/logger', {
+      setupFromConfig: karmaSetupFromConfigSpy
+    });
+
+    globSpy.sync.and.returnValue([]);
+    mock.reRequire('../cli/utils/karma-utils')
+      .run('test', {}, '')
+      .then(() => {
+        expect(karmaSetupFromConfigSpy).toHaveBeenCalledBefore(karmaParseConfigSpy);
+        done();
+      });
   });
 });

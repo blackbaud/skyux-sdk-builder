@@ -75,6 +75,7 @@ function getConfig(config) {
     coverageIstanbulReporter: {
       combineBrowserReports: true,
       fixWebpackSourcePaths: true,
+      skipFilesWithNoCoverage: true,
       dir: path.join(process.cwd(), 'coverage'),
       reports: [
         'html',
