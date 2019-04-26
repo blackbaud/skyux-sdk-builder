@@ -1,3 +1,8 @@
+# 3.6.2 (2019-04-22)
+
+- Fixed `skyux serve` to ignore Typescript type checking for component test fixtures. [#92](https://github.com/blackbaud/skyux-sdk-builder/pull/92)
+- Fixed unit test coverage reports for Windows machines. [#94](https://github.com/blackbaud/skyux-sdk-builder/pull/94)
+
 # 3.6.1 (2019-04-18)
 
 - Fixed default logging level when using external configuration during `skyux test`. [#87](https://github.com/blackbaud/skyux-sdk-builder/pull/87)
