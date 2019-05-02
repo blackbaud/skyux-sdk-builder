@@ -78,7 +78,6 @@
     "hash-file": "3.0.0",
     "html-webpack-plugin": "3.2.0",
     "http-proxy": "1.17.0",
-    "http-server": "0.11.1",
     "istanbul": "0.4.5",
     "istanbul-instrumenter-loader": "3.0.1",
     "jasmine": "2.99.0",
