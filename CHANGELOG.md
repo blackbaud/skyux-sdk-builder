@@ -1,3 +1,7 @@
+# 3.6.3 (2019-05-02)
+
+- Replaced use of `http-server` during internal e2e tests. [#102](https://github.com/blackbaud/skyux-builder/pull/102)
+
 # 3.6.2 (2019-04-22)
 
 - Fixed `skyux serve` to ignore Typescript type checking for component test fixtures. [#92](https://github.com/blackbaud/skyux-sdk-builder/pull/92)
