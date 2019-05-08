@@ -1,7 +1,7 @@
 # 3.6.4 (2019-05-08)
 
 - Fixed automated routing utility to register parameterized routes last. [#104](https://github.com/blackbaud/skyux-sdk-builder/issues/104)
-- Upgraded package dependencies, which addressed a few vulnerability warnings during installation. [#97](https://github.com/blackbaud/skyux-sdk-builder/pull/97)
+- Upgraded package dependencies to address vulnerability warnings during installation. [#97](https://github.com/blackbaud/skyux-sdk-builder/pull/97)
 
 # 3.6.3 (2019-05-02)
 
