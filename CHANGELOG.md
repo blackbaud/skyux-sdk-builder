@@ -1,3 +1,7 @@
+# 3.6.5 (2019-05-09)
+
+- Fixed `skyux test` and `skyux watch` to provide appropriate polyfills for Internet Explorer 11. [#107](https://github.com/blackbaud/skyux-sdk-builder/pull/107)
+
 # 3.6.4 (2019-05-08)
 
 - Fixed automated routing utility to register parameterized routes last. [#104](https://github.com/blackbaud/skyux-sdk-builder/issues/104)
