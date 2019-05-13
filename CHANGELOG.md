@@ -1,3 +1,16 @@
+# 3.6.5 (2019-05-09)
+
+- Fixed `skyux test` and `skyux watch` to provide appropriate polyfills for Internet Explorer 11. [#107](https://github.com/blackbaud/skyux-sdk-builder/pull/107)
+
+# 3.6.4 (2019-05-08)
+
+- Fixed automated routing utility to register parameterized routes last. [#104](https://github.com/blackbaud/skyux-sdk-builder/issues/104)
+- Upgraded package dependencies to address vulnerability warnings during installation. [#97](https://github.com/blackbaud/skyux-sdk-builder/pull/97)
+
+# 3.6.3 (2019-05-02)
+
+- Replaced use of `http-server` during internal e2e tests. [#102](https://github.com/blackbaud/skyux-builder/pull/102)
+
 # 3.6.2 (2019-04-22)
 
 - Fixed `skyux serve` to ignore Typescript type checking for component test fixtures. [#92](https://github.com/blackbaud/skyux-sdk-builder/pull/92)
