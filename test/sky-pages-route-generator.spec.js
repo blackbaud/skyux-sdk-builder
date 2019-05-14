@@ -356,4 +356,22 @@ describe('SKY UX Builder route generator', () => {
       `template: \`<iframe src="https://host.nxt.blackbaud.com/errors/notfound"`
     );
   });
+
+  it('should register parametized routes after non-parametized routes', () => {
+    spyOn(glob, 'sync').and.callFake(() => [
+      'my-custom-src/my-custom-route2/index.html',
+      'my-custom-src/_id/index.html',
+      'my-custom-src/my-custom-route1/index.html'
+    ]);
+    spyOn(path, 'join').and.returnValue('');
+    const routes = generator.getRoutes({
+      runtime: {
+        srcPath: ''
+      }
+    });
+
+    expect(routes.routesForConfig[0].routePath).toBe('my-custom-src/my-custom-route2');
+    expect(routes.routesForConfig[1].routePath).toBe('my-custom-src/my-custom-route1');
+    expect(routes.routesForConfig[2].routePath).toBe('my-custom-src/:id');
+  });
 });
