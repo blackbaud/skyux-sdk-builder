@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.6.5",
+  "version": "3.6.6",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -79,7 +79,9 @@
     "html-webpack-plugin": "3.2.0",
     "http-proxy": "1.17.0",
     "istanbul": "0.4.5",
+    "istanbul-api": "2.1.6",
     "istanbul-instrumenter-loader": "3.0.1",
+    "istanbul-reports": "2.2.4",
     "jasmine": "2.99.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "4.1.0",

@@ -1,3 +1,7 @@
+# 3.6.6 (2019-05-14)
+
+- Fixed the `skyux test` error "Attempt to close tag classes when packages was the one open" by using specific versions of `istanbul-reports` and `istanbul-api`.  [#111](https://github.com/blackbaud/skyux-sdk-builder/pull/111)
+
 # 3.6.5 (2019-05-09)
 
 - Fixed `skyux test` and `skyux watch` to provide appropriate polyfills for Internet Explorer 11. [#107](https://github.com/blackbaud/skyux-sdk-builder/pull/107)
