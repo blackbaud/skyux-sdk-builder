@@ -11,11 +11,15 @@ describe('cli utils run build', () => {
   let mockLocaleProcessor;
   let mockFsExtra;
 
+  let skyPagesConfigUtil;
+
   beforeEach(() => {
+    skyPagesConfigUtil = mock.reRequire('../config/sky-pages/sky-pages.config');
+
     mockLocaleProcessor = {
       getDefaultLocaleFiles: localeAssetsProcessor.getDefaultLocaleFiles,
       prepareLocaleFiles() {},
-      isLocaleFile() {},
+      isLocaleFile() {}
     };
 
     mockAssetsProcessor = {
@@ -94,8 +98,7 @@ describe('cli utils run build', () => {
   });
 
   it('should write files to disk in AoT compile mode', (done) => {
-    const generator = require('../lib/sky-pages-module-generator');
-    const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+    const generator = mock.reRequire('../lib/sky-pages-module-generator');
 
     const f = '../config/webpack/build-aot.webpack.config';
 
@@ -108,9 +111,7 @@ describe('cli utils run build', () => {
     const writeFileSpy = spyOn(mockFsExtra, 'writeFileSync');
     const removeSpy = spyOn(mockFsExtra, 'removeSync');
 
-    let passedConfig;
-    spyOn(generator, 'getSource').and.callFake(function (c) {
-      passedConfig = c;
+    spyOn(generator, 'getSource').and.callFake(function () {
       return 'TESTSOURCE';
     });
 
@@ -179,7 +180,7 @@ describe('cli utils run build', () => {
     expect(copySpy).toHaveBeenCalledWith(
       'physical-file-path.json',
       skyPagesConfigUtil.outPath('dist', 'file-with-hash.json')
-    )
+    );
   });
 
   it('should allow the assets base URL to be specified', (done) => {
@@ -289,5 +290,45 @@ describe('cli utils run build', () => {
       run: () => {}
     }));
     expect(spy).toHaveBeenCalledWith();
+  });
+
+  it('should add module aliases to tsconfig.json "paths" during AoT build', (done) => {
+
+    mock('../config/webpack/build-aot.webpack.config', {
+      getWebpackConfig: () => ({})
+    });
+
+    const fsSpy = spyOn(mockFsExtra, 'writeJSONSync').and.callThrough();
+
+    const runBuild = mock.reRequire('../cli/utils/run-build');
+
+    runBuild({}, {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        compileMode: 'aot',
+        moduleAliases: {
+          '@foobar': 'foo/bar/baz.ts'
+        }
+      }
+    }, () => ({
+      run: (cb) => {
+        cb(
+          null,
+          {
+            toJson: () => ({
+              errors: [],
+              warnings: []
+            })
+          }
+        );
+      }
+    })).then(() => {
+      const tsConfig = fsSpy.calls.argsFor(0)[1];
+      const compilerOptionsPath = tsConfig.compilerOptions.paths['@foobar'][0];
+      expect(compilerOptionsPath).toEqual(
+        skyPagesConfigUtil.spaPathTemp('foo/bar/baz.ts')
+      );
+      done();
+    });
   });
 });
