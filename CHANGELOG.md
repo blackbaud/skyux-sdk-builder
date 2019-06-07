@@ -1,3 +1,8 @@
+# 3.6.7 (2019-06-07)
+
+- Fixed **skyuxconfig.json** `moduleAliases` setting to function properly during AoT builds. [#120](https://github.com/blackbaud/skyux-sdk-builder/pull/120)
+- Fixed dependency vulnerabilities. [#118](https://github.com/blackbaud/skyux-sdk-builder/pull/118)
+
 # 3.6.6 (2019-05-14)
 
 - Fixed the `skyux test` error "Attempt to close tag classes when packages was the one open" by using specific versions of `istanbul-reports` and `istanbul-api`.  [#111](https://github.com/blackbaud/skyux-sdk-builder/pull/111)
