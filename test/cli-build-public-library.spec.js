@@ -34,11 +34,11 @@ describe('cli build-public-library', () => {
       return {
         run: (cb) => {
           cb(null, {
-          toJson: () => ({
-            errors: [],
-            warnings: []
-          })
-        });
+            toJson: () => ({
+              errors: [],
+              warnings: []
+            })
+          });
         }
       };
     };
@@ -115,21 +115,6 @@ describe('cli build-public-library', () => {
     cliCommand({}, {}, mockWebpack).then(() => {
       const firstArg = spy.calls.argsFor(0)[0];
       expect(firstArg).toEqual('tsconfig.json');
-      done();
-    });
-  });
-
-  it('should write a placeholder module file', (done) => {
-    const cliCommand = mock.reRequire(requirePath);
-    const spy = spyOn(mockFs, 'writeFileSync').and.callThrough();
-    cliCommand({}, {}, mockWebpack).then(() => {
-      const args = spy.calls.argsFor(0);
-      expect(args[0]).toEqual('main.ts');
-      expect(args[1]).toEqual(`import { NgModule } from '@angular/core';
-export * from './index';
-@NgModule({})
-export class SkyLibPlaceholderModule {}
-`);
       done();
     });
   });
