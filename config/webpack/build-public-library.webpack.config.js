@@ -1,7 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const fs = require('fs-extra');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 
@@ -48,7 +47,7 @@ function getWebpackConfig(skyPagesConfig) {
 
   return {
     mode: 'production',
-
+    devtool: 'source-map',
     entry: skyPagesConfigUtil.spaPathTemp('index.ts'),
     output: {
       path: skyPagesConfigUtil.spaPath('dist', 'bundles'),
@@ -64,8 +63,14 @@ function getWebpackConfig(skyPagesConfig) {
       rules: [
         {
           test: /\.ts$/,
-          use: ['awesome-typescript-loader', 'angular2-template-loader'],
-          exclude: [/\.(spec|e2e)\.ts$/]
+          use: [
+            'awesome-typescript-loader',
+            'angular2-template-loader'
+          ],
+          exclude: [
+            /node_modules/,
+            /\.(e2e-|pact-)?spec\.ts$/
+          ]
         },
         {
           test: /\.html$/,
@@ -80,16 +85,7 @@ function getWebpackConfig(skyPagesConfig) {
           use: ['raw-loader', 'style-loader']
         }
       ]
-    },
-    plugins: [
-      // Generates an AoT JavaScript bundle.
-      new AngularCompilerPlugin({
-        tsConfigPath: skyPagesConfigUtil.spaPathTemp('tsconfig.json'),
-        entryModule: skyPagesConfigUtil.spaPathTemp('main.ts') + '#SkyLibPlaceholderModule',
-        sourceMap: false,
-        typeChecking: false
-      })
-    ]
+    }
   };
 }
 
