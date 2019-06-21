@@ -112,23 +112,6 @@ function writeTSConfig() {
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.json'), config);
 }
 
-/**
- * Create a "placeholder" module for Angular AoT compiler.
- * This is needed to avoid breaking changes; in the future,
- * we should require a module name be provided by the consumer.
- */
-function writePlaceholderModule() {
-  const content = `import { NgModule } from '@angular/core';
-export * from './index';
-@NgModule({})
-export class SkyLibPlaceholderModule {}
-`;
-
-  fs.writeFileSync(skyPagesConfigUtil.spaPathTemp('main.ts'), content, {
-    encoding: 'utf8'
-  });
-}
-
 function processFiles(skyPagesConfig) {
   const pluginFileProcessor = require('../lib/plugin-file-processor');
   pluginFileProcessor.processFiles(
@@ -184,12 +167,11 @@ module.exports = (argv, skyPagesConfig, webpack) => {
   cleanAll();
   stageTypeScriptFiles();
   writeTSConfig();
-  writePlaceholderModule();
   copyRuntime();
   processFiles(skyPagesConfig);
 
-  return createBundle(skyPagesConfig, webpack)
-    .then(() => transpile())
+  return transpile()
+    .then(() => createBundle(skyPagesConfig, webpack))
     .then(() => {
       cleanRuntime();
       preparePackage();
