@@ -257,6 +257,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.setOnSearch(omnibarConfig);
 
       if (helpConfig) {
+        console.log(helpConfig);
         omnibarConfig.enableHelp = true;
       }
 
