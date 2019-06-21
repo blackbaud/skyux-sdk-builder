@@ -152,6 +152,9 @@
     "no-focused-tests": true,
     "no-disabled-tests": {
       "severity": "warning"
+    },
+    "deprecation": {
+      "severity": "warning"
     }
   }
 }
