@@ -47,7 +47,7 @@ function getWebpackConfig(skyPagesConfig) {
 
   return {
     mode: 'production',
-    devtool: 'source-map',
+
     entry: skyPagesConfigUtil.spaPathTemp('index.ts'),
     output: {
       path: skyPagesConfigUtil.spaPath('dist', 'bundles'),
