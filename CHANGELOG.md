@@ -1,3 +1,9 @@
+# 3.7.0 (2019-06-21)
+
+- Added support for `karma-webpack@4.0.2`. [#127](https://github.com/blackbaud/skyux-sdk-builder/pull/127)
+- Added support for TSLint `@deprecated` JSDoc annotation. [#114](https://github.com/blackbaud/skyux-sdk-builder/pull/114)
+- Fixed `skyux build-public-library` to properly create UMD bundles. [#126](https://github.com/blackbaud/skyux-sdk-builder/pull/126)
+
 # 3.6.7 (2019-06-07)
 
 - Fixed **skyuxconfig.json** `moduleAliases` setting to function properly during AoT builds. [#120](https://github.com/blackbaud/skyux-sdk-builder/pull/120)
