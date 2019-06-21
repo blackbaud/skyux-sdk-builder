@@ -170,8 +170,8 @@ module.exports = (argv, skyPagesConfig, webpack) => {
   copyRuntime();
   processFiles(skyPagesConfig);
 
-  return createBundle(skyPagesConfig, webpack)
-    .then(() => transpile())
+  return transpile()
+    .then(() => createBundle(skyPagesConfig, webpack))
     .then(() => {
       cleanRuntime();
       preparePackage();
