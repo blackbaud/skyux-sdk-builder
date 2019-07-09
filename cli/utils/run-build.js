@@ -58,7 +58,7 @@ function writeTSConfig(skyPagesConfig) {
       '**/*'
     ],
     'exclude': [
-      'fixtures',
+      '**/fixtures/**',
       'node_modules',
       '**/*.spec.ts',
       '**/*.fixture.ts'

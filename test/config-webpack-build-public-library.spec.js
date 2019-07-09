@@ -116,18 +116,4 @@ describe('config webpack build public library', () => {
     const config = lib.getWebpackConfig(skyPagesConfig);
     expect(config.externals).toEqual([]);
   });
-
-  it('should setup AOT compilation', () => {
-    const spy = spyOn(mockNgTools, 'AngularCompilerPlugin').and.callThrough();
-    const lib = mock.reRequire(configPath);
-
-    lib.getWebpackConfig(skyPagesConfig);
-
-    expect(spy).toHaveBeenCalledWith({
-      tsConfigPath: 'temp',
-      entryModule: 'temp#SkyLibPlaceholderModule',
-      sourceMap: false,
-      typeChecking: false
-    });
-  });
 });
