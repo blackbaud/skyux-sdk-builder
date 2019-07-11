@@ -1,5 +1,5 @@
 /*jshint jasmine: true, node: true */
-/*global element, by, browser*/
+/*global element, by, browser, protractor*/
 'use strict';
 
 const fs = require('fs');
@@ -30,13 +30,22 @@ import {
   SkyModalDemoFormComponent
 } from './modal-fixtures/modal-form-fixture.component';
 
+import {
+  BBHelpModule,
+  HelpInitializationService
+} from '@blackbaud/skyux-lib-help';
+
 @NgModule({
   exports: [
     AppSkyModule,
+    BBHelpModule,
     SkyModalModule
   ],
   entryComponents: [
     SkyModalDemoFormComponent
+  ],
+  providers: [
+    HelpInitializationService
   ]
 })
 export class AppExtrasModule { }
@@ -103,15 +112,12 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', (done) => {
-    const invoker = element(by.id('bb-help-invoker'));
+  it('should hide the invoker when a full page modal is opened', () => {
 
-    browser.wait(() => {
-      return invoker.isDisplayed()
-        .then((displayed) => {
-          return displayed;
-        });
-    }, 100000);
+    let until = protractor.ExpectedConditions;
+    browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 10000, 'Element taking too long to appear in the DOM');
+
+    const invoker = element(by.id('bb-help-invoker'));
 
     let regularModalButton = element(by.id('regular-modal-launcher'));
     let fullPageButton = element(by.id('full-page-modal-launcher'));
@@ -125,6 +131,5 @@ describe('skyux lib help', () => {
     fullPageButton.click();
     expect(invoker.isDisplayed()).toBe(false);
     element(by.id('modal-close-button')).click();
-    done();
   });
 });
