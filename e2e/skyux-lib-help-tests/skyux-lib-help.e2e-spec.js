@@ -81,7 +81,7 @@ function addModalToHomePage() {
   common.writeAppFile('home.component.html', content, 'utf8');
 }
 
-fdescribe('skyux lib help', () => {
+describe('skyux lib help', () => {
   beforeAll((done) => {
     prepareBuild()
       .then(() => {
@@ -103,9 +103,16 @@ fdescribe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', () => {
-    browser.sleep(20000);
+  it('should hide the invoker when a full page modal is opened', (done) => {
     const invoker = element(by.id('bb-help-invoker'));
+
+    browser.wait(() => {
+      return invoker.isDisplayed()
+        .then((displayed) => {
+          return displayed;
+        });
+    }, 1000);
+
     let regularModalButton = element(by.id('regular-modal-launcher'));
     let fullPageButton = element(by.id('full-page-modal-launcher'));
 
@@ -118,5 +125,6 @@ fdescribe('skyux lib help', () => {
     fullPageButton.click();
     expect(invoker.isDisplayed()).toBe(false);
     element(by.id('modal-close-button')).click();
+    done();
   });
 });
