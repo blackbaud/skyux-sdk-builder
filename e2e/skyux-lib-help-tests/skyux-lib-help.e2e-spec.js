@@ -111,7 +111,7 @@ describe('skyux lib help', () => {
         .then((displayed) => {
           return displayed;
         });
-    }, 1000);
+    }, 100000);
 
     let regularModalButton = element(by.id('regular-modal-launcher'));
     let fullPageButton = element(by.id('full-page-modal-launcher'));
