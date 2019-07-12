@@ -125,10 +125,7 @@ describe('skyux lib help', () => {
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
 
-        expect(invoker.isDisplayed()).toBe(true);
-
         regularModalButton.click();
-        expect(invoker.isDisplayed()).toBe(true);
         element(by.id('modal-close-button')).click();
 
         fullPageButton.click();
@@ -136,7 +133,6 @@ describe('skyux lib help', () => {
         console.log('SHOULD HAVE CLASS ON BODY', body);
 
         expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
-
         expect(invoker.isDisplayed()).toBe(false);
         element(by.id('modal-close-button')).click();
         done();
