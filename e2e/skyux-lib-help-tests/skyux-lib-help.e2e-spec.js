@@ -115,9 +115,14 @@ describe('skyux lib help', () => {
   it('should hide the invoker when a full page modal is opened', (done) => {
     let until = protractor.ExpectedConditions;
 
-    browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 10000, 'Element taking too long to appear in the DOM')
+    browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 60000, 'Element taking too long to appear in the DOM')
       .then(() => {
+        console.log('SHOULD HIDE INVOKER', element(by.id('bb-help-invoker')));
+        browser.sleep(60000);
         const invoker = element(by.id('bb-help-invoker'));
+        let body = element(by.tagName('body'));
+        expect(body.classList).toContain('sky-modal-body-full-page');
+
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
 
