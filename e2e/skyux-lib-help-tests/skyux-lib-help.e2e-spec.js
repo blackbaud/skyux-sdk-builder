@@ -57,7 +57,7 @@ function prepareBuild() {
     name: 'dist',
     compileMode: 'aot',
     help: {
-      extends: 'bb-help'
+      extends: 'bbhelp'
     }
   };
 
