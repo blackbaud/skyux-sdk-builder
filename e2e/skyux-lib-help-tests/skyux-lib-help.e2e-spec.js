@@ -112,24 +112,25 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', () => {
-
+  it('should hide the invoker when a full page modal is opened', (done) => {
     let until = protractor.ExpectedConditions;
-    browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 10000, 'Element taking too long to appear in the DOM');
 
-    const invoker = element(by.id('bb-help-invoker'));
+    browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 10000, 'Element taking too long to appear in the DOM')
+      .then(() => {
+        const invoker = element(by.id('bb-help-invoker'));
+        let regularModalButton = element(by.id('regular-modal-launcher'));
+        let fullPageButton = element(by.id('full-page-modal-launcher'));
 
-    let regularModalButton = element(by.id('regular-modal-launcher'));
-    let fullPageButton = element(by.id('full-page-modal-launcher'));
+        expect(invoker.isDisplayed()).toBe(true);
 
-    expect(invoker.isDisplayed()).toBe(true);
+        regularModalButton.click();
+        expect(invoker.isDisplayed()).toBe(true);
+        element(by.id('modal-close-button')).click();
 
-    regularModalButton.click();
-    expect(invoker.isDisplayed()).toBe(true);
-    element(by.id('modal-close-button')).click();
-
-    fullPageButton.click();
-    expect(invoker.isDisplayed()).toBe(false);
-    element(by.id('modal-close-button')).click();
+        fullPageButton.click();
+        expect(invoker.isDisplayed()).toBe(false);
+        element(by.id('modal-close-button')).click();
+        done();
+      });
   });
 });
