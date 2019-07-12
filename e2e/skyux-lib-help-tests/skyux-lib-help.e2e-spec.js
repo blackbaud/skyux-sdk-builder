@@ -112,20 +112,16 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', (done) => {
+  fit('should hide the invoker when a full page modal is opened', (done) => {
     let until = protractor.ExpectedConditions;
 
     browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 60000, 'Element taking too long to appear in the DOM')
       .then(() => {
 
         const invoker = element(by.id('bb-help-invoker'));
-        let body = element(by.tagName('body'));
 
-        console.log('SHOULD HIDE INVOKER', invoker);
-        console.log('SHOULD HAVE CLASS ON BODY', body);
+        console.log('SHOULD HIDE INVOKER', invoker.isDisplayed());
         browser.sleep(60000);
-        expect(body.class).toContain('sky-modal-body-full-page');
-
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
 
@@ -136,6 +132,11 @@ describe('skyux lib help', () => {
         element(by.id('modal-close-button')).click();
 
         fullPageButton.click();
+        let body = element(by.css('.sky-modal-body-full-page'));
+        console.log('SHOULD HAVE CLASS ON BODY', body);
+
+        expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
+
         expect(invoker.isDisplayed()).toBe(false);
         element(by.id('modal-close-button')).click();
         done();
