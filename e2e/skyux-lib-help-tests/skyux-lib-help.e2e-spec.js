@@ -124,7 +124,7 @@ describe('skyux lib help', () => {
     };
 
     console.log('here should not go inside');
-    browser.wait(elementToExist(element(by.id('bb-help-invoker'))), 20000, 'Element taking too long to appear in the DOM')
+    browser.wait(elementToExist(element(by.css('#bb-help-invoker'))), 20000, 'Element taking too long to appear in the DOM')
       .then(() => {
         console.log('before sleep');
         return browser.sleep(60000);
@@ -133,7 +133,7 @@ describe('skyux lib help', () => {
         console.log('after sleep');
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
-        const invoker = element(by.id('bb-help-invoker'));
+        const invoker = element(by.css('#bb-help-invoker'));
         expect(invoker.isDisplayed()).toBe(true);
 
         regularModalButton.click();
