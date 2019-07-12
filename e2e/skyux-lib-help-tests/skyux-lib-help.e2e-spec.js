@@ -112,12 +112,25 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', (done) => {
+  fit('should hide the invoker when a full page modal is opened', (done) => {
     let until = protractor.ExpectedConditions;
 
-    browser.wait(until.presenceOf(by.id('bb-help-invoker').isDisplayed()), 60000, 'Element taking too long to appear in the DOM')
+    let elementToExist = (elementFinder) => {
+      let isDisplayed = () => {
+        return elementFinder.isDisplayed()
+          .then((isShown) => isShown);
+      };
+      return until.and(until.presenceOf(elementFinder), isDisplayed);
+    };
+
+    console.log('here should not go inside');
+    browser.wait(elementToExist(element(by.id('bb-help-invoker'))), 5000, 'Element taking too long to appear in the DOM')
       .then(() => {
-        browser.sleep(60000);
+        console.log('before sleep');
+        return browser.sleep(60000);
+      })
+      .then(() => {
+        console.log('after sleep');
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
         const invoker = element(by.id('bb-help-invoker'));
