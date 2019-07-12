@@ -117,11 +117,14 @@ describe('skyux lib help', () => {
 
     browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 60000, 'Element taking too long to appear in the DOM')
       .then(() => {
-        console.log('SHOULD HIDE INVOKER', element(by.id('bb-help-invoker')));
-        browser.sleep(60000);
+
         const invoker = element(by.id('bb-help-invoker'));
         let body = element(by.tagName('body'));
-        expect(body.classList).toContain('sky-modal-body-full-page');
+
+        console.log('SHOULD HIDE INVOKER', invoker);
+        console.log('SHOULD HAVE CLASS ON BODY', body);
+        browser.sleep(60000);
+        expect(body.class).toContain('sky-modal-body-full-page');
 
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
