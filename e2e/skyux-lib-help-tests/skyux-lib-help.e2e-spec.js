@@ -124,7 +124,7 @@ describe('skyux lib help', () => {
     };
 
     console.log('here should not go inside');
-    browser.wait(elementToExist(element(by.id('bb-help-invoker'))), 5000, 'Element taking too long to appear in the DOM')
+    browser.wait(elementToExist(element(by.id('bb-help-invoker'))), 20000, 'Element taking too long to appear in the DOM')
       .then(() => {
         console.log('before sleep');
         return browser.sleep(60000);
