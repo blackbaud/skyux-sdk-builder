@@ -112,7 +112,7 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  fit('should hide the invoker when a full page modal is opened', (done) => {
+  it('should hide the invoker when a full page modal is opened', (done) => {
     let until = protractor.ExpectedConditions;
 
     browser.wait(until.presenceOf(element(by.id('bb-help-invoker'))), 60000, 'Element taking too long to appear in the DOM')
