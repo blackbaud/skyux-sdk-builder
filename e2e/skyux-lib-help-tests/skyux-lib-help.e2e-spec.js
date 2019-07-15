@@ -30,22 +30,14 @@ import {
   SkyModalDemoFormComponent
 } from './modal-fixtures/modal-form-fixture.component';
 
-import {
-  BBHelpModule,
-  HelpInitializationService
-} from '@blackbaud/skyux-lib-help';
 
 @NgModule({
   exports: [
     AppSkyModule,
-    BBHelpModule,
     SkyModalModule
   ],
   entryComponents: [
     SkyModalDemoFormComponent
-  ],
-  providers: [
-    HelpInitializationService
   ]
 })
 export class AppExtrasModule { }
@@ -112,35 +104,21 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', (done) => {
-    let until = protractor.ExpectedConditions;
+  it('should hide the invoker when a full page modal is opened', () => {
+    let regularModalButton = element(by.id('regular-modal-launcher'));
+    let fullPageButton = element(by.id('full-page-modal-launcher'));
+    const invoker = element(by.css('#bb-help-invoker'));
+    expect(invoker.isDisplayed()).toBe(true);
 
-    let elementToExist = (elementFinder) => {
-      let isDisplayed = () => {
-        return elementFinder.isDisplayed()
-          .then((isShown) => isShown);
-      };
-      return until.and(until.presenceOf(elementFinder), isDisplayed);
-    };
+    regularModalButton.click();
+    expect(invoker.isDisplayed()).toBe(true);
+    element(by.id('modal-close-button')).click();
 
-    browser.wait(elementToExist(element(by.css('#bb-help-invoker'))), 20000, 'Element taking too long to appear in the DOM')
-      .then(() => {
-        let regularModalButton = element(by.id('regular-modal-launcher'));
-        let fullPageButton = element(by.id('full-page-modal-launcher'));
-        const invoker = element(by.css('#bb-help-invoker'));
-        expect(invoker.isDisplayed()).toBe(true);
+    fullPageButton.click();
+    let body = element(by.css('.sky-modal-body-full-page'));
+    expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
 
-        regularModalButton.click();
-        expect(invoker.isDisplayed()).toBe(true);
-        element(by.id('modal-close-button')).click();
-
-        fullPageButton.click();
-        let body = element(by.css('.sky-modal-body-full-page'));
-        expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
-
-        expect(invoker.isDisplayed()).toBe(false);
-        element(by.id('modal-close-button')).click();
-        done();
-      });
+    expect(invoker.isDisplayed()).toBe(false);
+    element(by.id('modal-close-button')).click();
   });
 });
