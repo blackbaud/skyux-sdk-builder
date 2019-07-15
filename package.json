@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.13.8",
-    "@blackbaud/help-client": "git+https://github.com/blackbaud/help-client.git#test-changes",
+    "@blackbaud/help-client": "^2.0.0",
     "@blackbaud/skyux-lib-help": "3.1.0",
     "@blackbaud/skyux-logger": "1.1.1",
     "@ngtools/webpack": "7.3.9",
