@@ -132,19 +132,27 @@ describe('skyux lib help', () => {
         let regularModalButton = element(by.id('regular-modal-launcher'));
         let fullPageButton = element(by.id('full-page-modal-launcher'));
         const invoker = element(by.css('#bb-help-invoker'));
-        expect(invoker.isDisplayed()).toBe(true);
-
-        regularModalButton.click();
-        expect(invoker.isDisplayed()).toBe(true);
-        element(by.id('modal-close-button')).click();
-
-        fullPageButton.click();
-        let body = element(by.css('.sky-modal-body-full-page'));
-        expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
-
-        expect(invoker.isDisplayed()).toBe(false);
-        element(by.id('modal-close-button')).click();
-        done();
+        invoker.isDisplayed()
+          .then(displayed => {
+            expect(displayed).toBe(true);
+            regularModalButton.click();
+            return invoker.isDisplayed();
+          })
+          .then(displayed => {
+            expect(displayed).toBe(true);
+            return element(by.id('modal-close-button')).click();
+          })
+          .then(() => {
+            fullPageButton.click();
+            let body = element(by.css('.sky-modal-body-full-page'));
+            expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
+            return invoker.isDisplayed();
+          })
+          .then(displayed => {
+            expect(displayed).toBe(false);
+            element(by.id('modal-close-button')).click();
+            done();
+          });
       });
   });
 });
