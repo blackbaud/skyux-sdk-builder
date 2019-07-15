@@ -104,21 +104,35 @@ describe('skyux lib help', () => {
    * selector and add a display: none to the invoker. This test is to confirm that neither library
    * changed the class names that accomplish this style override.
    */
-  it('should hide the invoker when a full page modal is opened', () => {
-    let regularModalButton = element(by.id('regular-modal-launcher'));
-    let fullPageButton = element(by.id('full-page-modal-launcher'));
-    const invoker = element(by.css('#bb-help-invoker'));
-    expect(invoker.isDisplayed()).toBe(true);
+  it('should hide the invoker when a full page modal is opened', (done) => {
+    let until = protractor.ExpectedConditions;
 
-    regularModalButton.click();
-    expect(invoker.isDisplayed()).toBe(true);
-    element(by.id('modal-close-button')).click();
+    let elementToExist = (elementFinder) => {
+      let isDisplayed = () => {
+        return elementFinder
+          .then((isShown) => isShown);
+      };
+      return until.and(until.presenceOf(elementFinder), isDisplayed);
+    };
 
-    fullPageButton.click();
-    let body = element(by.css('.sky-modal-body-full-page'));
-    expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
+    browser.wait(elementToExist(element(by.css('#bb-help-invoker'))), 20000, 'Element taking too long to appear in the DOM')
+      .then(() => {
+        let regularModalButton = element(by.id('regular-modal-launcher'));
+        let fullPageButton = element(by.id('full-page-modal-launcher'));
+        const invoker = element(by.css('#bb-help-invoker'));
+        expect(invoker.isDisplayed()).toBe(true);
 
-    expect(invoker.isDisplayed()).toBe(false);
-    element(by.id('modal-close-button')).click();
+        regularModalButton.click();
+        expect(invoker.isDisplayed()).toBe(true);
+        element(by.id('modal-close-button')).click();
+
+        fullPageButton.click();
+        let body = element(by.css('.sky-modal-body-full-page'));
+        expect(body.getAttribute('class')).toContain('sky-modal-body-full-page');
+
+        expect(invoker.isDisplayed()).toBe(false);
+        element(by.id('modal-close-button')).click();
+        done();
+      });
   });
 });
