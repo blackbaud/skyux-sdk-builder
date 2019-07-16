@@ -12,7 +12,8 @@ const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfi
 
 const chromeArgs = [
   '--disable-extensions',
-  '--ignore-certificate-errors'
+  '--ignore-certificate-errors',
+  '--start-maximized'
 ];
 
 if (argv.headless) {
