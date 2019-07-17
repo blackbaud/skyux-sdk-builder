@@ -63,7 +63,7 @@
     "@blackbaud/skyux-logger": "1.1.1",
     "@ngtools/webpack": "7.3.9",
     "@pact-foundation/karma-pact": "2.2.0",
-    "@pact-foundation/pact-node": "9.0.0",
+    "@pact-foundation/pact-node": "8.6.0",
     "@types/jasmine": "2.8.16",
     "@types/node": "12.6.4",
     "ajv": "6.10.2",
