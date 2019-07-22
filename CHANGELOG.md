@@ -1,3 +1,8 @@
+# 3.8.0 (2019-07-22)
+
+- Added support for `@blackbaud/skyux-lib-help@3.1.0`. [#139](https://github.com/blackbaud/skyux-sdk-builder/pull/139)
+- Added support for `@skyux/assets@3.1.0`. [#142](https://github.com/blackbaud/skyux-sdk-builder/pull/142)
+
 # 3.7.1 (2019-07-02)
 
 - Fixed the `skyux build` command to ignore a SPA's `fixtures` directories. [#136](https://github.com/blackbaud/skyux-sdk-builder/pull/136)
