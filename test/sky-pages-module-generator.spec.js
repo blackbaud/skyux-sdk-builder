@@ -183,7 +183,7 @@ describe('SKY UX Builder module generator', () => {
   it('should not add BBHelpModule if the help config does not exists.', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedModule = 'BBHelpModule';
-    const expectedNodeModule = `import { BBHelpModule, HelpInitializationService } from '@blackbaud/skyux-lib-help';`;
+    const expectedNodeModule = `import { BBHelpModule } from '@blackbaud/skyux-lib-help';`;
 
     let source = generator.getSource({
       runtime: runtimeUtils.getDefaultRuntime(),
@@ -201,7 +201,7 @@ describe('SKY UX Builder module generator', () => {
   it('should add BBHelpModule if the help config exists.', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedModule = 'BBHelpModule';
-    const expectedNodeModule = `import { BBHelpModule, HelpInitializationService } from '@blackbaud/skyux-lib-help';`;
+    const expectedNodeModule = `import { BBHelpModule } from '@blackbaud/skyux-lib-help';`;
 
     let source = generator.getSource({
       runtime: runtimeUtils.getDefaultRuntime(),
