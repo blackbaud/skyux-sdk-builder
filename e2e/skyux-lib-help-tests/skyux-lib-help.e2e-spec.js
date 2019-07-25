@@ -31,8 +31,7 @@ import {
 } from './modal-fixtures/modal-form-fixture.component';
 
 import {
-  BBHelpModule,
-  HelpInitializationService
+  BBHelpModule
 } from '@blackbaud/skyux-lib-help';
 
 @NgModule({
@@ -43,9 +42,6 @@ import {
   ],
   entryComponents: [
     SkyModalDemoFormComponent
-  ],
-  providers: [
-    HelpInitializationService
   ]
 })
 export class AppExtrasModule { }
