@@ -1,3 +1,9 @@
+# 3.8.1 (2019-07-26)
+
+- Added support for `@blackbaud/skyux-lib-help@3.1.1` which includes a fix for a missing provider. [#148](https://github.com/blackbaud/skyux-sdk-builder/pull/148)
+- Added support for `@pact-foundation/pact-node@9.0.0` to fix a vulnerability warning. [#141](https://github.com/blackbaud/skyux-sdk-builder/pull/141)
+- Fixed `skyux serve` to recompile if build errors are encountered. [#149](https://github.com/blackbaud/skyux-sdk-builder/pull/149)
+
 # 3.8.0 (2019-07-22)
 
 - Added support for `@blackbaud/skyux-lib-help@3.1.0`. [#139](https://github.com/blackbaud/skyux-sdk-builder/pull/139)
