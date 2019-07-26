@@ -21,11 +21,16 @@ function getRule(command) {
     ]
   };
 
-  // Exclude test specs from type checking during a serve.
   if (command === 'serve') {
+
+    // Exclude test specs from type checking during a serve.
     awesomeTypescriptLoaderOptions.reportFiles = [
       'src/app/**/!(*.spec|*.fixture).ts'
     ];
+
+    // Report TS build errors as warnings to allow the
+    // application to recompile during a serve.
+    awesomeTypescriptLoaderOptions.errorsAsWarnings = true;
   }
 
   // These loaders will be used for files that require type checking.
