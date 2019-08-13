@@ -67,7 +67,6 @@
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
     "radix": true,
     "switch-default": true,
@@ -151,6 +150,9 @@
     "directive-class-suffix": true,
     "no-focused-tests": true,
     "no-disabled-tests": {
+      "severity": "warning"
+    },
+    "deprecation": {
       "severity": "warning"
     }
   }

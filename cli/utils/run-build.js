@@ -15,7 +15,20 @@ const browser = require('./browser');
 const runCompiler = require('./run-compiler');
 const tsLinter = require('./ts-linter');
 
-function writeTSConfig() {
+function writeTSConfig(skyPagesConfig) {
+
+  const tsConfigPaths = {};
+
+  // Add any module aliases to the tsconfig `paths` setting to support AoT builds.
+  const moduleAliases = skyPagesConfig.skyux.moduleAliases;
+  if (moduleAliases) {
+    Object.keys(moduleAliases).forEach((key) => {
+      tsConfigPaths[key] = [
+        skyPagesConfigUtil.spaPathTemp(moduleAliases[key])
+      ];
+    });
+  }
+
   const config = {
     'compilerOptions': {
       'target': 'es5',
@@ -36,14 +49,16 @@ function writeTSConfig() {
       ],
       'typeRoots': [
         '../../node_modules/@types'
-      ]
+      ],
+      'baseUrl': '.',
+      'paths': tsConfigPaths
     },
     'include': [
       '../../node_modules/@skyux-sdk/builder/runtime/**/*',
       '**/*'
     ],
     'exclude': [
-      'fixtures',
+      '**/fixtures/**',
       'node_modules',
       '**/*.spec.ts',
       '**/*.fixture.ts'
@@ -120,7 +135,7 @@ function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
   );
 
   pluginFileProcessor.processFiles(skyPagesConfig);
-  writeTSConfig();
+  writeTSConfig(skyPagesConfig);
 }
 
 function cleanupAot() {
