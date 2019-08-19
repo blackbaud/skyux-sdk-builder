@@ -1,9 +1,8 @@
 import { SkyAppBootstrapper } from './bootstrapper';
 
 import {
-  BBAuth,
-  BBContextProvider
-} from '@blackbaud/auth-client';
+  BBAuthClientFactory
+} from '@skyux/auth-client-factory';
 
 describe('bootstrapper', () => {
 
@@ -59,8 +58,8 @@ describe('bootstrapper', () => {
   }
 
   beforeEach(() => {
-    getTokenSpy = spyOn(BBAuth, 'getToken');
-    ensureContext = spyOn(BBContextProvider,  'ensureContext');
+    getTokenSpy = spyOn(BBAuthClientFactory.BBAuth, 'getToken');
+    ensureContext = spyOn(BBAuthClientFactory.BBContextProvider,  'ensureContext');
     historyReplaceStateSpy = spyOn(history, 'replaceState').and.callThrough();
     getUrlSpy = spyOn(SkyAppBootstrapper as any, 'getUrl').and.callThrough();
   });
