@@ -1,3 +1,7 @@
+# 3.9.0 (2019-08-19)
+
+- SKY UX Builder will now reference a global instance of the `@blackbaud/auth-client` library for obtaining BBID JWTs and loading the omnibar when available. This allows the host page to add its own reference to `@blackbaud/auth-client`, enabling the library to become a "runtime" dependency that can be updated without redploying the SPA. If the host page does not provide a global instance of `@blackbaud/auth-client`, SKY UX Builder will fall back to its previous behavior of using the local version of the library included in the SPA's bundle. [#154](https://github.com/blackbaud/skyux-sdk-builder/pull/154)
+
 # 3.8.1 (2019-07-26)
 
 - Added support for `@blackbaud/skyux-lib-help@3.1.1` which includes a fix for a missing provider. [#148](https://github.com/blackbaud/skyux-sdk-builder/pull/148)
