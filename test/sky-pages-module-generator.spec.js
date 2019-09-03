@@ -270,6 +270,11 @@ enableProdMode();`
       `import { BBAuth } from '@blackbaud/auth-client';
 BBAuth.mock = true;`
     );
+
+    expect(source).toContain(
+      `import { BBAuthClientFactory } from '@skyux/auth-client-factory';
+BBAuthClientFactory.BBAuth.mock = true;`
+    );
   });
 
   it('should add routes to skyPagesConfig.runtime', () => {

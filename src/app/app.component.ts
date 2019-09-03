@@ -12,7 +12,6 @@ import {
 } from '@angular/router';
 
 import {
-  BBOmnibar,
   BBOmnibarNavigation,
   BBOmnibarNavigationItem,
   BBOmnibarSearchArgs
@@ -40,6 +39,10 @@ import {
   SkyAppStyleLoader,
   SkyAppViewportService
 } from '@skyux/theme';
+
+import {
+  BBAuthClientFactory
+} from '@skyux/auth-client-factory';
 
 require('style-loader!@skyux/theme/css/sky.css');
 require('style-loader!./app.component.scss');
@@ -136,7 +139,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy() {
     if (omnibarLoaded) {
-      BBOmnibar.destroy();
+      BBAuthClientFactory.BBOmnibar.destroy();
       omnibarLoaded = false;
     }
   }
@@ -268,7 +271,7 @@ export class AppComponent implements OnInit, OnDestroy {
       // triggers change detection on each interval.  Loading the omnibar outside
       // Angular will keep change detection from being triggered during each interval.
       this.zone.runOutsideAngular(() => {
-        BBOmnibar.load(omnibarConfig);
+        BBAuthClientFactory.BBOmnibar.load(omnibarConfig);
         omnibarLoaded = true;
       });
     };
