@@ -1,7 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const webpackMerge = require('webpack-merge');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
@@ -10,6 +9,7 @@ const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlug
 
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const browser = require('../../cli/utils/browser');
+const certResolver = require('../../cli/utils/cert-resolver');
 
 const tsLoaderUtil = require('./ts-loader-rule');
 
@@ -73,8 +73,8 @@ function getWebpackConfig(argv, skyPagesConfig) {
         index: skyPagesConfigUtil.getAppBase(skyPagesConfig)
       },
       https: {
-        key: fs.readFileSync(path.join(__dirname, '../../ssl/server.key')),
-        cert: fs.readFileSync(path.join(__dirname, '../../ssl/server.crt'))
+        cert: certResolver.readCert(),
+        key: certResolver.readKey()
       },
       publicPath: skyPagesConfigUtil.getAppBase(skyPagesConfig)
     },
