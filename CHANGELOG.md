@@ -1,3 +1,7 @@
+# 3.10.0 (2019-09-27)
+
+- Updated template used during `skyux build` to read the `skyuxconfig.json` `app.base` property. [#165](https://github.com/blackbaud/skyux-sdk-builder/pull/165)
+
 # 3.9.0 (2019-08-19)
 
 - Referenced a global instance of @blackbaud/auth-client to obtain BBID JWTs and load the omnibar. This enables the library to become a runtime dependency that you can update without redeploying the SPA. However, if the host page doesn't provide a global instance of @blackbaud\auth-client, then SKY UX Builder still uses the local version of the library in the SPA's bundle. [#154](https://github.com/blackbaud/skyux-sdk-builder/pull/154)
