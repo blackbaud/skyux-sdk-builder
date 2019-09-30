@@ -6,27 +6,31 @@ const os = require('os');
 const path = require('path');
 const logger = require('@blackbaud/skyux-logger');
 
-function getResolver() {
-  const certRootPath = path.resolve(`${os.homedir()}/.skyux/certs/`);
+function logError(code) {
+  logger.error(`Unable to locate certificates. (${code})`);
+  logger.error('Please install the latest SKY UX CLI and run `skyux certs install`.');
+}
 
-  if (!fs.pathExistsSync(certRootPath)) {
-    logger.error('Unable to locate certificates.');
-    logger.error('Please install the latest SKY UX CLI and run `skyux certs install`.');
+function getResolver(argv) {
+  if (!argv.sslRoot) {
+    return logError(0);
+  } else if (!fs.pathExistsSync(argv.sslRoot)) {
+    return logError(1);
   } else {
     const resolver = require(certRootPath);
     return resolver;
   }
 }
 
-function readCert() {
-  const resolver = getResolver();
+function readCert(argv) {
+  const resolver = getResolver(argv);
   if (resolver) {
     return resolver.readCert();
   }
 }
 
-function readKey() {
-  const resolver = getResolver();
+function readKey(argv) {
+  const resolver = getResolver(argv);
   if (resolver) {
     return resolver.readKey();
   }

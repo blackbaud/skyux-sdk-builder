@@ -62,7 +62,7 @@ describe('server utils', () => {
   it('should accept a root', () => {
     const server = bind();
     const root = 'custom-root';
-    server.start(root).then(() =>{
+    server.start({}, root).then(() =>{
 
     });
   });
@@ -120,7 +120,7 @@ describe('server utils', () => {
     const customDistPath = 'custom-dist';
     const server = bind();
 
-    server.start('custom-root', customDistPath)
+    server.start({}, 'custom-root', customDistPath)
       .then(() => {
         expect(path.resolve).toHaveBeenCalledWith(process.cwd(), customDistPath);
         done();

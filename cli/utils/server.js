@@ -33,8 +33,8 @@ function start(root, distPath) {
     }
 
     const options = {
-      cert: certResolver.readCert(),
-      key: certResolver.readKey()
+      cert: certResolver.readCert(argv),
+      key: certResolver.readKey(argv)
     };
 
     server = https.createServer(options, app);

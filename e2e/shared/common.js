@@ -118,7 +118,7 @@ function prepareBuild(config) {
     // Reset skyuxconfig.json
     resetConfig();
 
-    return server.start('unused-root', tmp)
+    return server.start({}, 'unused-root', tmp)
       .then(port => browser.get(`https://localhost:${port}/dist/`));
   }
 
