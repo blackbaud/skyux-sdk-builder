@@ -1,8 +1,8 @@
 # 3.10.0 (2019-09-30)
 
-- Upgraded `help-client` to `2.1.0`. [#161](https://github.com/blackbaud/skyux-sdk-builder/pull/161) Thanks [@Blackbaud-ColbyWhite](https://github.com/Blackbaud-ColbyWhite)!
-- Removed "Local Development Only" warning from the `index.html` produced during `skyux build`. [#163](https://github.com/blackbaud/skyux-sdk-builder/pull/163)
-- Updated template used during `skyux build` to read the `skyuxconfig.json` `app.base` property. [#165](https://github.com/blackbaud/skyux-sdk-builder/pull/165)
+- Upgraded `help-client` to `2.1.0`. [#161](https://github.com/blackbaud/skyux-sdk-builder/pull/161) Thanks, [@Blackbaud-ColbyWhite](https://github.com/Blackbaud-ColbyWhite)!
+- Removed the "Local Development Only" warning from the `index.html` produced during `skyux build`. [#163](https://github.com/blackbaud/skyux-sdk-builder/pull/163)
+- Updated the template used during `skyux build` to read the `skyuxconfig.json` `app.base` property. [#165](https://github.com/blackbaud/skyux-sdk-builder/pull/165)
 )
 
 # 3.9.0 (2019-08-19)
