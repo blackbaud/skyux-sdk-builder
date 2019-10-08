@@ -36,6 +36,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
   }
 
   const common = require('./common.webpack.config').getWebpackConfig(skyPagesConfig, argv);
+  const certResolverInstance = certResolver.getResolver(argv);
 
   // Revert to environment defaults when serving.
   delete common.optimization;
@@ -73,8 +74,8 @@ function getWebpackConfig(argv, skyPagesConfig) {
         index: skyPagesConfigUtil.getAppBase(skyPagesConfig)
       },
       https: {
-        cert: certResolver.readCert(),
-        key: certResolver.readKey()
+        cert: certResolverInstance.readCert(),
+        key: certResolverInstance.readKey()
       },
       publicPath: skyPagesConfigUtil.getAppBase(skyPagesConfig)
     },

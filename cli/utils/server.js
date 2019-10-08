@@ -17,10 +17,11 @@ let server;
  * Starts the httpServer
  * @name start
  */
-function start(root, distPath) {
+function start(argv, root, distPath) {
   return new Promise((resolve, reject) => {
 
     const dist = path.resolve(process.cwd(), distPath || 'dist');
+    const certResolverInstance = certResolver.getResolver(argv);
 
     logger.info('Creating web server');
     app.use(cors());
@@ -33,8 +34,8 @@ function start(root, distPath) {
     }
 
     const options = {
-      cert: certResolver.readCert(argv),
-      key: certResolver.readKey(argv)
+      cert: certResolverInstance.readCert(),
+      key: certResolverInstance.readKey(argv)
     };
 
     server = https.createServer(options, app);

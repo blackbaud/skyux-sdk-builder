@@ -12,6 +12,8 @@ describe('server utils', () => {
   let customServerError;
   let customPortError;
   let customPortNumber;
+  let spyCertResolver;
+  let spyCertResolverInstance;
 
   beforeEach(() => {
     spyOn(logger, 'info');
@@ -50,6 +52,13 @@ describe('server utils', () => {
       }
     });
 
+    spyCertResolver = jasmine.createSpy('cert-resolver');
+    spyCertResolverInstance = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
+    spyCertResolver.and.returnValue(spyCertResolverInstance);
+    mock('../cli/utils/cert-resolver', {
+      getResolver: spyCertResolver
+    });
+
     return mock.reRequire('../cli/utils/server');
   }
 
@@ -73,7 +82,7 @@ describe('server utils', () => {
     server.stop();
     expect(closeCalled).toBe(false);
 
-    server.start().then(() => {
+    server.start({}).then(() => {
       logger.info.calls.reset();
       server.stop();
       expect(closeCalled).toBe(true);
@@ -87,7 +96,7 @@ describe('server utils', () => {
     customServerError = 'custom-error';
     const server = bind();
 
-    server.start().catch(err => {
+    server.start({}).catch(err => {
       expect(err).toBe(customServerError);
       done();
     });
@@ -97,7 +106,7 @@ describe('server utils', () => {
     customPortNumber = 1234;
     const server = bind();
 
-    server.start().then(port => {
+    server.start({}).then(port => {
       expect(port).toBe(customPortNumber);
       done();
     });
@@ -108,7 +117,7 @@ describe('server utils', () => {
     customPortError = 'custom-portfinder-error';
 
     const server = bind();
-    server.start().catch(err => {
+    server.start({}).catch(err => {
       expect(err).toBe(customPortError);
       done();
     });
@@ -125,5 +134,17 @@ describe('server utils', () => {
         expect(path.resolve).toHaveBeenCalledWith(process.cwd(), customDistPath);
         done();
       });
+  });
+
+  it('should pass argv to cert-resolver and call the readCert and readKey methods', (done) => {
+    const argv = { custom: true };
+    const server = bind();
+
+    server.start(argv).then(() => {
+      expect(spyCertResolver).toHaveBeenCalledWith(argv);
+      expect(spyCertResolverInstance.readCert).toHaveBeenCalled();
+      expect(spyCertResolverInstance.readKey).toHaveBeenCalled();
+      done();
+    });
   });
 });

@@ -2,8 +2,6 @@
 'use strict';
 
 const fs = require('fs-extra');
-const os = require('os');
-const path = require('path');
 const logger = require('@blackbaud/skyux-logger');
 
 function logError(code) {
@@ -17,26 +15,12 @@ function getResolver(argv) {
   } else if (!fs.pathExistsSync(argv.sslRoot)) {
     return logError(1);
   } else {
-    const resolver = require(certRootPath);
+    const resolver = require(argv.sslRoot);
+    logger.info(`Located cert-resolver at ${argv.sslRoot}.`);
     return resolver;
   }
 }
 
-function readCert(argv) {
-  const resolver = getResolver(argv);
-  if (resolver) {
-    return resolver.readCert();
-  }
-}
-
-function readKey(argv) {
-  const resolver = getResolver(argv);
-  if (resolver) {
-    return resolver.readKey();
-  }
-}
-
 module.exports = {
-  readCert,
-  readKey
+  getResolver
 };

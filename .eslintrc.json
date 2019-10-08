@@ -16,6 +16,7 @@
     "import/order": "off",
     "lines-around-directive": "off",
     "no-console": "off",
+    "no-else-return": "off",
     "no-multi-assign": "off",
     "no-param-reassign": "off",
     "no-plusplus": "off",
