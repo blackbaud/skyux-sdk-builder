@@ -122,6 +122,10 @@ module.exports = {
    * @returns {String} appName
    */
   getAppBase: function (skyPagesConfig) {
+    if (skyPagesConfig.skyux.app && skyPagesConfig.skyux.app.base) {
+      return skyPagesConfig.skyux.app.base;
+    }
+
     return '/' + this.getAppName(skyPagesConfig) + '/';
   },
 
