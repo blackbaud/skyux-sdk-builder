@@ -35,7 +35,7 @@ function start(argv, root, distPath) {
 
     const options = {
       cert: certResolverInstance.readCert(),
-      key: certResolverInstance.readKey(argv)
+      key: certResolverInstance.readKey()
     };
 
     server = https.createServer(options, app);
