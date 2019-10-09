@@ -20,7 +20,7 @@ branches:
 # TODO: Update after https://github.com/blackbaud/skyux-sdk-cli/pull/32 is released
 before_install:
   - npm i -g blackbaud/skyux-sdk-cli#cert-resolver
-  - skyux certs install
+  - skyux certs install --checkout initial-commit
 
 script: "npm run lint && npm run $TEST_COMMAND"
 
