@@ -8,6 +8,8 @@ environment:
 install:
   - choco install googlechrome --ignore-checksums
   - ps: Install-Product node $env:nodejs_version
+  - npm i -g blackbaud/skyux-sdk-cli#cert-resolver
+  - skyux certs install
   - npm install
 
 test_script:
