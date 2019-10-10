@@ -12,13 +12,15 @@ function logError(code) {
 function getResolver(argv) {
   if (!argv.sslRoot) {
     return logError(0);
-  } else if (!fs.pathExistsSync(argv.sslRoot)) {
-    return logError(1);
-  } else {
-    const resolver = require(argv.sslRoot);
-    logger.info(`Located cert-resolver at ${argv.sslRoot}.`);
-    return resolver;
   }
+
+  if (!fs.pathExistsSync(argv.sslRoot)) {
+    return logError(1);
+  }
+
+  const resolver = require(argv.sslRoot);
+  logger.info(`Located cert-resolver at ${argv.sslRoot}.`);
+  return resolver;
 }
 
 module.exports = {
