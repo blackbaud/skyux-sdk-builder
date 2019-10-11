@@ -4,25 +4,28 @@
 const fs = require('fs-extra');
 const logger = require('@blackbaud/skyux-logger');
 
-function logError(code) {
-  logger.error(`Unable to locate certificates. (${code})`);
-  logger.error('Please install the latest SKY UX CLI and run `skyux certs install`.');
+function validate(prop) {
+  if (prop && fs.pathExistsSync(prop)) {
+    return true;
+  }
+
+  logger.error(`Unable to resolve certificate property ${prop}.`);
+  logger.error('Please install the latest SKY UX CLI and run `skyux certs trust`.');
 }
 
-function getResolver(argv) {
-  if (!argv.sslRoot) {
-    return logError(0);
+function readCert(argv) {
+  if (validate(argv.sslCert)) {
+    return fs.readFileSync(argv.sslCert);
   }
+}
 
-  if (!fs.pathExistsSync(argv.sslRoot)) {
-    return logError(1);
+function readKey(argv) {
+  if (validate(argv.sslKey)) {
+    return fs.readFileSync(argv.sslKey);
   }
-
-  const resolver = require(argv.sslRoot);
-  logger.info(`Located cert-resolver at ${argv.sslRoot}.`);
-  return resolver;
 }
 
 module.exports = {
-  getResolver
+  readCert,
+  readKey
 };
