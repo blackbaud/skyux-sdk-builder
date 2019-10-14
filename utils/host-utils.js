@@ -12,10 +12,15 @@ const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
  * @param {Object} skyPagesConfig
  */
 function resolve(url, localUrl, chunks, skyPagesConfig) {
-  let host = skyPagesConfig.skyux.host.url;
-  let config = {
+  let {
+    frameOptions,
+    url: hostUrl
+  } = skyPagesConfig.skyux.host;
+
+  const config = {
     scripts: getScripts(chunks),
-    localUrl: localUrl
+    localUrl,
+    frameOptions
   };
 
   if (skyPagesConfig.skyux.app && skyPagesConfig.skyux.app.externals) {
@@ -28,14 +33,14 @@ function resolve(url, localUrl, chunks, skyPagesConfig) {
   }
 
   // Trim trailing slash since geAppBase adds it
-  if (host && host.charAt(host.length - 1) === '/') {
-    host = host.slice(0, -1);
+  if (hostUrl && hostUrl.charAt(hostUrl.length - 1) === '/') {
+    hostUrl = hostUrl.slice(0, -1);
   }
 
   const delimeter = url.indexOf('?') === -1 ? '?' : '&';
   const encoded = Buffer.from(JSON.stringify(config)).toString('base64');
   const base = skyPagesConfigUtil.getAppBase(skyPagesConfig);
-  const resolved = `${host}${base}${url}${delimeter}local=true&_cfg=${encoded}`;
+  const resolved = `${hostUrl}${base}${url}${delimeter}local=true&_cfg=${encoded}`;
 
   return resolved;
 }
