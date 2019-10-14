@@ -1,14 +1,17 @@
 //#region imports
 import {
-  BBAuth,
-  BBContextArgs,
-  BBContextProvider
+  BBContextArgs
 } from '@blackbaud/auth-client';
 
 import {
   SkyAppRuntimeConfigParams,
   SkyuxConfig
 } from '@skyux/config';
+
+import {
+  BBAuthClientFactory
+} from '@skyux/auth-client-factory';
+
 //#endregion
 
 export class SkyAppBootstrapper {
@@ -17,7 +20,7 @@ export class SkyAppBootstrapper {
 
   public static processBootstrapConfig(): Promise<any> {
     if (SkyAppBootstrapper.config && SkyAppBootstrapper.config.auth) {
-      return BBAuth.getToken()
+      return BBAuthClientFactory.BBAuth.getToken()
         .then(() => {
           const currentUrl = this.getUrl();
 
@@ -36,7 +39,7 @@ export class SkyAppBootstrapper {
             url: currentUrl
           };
 
-          return BBContextProvider.ensureContext(ensureContextArgs)
+          return BBAuthClientFactory.BBContextProvider.ensureContext(ensureContextArgs)
             .then((args) => {
               // The URL will remain the same if the required context is already present, in which
               // case there's no need to update the URL.

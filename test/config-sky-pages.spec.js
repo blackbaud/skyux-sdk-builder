@@ -177,4 +177,36 @@ describe('config sky-pages', () => {
     );
   });
 
+  it('should support the skyuxconfig.json app.base property', () => {
+    const lib = require('../config/sky-pages/sky-pages.config');
+    const customBase = '/my-custom-base';
+    const defaultName = 'default-name';
+
+    const noAppProperty = lib.getAppBase({
+      skyux: {
+        name: defaultName
+      }
+    });
+
+    const noBaseProperty = lib.getAppBase({
+      skyux: {
+        app: {},
+        name: defaultName
+      }
+    });
+
+    const hasBaseProperty = lib.getAppBase({
+      skyux: {
+        app: {
+          base: customBase
+        },
+        name: defaultName
+      }
+    });
+
+    expect(noAppProperty).toBe('/' + defaultName + '/');
+    expect(noBaseProperty).toBe('/' + defaultName + '/');
+    expect(hasBaseProperty).toBe(customBase);
+  });
+
 });
