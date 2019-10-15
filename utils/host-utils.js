@@ -12,15 +12,12 @@ const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
  * @param {Object} skyPagesConfig
  */
 function resolve(url, localUrl, chunks, skyPagesConfig) {
-  let {
-    frameOptions,
-    url: hostUrl
-  } = skyPagesConfig.skyux.host;
+  const hostConfig = skyPagesConfig.skyux.host;
 
   const config = {
     scripts: getScripts(chunks),
     localUrl,
-    frameOptions
+    frameOptions: hostConfig.frameOptions
   };
 
   if (skyPagesConfig.skyux.app && skyPagesConfig.skyux.app.externals) {
@@ -33,6 +30,7 @@ function resolve(url, localUrl, chunks, skyPagesConfig) {
   }
 
   // Trim trailing slash since geAppBase adds it
+  let hostUrl = hostConfig.url;
   if (hostUrl && hostUrl.charAt(hostUrl.length - 1) === '/') {
     hostUrl = hostUrl.slice(0, -1);
   }

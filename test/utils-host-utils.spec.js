@@ -24,12 +24,12 @@ describe('host-utils', () => {
     mock('html-webpack-plugin/lib/chunksorter', {
       dependency: (chunks) => chunks
     });
-    utils = require('../utils/host-utils');
+    utils = mock.reRequire('../utils/host-utils');
   });
 
   afterEach(() => {
     utils = null;
-    mock.stop('html-webpack-plugin/lib/chunksorter');
+    mock.stopAll();
   });
 
   it('should resolve a url, trim trailing slash from host and leading slash from url', () => {
@@ -55,7 +55,6 @@ describe('host-utils', () => {
   });
 
   it('should add scripts / chunks', () => {
-
     const resolved = utils.resolve('/url', '', [{ files: ['test.js'] }], skyPagesConfig);
     const decoded = decode(resolved);
 
@@ -77,8 +76,8 @@ describe('host-utils', () => {
   });
 
   it('should add externals, trim slash from host, and read name from package.json', () => {
-
     const readJsonSync = fs.readJsonSync;
+
     spyOn(fs, 'readJsonSync').and.callFake((filename, encoding) => {
       if (filename.indexOf('package.json') > -1) {
         return {
@@ -95,6 +94,7 @@ describe('host-utils', () => {
         url: 'myjs.com'
       }]
     };
+
     const resolved = utils.resolve('/url', '', [], {
       skyux: {
         app: {
@@ -105,11 +105,22 @@ describe('host-utils', () => {
         }
       }
     });
+
     const decoded = decode(resolved);
 
     expect(resolved).toContain(`base.com/my-name/url?local=true&_cfg=`);
     expect(decoded.externals).toEqual(externals);
-    mock.stop('../package.json');
+  });
+
+  it('should add frame options', () => {
+    const expectedFrameOptions = 'foo-frame-options';
+
+    skyPagesConfig.skyux.host.frameOptions = expectedFrameOptions;
+
+    const resolved = utils.resolve('/url', '', [], skyPagesConfig);
+    const decoded = decode(resolved);
+
+    expect(decoded.frameOptions).toEqual(expectedFrameOptions);
   });
 
 });
