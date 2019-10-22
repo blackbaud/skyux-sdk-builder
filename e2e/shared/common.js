@@ -290,5 +290,7 @@ module.exports = {
   writeAppFile: writeAppFile,
   removeAppFolderItem: removeAppFolderItem,
   verifyAppFolder: verifyAppFolder,
-  writeAppExtras: writeAppExtras
+  writeAppExtras: writeAppExtras,
+  sslCert,
+  sslKey
 };

@@ -3,8 +3,20 @@
 
 const common = require('./shared/common');
 
+
 function validateTestRun(done) {
-  common.exec(`node`, [common.cliPath, `e2e`, `--logFormat`, `none`], common.cwdOpts)
+  const args = [
+    common.cliPath,
+    `e2e`,
+    `--logFormat`,
+    `none`,
+    `--sslCert`,
+    common.sslCert,
+    `-sslKey`,
+    common.sslKey
+  ];
+
+  common.exec(`node`, args, common.cwdOpts)
     .then(exit => {
       expect(exit).toEqual(0);
       done();
