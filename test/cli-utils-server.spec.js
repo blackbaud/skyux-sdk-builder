@@ -13,7 +13,6 @@ describe('server utils', () => {
   let customPortError;
   let customPortNumber;
   let spyCertResolver;
-  let spyCertResolverInstance;
 
   beforeEach(() => {
     spyOn(logger, 'info');
@@ -52,12 +51,8 @@ describe('server utils', () => {
       }
     });
 
-    spyCertResolver = jasmine.createSpy('cert-resolver');
-    spyCertResolverInstance = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
-    spyCertResolver.and.returnValue(spyCertResolverInstance);
-    mock('../cli/utils/cert-resolver', {
-      getResolver: spyCertResolver
-    });
+    spyCertResolver = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
+    mock('../cli/utils/cert-resolver', spyCertResolver);
 
     return mock.reRequire('../cli/utils/server');
   }
@@ -141,9 +136,8 @@ describe('server utils', () => {
     const server = bind();
 
     server.start(argv).then(() => {
-      expect(spyCertResolver).toHaveBeenCalledWith(argv);
-      expect(spyCertResolverInstance.readCert).toHaveBeenCalled();
-      expect(spyCertResolverInstance.readKey).toHaveBeenCalled();
+      expect(spyCertResolver.readCert).toHaveBeenCalledWith(argv);
+      expect(spyCertResolver.readKey).toHaveBeenCalledWith(argv);
       done();
     });
   });

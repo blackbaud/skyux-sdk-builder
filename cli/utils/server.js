@@ -21,7 +21,6 @@ function start(argv, root, distPath) {
   return new Promise((resolve, reject) => {
 
     const dist = path.resolve(process.cwd(), distPath || 'dist');
-    const certResolverInstance = certResolver.getResolver(argv);
 
     logger.info('Creating web server');
     app.use(cors());
@@ -34,8 +33,8 @@ function start(argv, root, distPath) {
     }
 
     const options = {
-      cert: certResolverInstance.readCert(),
-      key: certResolverInstance.readKey()
+      cert: certResolver.readCert(argv),
+      key: certResolver.readKey(argv)
     };
 
     server = https.createServer(options, app);
