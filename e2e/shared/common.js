@@ -123,6 +123,9 @@ function prepareBuild(config) {
     // Reset skyuxconfig.json
     resetConfig();
 
+    console.log('DEBUGGING sslCert', sslCert);
+    console.log('DEBUGGING sslKey', sslKey);
+
     return server.start({ sslCert, sslKey }, 'unused-root', tmp)
       .then(port => browser.get(`https://localhost:${port}/dist/`));
   }
