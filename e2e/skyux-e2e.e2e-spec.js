@@ -3,7 +3,6 @@
 
 const common = require('./shared/common');
 
-
 function validateTestRun(done) {
   const args = [
     common.cliPath,
@@ -12,7 +11,7 @@ function validateTestRun(done) {
     `none`,
     `--sslCert`,
     common.sslCert,
-    `-sslKey`,
+    `--sslKey`,
     common.sslKey
   ];
 

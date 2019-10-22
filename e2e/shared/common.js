@@ -123,9 +123,6 @@ function prepareBuild(config) {
     // Reset skyuxconfig.json
     resetConfig();
 
-    console.log('DEBUGGING sslCert', sslCert);
-    console.log('DEBUGGING sslKey', sslKey);
-
     return server.start({ sslCert, sslKey }, 'unused-root', tmp)
       .then(port => browser.get(`https://localhost:${port}/dist/`));
   }
@@ -148,15 +145,15 @@ function prepareServe() {
 
   if (webpackServer) {
     return bindServe();
-  } else {
-    return new Promise((resolve, reject) => {
-      portfinder.getPortPromise()
-        .then(writeConfigServe)
-        .then(bindServe)
-        .then(resolve)
-        .catch(err => reject(err));
-    });
   }
+
+  return new Promise((resolve, reject) => {
+    portfinder.getPortPromise()
+      .then(writeConfigServe)
+      .then(bindServe)
+      .then(resolve)
+      .catch(err => reject(err));
+  });
 }
 
 /**
@@ -215,7 +212,7 @@ function writeConfigServe(port) {
       `none`,
       `--sslCert`,
       sslCert,
-      `-sslKey`,
+      `--sslKey`,
       sslKey
     ];
     webpackServer = childProcessSpawn(`node`, args, cwdOpts);
