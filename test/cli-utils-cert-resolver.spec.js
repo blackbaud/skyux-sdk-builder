@@ -32,8 +32,12 @@ describe('utils/cert-resolver.js', () => {
     lib.readCert({});
     lib.readKey({});
 
-    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslCert.`);
-    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslKey.`);
+    expect(logger.error).toHaveBeenCalledWith(
+      `Unable to resolve certificate property sslCert (code 0).`
+    );
+    expect(logger.error).toHaveBeenCalledWith(
+      `Unable to resolve certificate property sslKey (code 0).`
+    );
     expect(logger.error).toHaveBeenCalledWith(
       'Please install the latest SKY UX CLI and run `skyux certs trust`.'
     );
@@ -48,8 +52,12 @@ describe('utils/cert-resolver.js', () => {
     lib.readCert({ sslCert: 'asdf' });
     lib.readKey({ sslKey: 'asdf' });
 
-    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslCert.`);
-    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslKey.`);
+    expect(logger.error).toHaveBeenCalledWith(
+      `Unable to resolve certificate property sslCert (code 1).`
+    );
+    expect(logger.error).toHaveBeenCalledWith(
+      `Unable to resolve certificate property sslKey (code 1).`
+    );
     expect(logger.error).toHaveBeenCalledWith(
       'Please install the latest SKY UX CLI and run `skyux certs trust`.'
     );
