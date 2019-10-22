@@ -4,9 +4,9 @@
 const fs = require('fs-extra');
 const logger = require('@blackbaud/skyux-logger');
 
-function validate(prop) {
-  if (prop && fs.pathExistsSync(prop)) {
-    return true;
+function read(argv, prop) {
+  if (argv[prop] && fs.pathExistsSync(argv[prop])) {
+    return fs.readFileSync(argv[prop]);
   }
 
   logger.error(`Unable to resolve certificate property ${prop}.`);
@@ -14,15 +14,11 @@ function validate(prop) {
 }
 
 function readCert(argv) {
-  if (validate(argv.sslCert)) {
-    return fs.readFileSync(argv.sslCert);
-  }
+  return read(argv, 'sslCert');
 }
 
 function readKey(argv) {
-  if (validate(argv.sslKey)) {
-    return fs.readFileSync(argv.sslKey);
-  }
+  return read(argv, 'sslKey');
 }
 
 module.exports = {

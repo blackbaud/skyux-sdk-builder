@@ -17,10 +17,10 @@ branches:
     - /^rc-.*$/
     - /^[0-9]+\.[0-9]+\.[0-9]+.*/
 
-# TODO: Update after https://github.com/blackbaud/skyux-sdk-cli/pull/32 is released
+# TODO: Update after https://github.com/blackbaud/skyux-sdk-cli/pull/36 is released
 before_install:
-  - npm i -g blackbaud/skyux-sdk-cli#cert-resolver
-  - skyux certs install --checkout initial-commit
+  - npm i -g blackbaud/skyux-sdk-cli#cert-generator
+  - skyux certs trust
 
 script: "npm run lint && npm run $TEST_COMMAND"
 

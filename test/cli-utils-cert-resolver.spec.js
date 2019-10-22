@@ -11,49 +11,61 @@ describe('utils/cert-resolver.js', () => {
     spyOn(logger, 'info');
   });
 
-  it('should expose a getResolver method', () => {
-    const resolver = mock.reRequire('../cli/utils/cert-resolver');
-    expect(resolver.getResolver).toBeDefined();
+  function spyOnFS() {
+    const spyFS = jasmine.createSpyObj('fs', ['pathExistsSync', 'readFileSync']);
+    mock('fs-extra', spyFS);
+    return spyFS;
+  }
+
+  function getLib() {
+    return mock.reRequire('../cli/utils/cert-resolver');
+  }
+
+  it('should expose getCert and getKey methods', () => {
+    const lib = getLib();
+    expect(lib.readCert).toBeDefined();
+    expect(lib.readKey).toBeDefined();
   });
 
-  it('should require sslRoot be passed in with argv', () => {
-    const resolver = mock.reRequire('../cli/utils/cert-resolver');
-    resolver.getResolver({});
+  it('should handle sslCert and sslKey not passed in', () => {
+    const lib = getLib();
+    lib.readCert({});
+    lib.readKey({});
 
-    expect(logger.error).toHaveBeenCalledWith(`Unable to locate certificates. (0)`);
+    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslCert.`);
+    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslKey.`);
     expect(logger.error).toHaveBeenCalledWith(
-      'Please install the latest SKY UX CLI and run `skyux certs install`.'
+      'Please install the latest SKY UX CLI and run `skyux certs trust`.'
     );
   });
 
-  it('should require sslRoot path to exist', () => {
-    const spyFsExtra = jasmine.createSpyObj('fs-extra', ['pathExistsSync']);
-    mock('fs-extra', spyFsExtra);
+  it('should handle sslCert and sslKey not existing', () => {
+    const spyFS = spyOnFS();
+    const lib = getLib();
 
-    const resolver = mock.reRequire('../cli/utils/cert-resolver');
+    spyFS.pathExistsSync.and.returnValue(false);
 
-    spyFsExtra.pathExistsSync.and.returnValue(false);
-    resolver.getResolver({ sslRoot: 'asdf' });
+    lib.readCert({ sslCert: 'asdf' });
+    lib.readKey({ sslKey: 'asdf' });
 
-    expect(logger.error).toHaveBeenCalledWith(`Unable to locate certificates. (1)`);
+    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslCert.`);
+    expect(logger.error).toHaveBeenCalledWith(`Unable to resolve certificate property sslKey.`);
     expect(logger.error).toHaveBeenCalledWith(
-      'Please install the latest SKY UX CLI and run `skyux certs install`.'
+      'Please install the latest SKY UX CLI and run `skyux certs trust`.'
     );
   });
 
-  it('require the sslRoot path and log a message', () => {
-    const spyFsExtra = jasmine.createSpyObj('fs-extra', ['pathExistsSync']);
-    mock('fs-extra', spyFsExtra);
+  it('should return contents of sslCert and sslKey', () => {
+    const spyFS = spyOnFS();
+    const lib = getLib();
 
-    const argv = { sslRoot: 'custom-ssl-root' };
-    mock(argv.sslRoot, () => {});
+    spyFS.pathExistsSync.and.returnValue(true);
+    spyFS.readFileSync.and.callFake(p => `${p}-content`);
 
-    const resolver = mock.reRequire('../cli/utils/cert-resolver');
+    const cert = lib.readCert({ sslCert: 'custom-cert' });
+    const key = lib.readKey({ sslKey: 'custom-key' });
 
-    spyFsExtra.pathExistsSync.and.returnValue(true);
-    resolver.getResolver(argv);
-
-    expect(logger.info).toHaveBeenCalledWith(`Located cert-resolver at ${argv.sslRoot}.`);
+    expect(cert).toBe('custom-cert-content');
+    expect(key).toBe('custom-key-content');
   });
-
 });

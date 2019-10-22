@@ -7,16 +7,10 @@ const runtimeUtils = require('../utils/runtime-test-utils');
 describe('config webpack serve', () => {
 
   let spyCertResolver;
-  let spyCertResolverInstance;
 
   beforeEach(() => {
-    spyCertResolver = jasmine.createSpy('cert-resolver');
-    spyCertResolverInstance = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
-
-    spyCertResolver.and.returnValue(spyCertResolverInstance);
-    mock('../cli/utils/cert-resolver', {
-      getResolver: spyCertResolver
-    });
+    spyCertResolver = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
+    mock('../cli/utils/cert-resolver', spyCertResolver);
   });
 
   it('should expose a getWebpackConfig method', () => {
@@ -73,9 +67,8 @@ describe('config webpack serve', () => {
     const argv = { custom: true };
 
     lib.getWebpackConfig(argv, runtimeUtils.getDefault());
-    expect(spyCertResolver).toHaveBeenCalledWith(argv);
-    expect(spyCertResolverInstance.readCert).toHaveBeenCalled();
-    expect(spyCertResolverInstance.readKey).toHaveBeenCalled();
+    expect(spyCertResolver.readCert).toHaveBeenCalledWith(argv);
+    expect(spyCertResolver.readKey).toHaveBeenCalledWith(argv);
   });
 
 });

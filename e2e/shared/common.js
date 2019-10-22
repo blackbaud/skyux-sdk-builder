@@ -20,7 +20,8 @@ const appExtrasPath = path.resolve(process.cwd(), tmp, 'src/app/app-extras.modul
 const cliPath = `../e2e/shared/cli`;
 
 // This is normally provided by the CLI.
-const sslRootPath = path.resolve(`${os.homedir()}/.skyux/certs/`);
+const sslCert = path.resolve(`${os.homedir()}/.skyux/certs/skyux-server.pem`);
+const sslKey = path.resolve(`${os.homedir()}/.skyux/certs/skyux-server.key`);
 
 let skyuxConfigOriginal;
 let appExtrasOriginal;
@@ -122,7 +123,7 @@ function prepareBuild(config) {
     // Reset skyuxconfig.json
     resetConfig();
 
-    return server.start({ sslRoot: sslRootPath }, 'unused-root', tmp)
+    return server.start({ sslCert, sslKey }, 'unused-root', tmp)
       .then(port => browser.get(`https://localhost:${port}/dist/`));
   }
 
@@ -202,7 +203,18 @@ function writeConfigServe(port) {
 
     writeConfig(skyuxConfigWithPort);
 
-    const args = [cliPath, `serve`, `-l`, `none`, `--logFormat`, `none`, `--sslRoot`, sslRootPath];
+    const args = [
+      cliPath,
+      `serve`,
+      `-l`,
+      `none`,
+      `--logFormat`,
+      `none`,
+      `--sslCert`,
+      sslCert,
+      `-sslKey`,
+      sslKey
+    ];
     webpackServer = childProcessSpawn(`node`, args, cwdOpts);
     resetConfig();
     resolve();
