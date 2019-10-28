@@ -1,6 +1,6 @@
 # 3.11.0 (2019-10-28)
 
-- Added support for `@skyux-sdk/cli@3.2.0` by reading `--sslCert` and `--sslKey` instead of using the expired, hard-coded version. [#168](https://github.com/blackbaud/skyux-sdk-builder/pull/168)
+- Added support for `@skyux-sdk/cli@3.2.0` by reading `--sslCert` and `--sslKey` instead of hard-coded versions. [#168](https://github.com/blackbaud/skyux-sdk-builder/pull/168)
 
 # 3.10.0 (2019-09-30)
 
