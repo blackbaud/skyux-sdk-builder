@@ -10,7 +10,7 @@ install:
   - choco install googlechrome --ignore-checksums
   - ps: Install-Product node $env:nodejs_version
   - npm i -g blackbaud/skyux-sdk-cli#cert-generator
-  - skyux certs trust
+  - skyux certs install
   - npm install
 
 test_script:

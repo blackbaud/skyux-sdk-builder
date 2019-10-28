@@ -6,7 +6,7 @@ const logger = require('@blackbaud/skyux-logger');
 
 function error(prop, code) {
   logger.error(`Unable to resolve certificate property ${prop} (code ${code}).`);
-  logger.error('Please install the latest SKY UX CLI and run `skyux certs trust`.');
+  logger.error('Please install the latest SKY UX CLI and run `skyux certs install`.');
 }
 
 function read(argv, prop) {

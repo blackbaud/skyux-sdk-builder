@@ -39,7 +39,7 @@ describe('utils/cert-resolver.js', () => {
       `Unable to resolve certificate property sslKey (code 0).`
     );
     expect(logger.error).toHaveBeenCalledWith(
-      'Please install the latest SKY UX CLI and run `skyux certs trust`.'
+      'Please install the latest SKY UX CLI and run `skyux certs install`.'
     );
   });
 
@@ -59,7 +59,7 @@ describe('utils/cert-resolver.js', () => {
       `Unable to resolve certificate property sslKey (code 1).`
     );
     expect(logger.error).toHaveBeenCalledWith(
-      'Please install the latest SKY UX CLI and run `skyux certs trust`.'
+      'Please install the latest SKY UX CLI and run `skyux certs install`.'
     );
   });
 
