@@ -12,6 +12,7 @@ describe('server utils', () => {
   let customServerError;
   let customPortError;
   let customPortNumber;
+  let spyCertResolver;
 
   beforeEach(() => {
     spyOn(logger, 'info');
@@ -50,6 +51,9 @@ describe('server utils', () => {
       }
     });
 
+    spyCertResolver = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
+    mock('../cli/utils/cert-resolver', spyCertResolver);
+
     return mock.reRequire('../cli/utils/server');
   }
 
@@ -62,7 +66,7 @@ describe('server utils', () => {
   it('should accept a root', () => {
     const server = bind();
     const root = 'custom-root';
-    server.start(root).then(() =>{
+    server.start({}, root).then(() =>{
 
     });
   });
@@ -73,7 +77,7 @@ describe('server utils', () => {
     server.stop();
     expect(closeCalled).toBe(false);
 
-    server.start().then(() => {
+    server.start({}).then(() => {
       logger.info.calls.reset();
       server.stop();
       expect(closeCalled).toBe(true);
@@ -87,7 +91,7 @@ describe('server utils', () => {
     customServerError = 'custom-error';
     const server = bind();
 
-    server.start().catch(err => {
+    server.start({}).catch(err => {
       expect(err).toBe(customServerError);
       done();
     });
@@ -97,7 +101,7 @@ describe('server utils', () => {
     customPortNumber = 1234;
     const server = bind();
 
-    server.start().then(port => {
+    server.start({}).then(port => {
       expect(port).toBe(customPortNumber);
       done();
     });
@@ -108,7 +112,7 @@ describe('server utils', () => {
     customPortError = 'custom-portfinder-error';
 
     const server = bind();
-    server.start().catch(err => {
+    server.start({}).catch(err => {
       expect(err).toBe(customPortError);
       done();
     });
@@ -120,10 +124,21 @@ describe('server utils', () => {
     const customDistPath = 'custom-dist';
     const server = bind();
 
-    server.start('custom-root', customDistPath)
+    server.start({}, 'custom-root', customDistPath)
       .then(() => {
         expect(path.resolve).toHaveBeenCalledWith(process.cwd(), customDistPath);
         done();
       });
+  });
+
+  it('should pass argv to cert-resolver and call the readCert and readKey methods', (done) => {
+    const argv = { custom: true };
+    const server = bind();
+
+    server.start(argv).then(() => {
+      expect(spyCertResolver.readCert).toHaveBeenCalledWith(argv);
+      expect(spyCertResolver.readKey).toHaveBeenCalledWith(argv);
+      done();
+    });
   });
 });
