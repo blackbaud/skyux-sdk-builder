@@ -5,11 +5,10 @@ branches:
 environment:
   nodejs_version: "10"
 
-# TODO: Update after https://github.com/blackbaud/skyux-sdk-cli/pull/36 is released
 install:
   - choco install googlechrome --ignore-checksums
   - ps: Install-Product node $env:nodejs_version
-  - npm i -g blackbaud/skyux-sdk-cli#cert-generator
+  - npm i -g @skyux-sdk/cli
   - skyux certs install
   - npm install
 
