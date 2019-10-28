@@ -183,7 +183,7 @@ function e2e(command, argv, skyPagesConfig, webpack) {
     return killServers(0);
   }
 
-  server.start()
+  server.start(argv)
     .then((port) => {
       argv.assets = 'https://localhost:' + port;
 
