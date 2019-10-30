@@ -1,3 +1,7 @@
+# 3.11.0 (2019-10-28)
+
+- Updated the local server to use the self-signed certificate implementation introduced in `@skyux-sdk/cli@3.2.0`. See the [SSL documentation](https://developer.blackbaud.com/skyux/learn/get-started/prereqs/ssl-certificate). [#168](https://github.com/blackbaud/skyux-sdk-builder/pull/168)
+
 # 3.10.0 (2019-09-30)
 
 - Upgraded `help-client` to `2.1.0`. [#161](https://github.com/blackbaud/skyux-sdk-builder/pull/161) Thanks, [@Blackbaud-ColbyWhite](https://github.com/Blackbaud-ColbyWhite)!
