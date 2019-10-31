@@ -22,7 +22,7 @@ branches:
     - /^[0-9]+\.[0-9]+\.[0-9]+.*/
 
 before_install:
-  - npm i -g @skyux-sdk/cli
+  - npm i -g blackbaud/skyux-sdk-cli#trust-linux-remove-argv
   - skyux certs install
 
 script: "npm run lint && npm run $TEST_COMMAND"
