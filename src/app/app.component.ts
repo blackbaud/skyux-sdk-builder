@@ -297,6 +297,14 @@ export class AppComponent implements OnInit, OnDestroy {
         if (this.config.runtime.params.has('svcid')) {
           helpConfig.extends = this.config.runtime.params.get('svcid');
         }
+        if (this.config.runtime.params.has('envid')) {
+          helpConfig.environmentId = this.config.runtime.params.get('envid');
+        }
+        if (this.config.skyux.appSettings
+          && this.config.skyux.appSettings.accessResolver
+          && this.config.skyux.appSettings.accessResolver.globalPermissionsScope) {
+          helpConfig.permissionScope = this.config.skyux.appSettings.accessResolver.globalPermissionsScope;
+        }
 
         if (skyuxHost && !helpConfig.locale) {
           const browserLanguages = skyuxHost.acceptLanguage || '';

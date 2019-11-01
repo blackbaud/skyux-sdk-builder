@@ -721,6 +721,36 @@ describe('AppComponent', () => {
     });
   }));
 
+  it('should assign help config environmentId to the envid if one exists', async(() => {
+    const spyHelp = spyOn(mockHelpInitService, 'load');
+    const expectedCall = { productId: 'test-config', environmentId: 't-Z-FEhKwLvkGVGjTCcbBMEA' };
+    skyAppConfig.skyux.help = { productId: 'test-config' };
+
+    skyAppConfig.skyux.params = ['envid'];
+    skyAppConfig.runtime.params.has = (key: any) => key === 'envid';
+    skyAppConfig.runtime.params.get = (key: any) => key === 'envid' ? expectedCall.environmentId : false;
+
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+      expect(spyHelp).not.toHaveBeenCalledWith(skyAppConfig.skyux.help);
+      expect(spyHelp).toHaveBeenCalledWith(expectedCall);
+    });
+  }));
+
+  it('should assign help config permissionScope to the access resolver\'s scope if one exists', async(() => {
+    const spyHelp = spyOn(mockHelpInitService, 'load');
+    const expectedCall = { productId: 'test-config', permissionScope: 'myScope' };
+    skyAppConfig.skyux.help = { productId: 'test-config' };
+
+    skyAppConfig.skyux.appSettings = {accessResolver: {globalPermissionsScope: expectedCall.permissionScope}};
+
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+      expect(spyHelp).not.toHaveBeenCalledWith(skyAppConfig.skyux.help);
+      expect(spyHelp).toHaveBeenCalledWith(expectedCall);
+    });
+  }));
+
   it('should assign help config locale key if none exist and host exposes the browser language', async(() => {
     const spyHelp = spyOn(mockHelpInitService, 'load');
 
