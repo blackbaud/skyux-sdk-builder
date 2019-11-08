@@ -16,6 +16,9 @@ addons:
 services:
   - xvfb
 
+git:
+  autocrlf: false
+
 branches:
   only:
     - master
@@ -25,8 +28,6 @@ branches:
 before_install:
   - npm i -g @skyux-sdk/cli
   - skyux certs install
-  - git config --list
-  - git config core.autocrlf false
   - git config --list
 
 script: "npm run lint && npm run $TEST_COMMAND"
