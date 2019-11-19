@@ -6,6 +6,13 @@ const runtimeUtils = require('../utils/runtime-test-utils');
 
 describe('config webpack serve', () => {
 
+  let spyCertResolver;
+
+  beforeEach(() => {
+    spyCertResolver = jasmine.createSpyObj('certResolver', ['readCert', 'readKey']);
+    mock('../cli/utils/cert-resolver', spyCertResolver);
+  });
+
   it('should expose a getWebpackConfig method', () => {
     const lib = require('../config/webpack/serve.webpack.config');
     expect(typeof lib.getWebpackConfig).toEqual('function');
@@ -53,6 +60,15 @@ describe('config webpack serve', () => {
       }
     });
 
+  });
+
+  it('should pass argv to cert-resolver and call the readCert and readKey methods', () => {
+    const lib = mock.reRequire('../config/webpack/serve.webpack.config');
+    const argv = { custom: true };
+
+    lib.getWebpackConfig(argv, runtimeUtils.getDefault());
+    expect(spyCertResolver.readCert).toHaveBeenCalledWith(argv);
+    expect(spyCertResolver.readKey).toHaveBeenCalledWith(argv);
   });
 
 });
