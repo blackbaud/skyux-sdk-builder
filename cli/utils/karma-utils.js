@@ -83,7 +83,7 @@ function run(command, argv, specsPattern) {
       });
     }
 
-    server.start();
+    server.start(argv);
   });
 }
 

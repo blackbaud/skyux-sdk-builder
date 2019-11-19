@@ -149,7 +149,7 @@ function cleanupDist() {
 function buildServe(argv, skyPagesConfig, webpack, isAot) {
   const base = skyPagesConfigUtil.getAppBase(skyPagesConfig);
   return server
-    .start(base)
+    .start(argv, base)
     .then(port => {
       argv.assets = argv.assets || `https://localhost:${port}`;
       return buildCompiler(argv, skyPagesConfig, webpack, isAot)
