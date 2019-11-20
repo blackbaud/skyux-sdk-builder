@@ -4,7 +4,7 @@
 const fs = require('fs-extra');
 const glob = require('glob');
 const path = require('path');
-const sass = require('node-sass');
+const sass = require('sass');
 const tildeImporter = require('node-sass-tilde-importer');
 
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
