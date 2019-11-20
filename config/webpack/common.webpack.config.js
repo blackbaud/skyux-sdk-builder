@@ -166,7 +166,7 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
         },
         {
           test: /\.html$/,
-          loader: 'raw-loader'
+          loader: 'html-loader'
         },
         {
           // Mark files inside `@angular/core` as using SystemJS style dynamic imports.

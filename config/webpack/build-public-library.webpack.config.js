@@ -74,7 +74,7 @@ function getWebpackConfig(skyPagesConfig) {
         },
         {
           test: /\.html$/,
-          use: 'raw-loader'
+          use: 'html-loader'
         },
         {
           test: /\.scss$/,
