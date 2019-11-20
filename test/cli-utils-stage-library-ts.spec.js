@@ -4,7 +4,7 @@
 const fs = require('fs-extra');
 const glob = require('glob');
 const mock = require('mock-require');
-const sass = require('node-sass');
+const sass = require('sass');
 
 describe('cli utils prepare-library-package', () => {
   let util;
