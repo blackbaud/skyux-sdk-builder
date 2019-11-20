@@ -130,7 +130,12 @@ function getConfig(config) {
     captureTimeout: 3e5,
     autoWatch: false,
     singleRun: true,
-    failOnEmptyTestSuite: false
+    failOnEmptyTestSuite: false,
+    client: {
+      jasmine: {
+        random: false
+      }
+    }
   });
 }
 
