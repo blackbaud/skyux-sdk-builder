@@ -350,7 +350,7 @@ describe('AppComponent', () => {
     })
   );
 
-  it('should call omnibar destroy if it was loaded', () => {
+  it('should call omnibar destroy if it was loaded', async(() => {
     const spyOmnibarLoad = spyOn(BBOmnibar, 'load');
 
     skyAppConfig.skyux.omnibar = {};
@@ -361,7 +361,7 @@ describe('AppComponent', () => {
       expect(spyOmnibarLoad).toHaveBeenCalled();
       expect(spyOmnibarDestroy).toHaveBeenCalled();
     });
-  });
+  }));
 
   it('should not load the omnibar or help widget if the addin param is 1', () => {
     const spyOmnibar = spyOn(BBOmnibar, 'load');
