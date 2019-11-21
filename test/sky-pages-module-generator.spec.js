@@ -152,34 +152,6 @@ describe('SKY UX Builder module generator', () => {
     );
   });
 
-  it('should only provide the SkyAuthHttp service if the app is configured to use auth', () => {
-    const generator = mock.reRequire(GENERATOR_PATH);
-    const expectedImport = `{ SkyAuthHttp }`;
-    const expectedProvider = `{
-      provide: SkyAuthHttp,
-      useClass: SkyAuthHttp,
-      deps: [XHRBackend, RequestOptions, SkyAuthTokenProvider, SkyAppConfig]
-    }`;
-
-    let source = generator.getSource({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: runtimeUtils.getDefaultSkyux()
-    });
-
-    expect(source).not.toContain(expectedImport);
-    expect(source).not.toContain(expectedProvider);
-
-    source = generator.getSource({
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: runtimeUtils.getDefaultSkyux({
-        auth: true
-      })
-    });
-
-    expect(source).toContain(expectedImport);
-    expect(source).toContain(expectedProvider);
-  });
-
   it('should not add BBHelpModule if the help config does not exists.', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedModule = 'BBHelpModule';
