@@ -90,7 +90,11 @@ function getWebpackConfig(skyPagesConfig, argv) {
 
         {
           test: /\.s?css$/,
-          use: ['raw-loader', 'sass-loader']
+          use: [
+            'to-string-loader',
+            'css-loader',
+            'sass-loader'
+          ]
         },
         {
           test: /\.html$/,

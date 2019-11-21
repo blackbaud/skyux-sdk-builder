@@ -77,12 +77,12 @@ function getWebpackConfig(skyPagesConfig) {
           use: 'html-loader'
         },
         {
-          test: /\.scss$/,
-          use: ['raw-loader', 'sass-loader']
-        },
-        {
-          test: /\.css$/,
-          use: ['raw-loader', 'style-loader']
+          test: /\.s?css$/,
+          use: [
+            'to-string-loader',
+            'css-loader',
+            'sass-loader'
+          ]
         }
       ]
     }
