@@ -72,7 +72,8 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
     }),
 
     new webpack.DefinePlugin({
-      'skyPagesConfig': JSON.stringify(skyPagesConfig)
+      'skyPagesConfig': JSON.stringify(skyPagesConfig),
+      ngDevMode: false // This is usually defined by Angular CLI during a production build. We need to set it to a hard 'false' to get the build to pass. See: https://github.com/angular/angular/issues/31595#issuecomment-519083266
     }),
 
     new LoaderOptionsPlugin({
