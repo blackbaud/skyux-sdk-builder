@@ -416,4 +416,23 @@ require('style-loader!src/styles/custom.css');
 
     expect(source).toContain(expectedProvider);
   });
+
+  it('should provide SkyAppOmnibarTitleService when omnibar is enabled', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+    const config = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux()
+    };
+
+    config.skyux.omnibar = {
+      experimental: true
+    };
+
+    const source = generator.getSource(config);
+
+    expect(source).toContain(
+      '{ provide: SkyAppTitleService, useClass: SkyAppOmnibarTitleService }'
+    );
+  });
+
 });
