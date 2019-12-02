@@ -1,3 +1,7 @@
+# 3.12.0 (2019-11-02)
+
+- Added `SkyAppTitleService` to the Angular app's providers. When the omnibar is enabled, this is replaced with a service that updates the window title through the omnibar and preserves the selected service and number of unread notifications in the title. [#182](https://github.com/blackbaud/skyux-sdk-builder/pull/182)
+
 # 3.11.0 (2019-10-28)
 
 - Updated the local server to use the self-signed certificate implementation introduced in `@skyux-sdk/cli@3.2.0`. See the [SSL documentation](https://developer.blackbaud.com/skyux/learn/get-started/prereqs/ssl-certificate). [#168](https://github.com/blackbaud/skyux-sdk-builder/pull/168)
