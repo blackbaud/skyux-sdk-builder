@@ -11,8 +11,11 @@ const minimist = require('minimist');
 function getConfig(config) {
   require('./shared.karma.conf')(config);
 
-  const argv = minimist(process.argv.slice(2));
+  const argv = minimist(process.argv.slice(2), {
+    boolean: ['browser', 'suppressUnfocusedTestOutput']
+  });
   const browser = (argv.headless) ? 'ChromeHeadless' : 'Chrome';
+  const suppressUnfocusedTestOutput = (argv.suppressUnfocusedTestOutput);
 
   const configuration = {
     browsers: [
@@ -28,6 +31,10 @@ function getConfig(config) {
 
   if (process.env.TRAVIS) {
     configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  if (suppressUnfocusedTestOutput) {
+    configuration.mochaReporter = { ignoreSkipped: true };
   }
 
   config.set(configuration);
