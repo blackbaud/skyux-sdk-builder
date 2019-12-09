@@ -12,10 +12,9 @@ function getConfig(config) {
   require('./shared.karma.conf')(config);
 
   const argv = minimist(process.argv.slice(2), {
-    boolean: ['browser', 'enableDesktopNotifications']
+    boolean: ['headless', 'enableDesktopNotifications']
   });
   const browser = (argv.headless) ? 'ChromeHeadless' : 'Chrome';
-  const enableDesktopNotifications = (argv.enableDesktopNotifications);
 
   const configuration = {
     browsers: [
@@ -33,7 +32,7 @@ function getConfig(config) {
     configuration.browsers = ['Chrome_travis_ci'];
   }
 
-  if (enableDesktopNotifications) {
+  if (argv.enableDesktopNotifications) {
     configuration.reporters = config.reporters ? config.reporters.concat('notify') : ['notify'];
   }
 
