@@ -6,10 +6,9 @@ environment:
   nodejs_version: "10"
 
 install:
-  - choco install googlechrome --ignore-checksums
   - ps: Install-Product node $env:nodejs_version
   - npm i -g @skyux-sdk/cli
-  - skyux certs install
+  - skyux certs install --no-pause
   - npm install
 
 test_script:
