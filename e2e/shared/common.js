@@ -209,7 +209,7 @@ function writeConfigServe(port) {
       `-l`,
       `none`,
       `--logFormat`,
-      `none`,
+      `verbose`,
       `--sslCert`,
       sslCert,
       `--sslKey`,
