@@ -131,7 +131,7 @@ function prepareBuild(config) {
 
   return new Promise((resolve, reject) => {
     rimrafPromise(path.join(tmp, 'dist'))
-      .then(() => exec(`node`, [cliPath, `build`, `--logFormat`, `verbose`], cwdOpts))
+      .then(() => exec(`node`, [cliPath, `build`, `--logFormat`, `none`], cwdOpts))
       .then(serve)
       .then(resolve)
       .catch(err => reject(err));
@@ -209,7 +209,7 @@ function writeConfigServe(port) {
       `-l`,
       `none`,
       `--logFormat`,
-      `verbose`,
+      `none`,
       `--sslCert`,
       sslCert,
       `--sslKey`,
