@@ -113,7 +113,13 @@ if (process.env.TRAVIS) {
   config.capabilities = {
     browserName: 'chrome',
     'chromeOptions': {
-      'args': ['--disable-extensions --ignore-certificate-errors']
+      'args': [
+        '--disable-extensions',
+        '--ignore-certificate-errors',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--headless'
+      ]
     }
   };
 }
