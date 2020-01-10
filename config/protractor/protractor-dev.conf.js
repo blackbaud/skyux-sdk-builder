@@ -116,9 +116,7 @@ if (process.env.TRAVIS) {
       'args': [
         '--disable-extensions',
         '--ignore-certificate-errors',
-        '--no-sandbox',
-        '--disable-dev-shm-usage',
-        '--headless'
+        '--no-sandbox'
       ]
     }
   };
