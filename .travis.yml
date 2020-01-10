@@ -10,7 +10,7 @@ env:
   - TEST_COMMAND=e2e
 
 addons:
-  chrome: beta
+  firefox: latest
 
 services:
   - xvfb

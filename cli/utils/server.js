@@ -37,9 +37,6 @@ function start(argv, root, distPath) {
       key: certResolver.readKey(argv)
     };
 
-    // Temporarily debugging
-    console.log(argv, options);
-
     server = https.createServer(options, app);
     server.on('error', reject);
 
