@@ -111,7 +111,10 @@ let config = {
 // In CI, use firefox
 if (process.env.TRAVIS) {
   config.capabilities = {
-    browserName: 'firefox'
+    browserName: 'chrome',
+    'chromeOptions': {
+      'args': ['--disable-extensions --ignore-certificate-errors']
+    }
   };
 }
 

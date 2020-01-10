@@ -3,7 +3,6 @@ os:
   - osx
 
 language: node_js
-dist: bionic
 
 env:
   - TEST_COMMAND=coverage
