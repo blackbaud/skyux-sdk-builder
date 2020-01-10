@@ -10,17 +10,17 @@ const logger = require('@blackbaud/skyux-logger');
 const argv = minimist(process.argv.slice(2));
 const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
 
-// const chromeArgs = [
-//   '--disable-extensions',
-//   '--ignore-certificate-errors',
-//   '--start-maximized'
-// ];
+const chromeArgs = [
+  '--disable-extensions',
+  '--ignore-certificate-errors',
+  '--start-maximized'
+];
 
-// if (argv.headless) {
-//   chromeArgs.push(
-//     '--headless'
-//   );
-// }
+if (argv.headless) {
+  chromeArgs.push(
+    '--headless'
+  );
+}
 
 exports.config = {
   skyPagesConfig: skyPagesConfig,
@@ -33,14 +33,11 @@ exports.config = {
       '*.e2e-spec.ts'
     )
   ],
-  // capabilities: {
-  //   'browserName': 'chrome',
-  //   'chromeOptions': {
-  //     'args': chromeArgs
-  //   }
-  // },
   capabilities: {
-    'browserName': 'firefox'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      'args': chromeArgs
+    }
   },
   directConnect: true,
   // seleniumAddress: 'http://localhost:4444/wd/hub',
