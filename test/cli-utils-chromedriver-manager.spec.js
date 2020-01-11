@@ -5,6 +5,10 @@ const mock = require('mock-require');
 
 describe('utils/chromedriver-manager.js', () => {
 
+  afterEach(() => {
+    mock.stopAll();
+  });
+
   function spyOnChromeDriverVersionMatcher() {
     const spyChromeDriverVersionMatcher = jasmine.createSpyObj(
       'chromedriver-version-matcher',
