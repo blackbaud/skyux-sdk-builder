@@ -70,7 +70,7 @@
     "angular2-template-loader": "0.6.2",
     "async": "2.6.3",
     "awesome-typescript-loader": "5.2.1",
-    "chromedriver-version-matcher": "^1.0.0-alpha.6",
+    "chromedriver-version-matcher": "^1.0.0",
     "cors": "2.8.5",
     "cross-spawn": "6.0.5",
     "enhanced-resolve": "4.1.1",
