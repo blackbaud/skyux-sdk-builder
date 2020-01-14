@@ -25,6 +25,7 @@ describe('index.ejs template', () => {
 
     mock('../config/webpack/build.webpack.config', {
       getWebpackConfig: (skyPagesConfig) => ({
+        mode: 'none',
         entry: {
           test: ['./test/fixtures/index-ejs-test.js']
         },
@@ -36,7 +37,7 @@ describe('index.ejs template', () => {
             skyux: skyPagesConfig.skyux
           }),
           function () {
-            this.plugin('emit', (compilation) => {
+            this.hooks.emit.tap('index-ejs.spec.js-plugin', (compilation) => {
               const source = compilation.assets['index.html'].source();
 
               const css1 = `<link rel="stylesheet" href="f1.css" integrity="ic1" crossorigin="anonymous">`;
@@ -117,7 +118,6 @@ describe('index.ejs template', () => {
       }
     };
 
-    spyOn(process, 'exit').and.callFake(() => {});
     const build = mock.reRequire('../cli/build');
 
     build({}, config, webpack);

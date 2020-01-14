@@ -4,18 +4,14 @@
 const fs = require('fs-extra');
 const glob = require('glob');
 const path = require('path');
-const spawn = require('cross-spawn');
 const selenium = require('selenium-standalone');
 const protractorLauncher = require('protractor/built/launcher');
 const logger = require('@blackbaud/skyux-logger');
-const matcher = require('chromedriver-version-matcher');
 
 const build = require('./utils/run-build');
 const server = require('./utils/server');
 const configResolver = require('./utils/config-resolver');
-
-// Disable this to quiet the output
-const spawnOptions = { stdio: 'inherit' };
+const chromeDriverManager = require('./utils/chromedriver-manager');
 
 let seleniumServer;
 let start;
@@ -57,25 +53,6 @@ function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
 }
 
 /**
- * Calls the getChromeDriverVersion method in our library, but handles any errors.
- */
-function getChromeDriverVersion() {
-  return new Promise(resolve => {
-    const defaultVersion = 'latest';
-
-    matcher.getChromeDriverVersion()
-      .then(result => {
-        if (result.chromeDriverVersion) {
-          resolve(result.chromeDriverVersion);
-        } else {
-          resolve(defaultVersion);
-        }
-      })
-      .catch(() => resolve(defaultVersion));
-  });
-}
-
-/**
  * Spawns the selenium server if directConnect is not enabled.
  * @name spawnSelenium
  */
@@ -105,40 +82,9 @@ function spawnSelenium(configPath) {
 
     // Otherwise we need to prep protractor's selenium
     } else {
-
-      logger.info(`Getting webdriver version.`);
-
-      getChromeDriverVersion().then(version => {
-        logger.info(`Updating webdriver to version ${version}`);
-
-        const webdriverManagerPath = path.resolve(
-          'node_modules',
-          '.bin',
-          'webdriver-manager'
-        );
-
-        const results = spawn.sync(
-          webdriverManagerPath,
-          [
-            'update',
-            '--standalone',
-            'false',
-            '--gecko',
-            'false',
-            '--versions.chrome',
-            version
-          ],
-          spawnOptions
-        );
-
-        if (results.error) {
-          reject(results.error);
-          return;
-        }
-
-        logger.info('Selenium server is ready.');
-        resolve();
-      });
+      chromeDriverManager.update()
+        .then(() => resolve())
+        .catch(err => reject(err));
     }
   });
 }
