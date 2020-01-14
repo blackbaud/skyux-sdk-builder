@@ -12,7 +12,7 @@ function getConfig(config) {
   require('./shared.karma.conf')(config);
 
   const argv = minimist(process.argv.slice(2), {
-    boolean: ['headless', 'enableDesktopNotifications']
+    boolean: ['headless', 'enableDesktopNotifications', 'suppressUnfocusedTestOutput']
   });
   const browser = (argv.headless) ? 'ChromeHeadless' : 'Chrome';
 
@@ -30,6 +30,10 @@ function getConfig(config) {
 
   if (process.env.TRAVIS) {
     configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  if (argv.suppressUnfocusedTestOutput) {
+    configuration.mochaReporter = { ignoreSkipped: true };
   }
 
   if (argv.enableDesktopNotifications) {

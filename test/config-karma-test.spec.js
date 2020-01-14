@@ -68,4 +68,18 @@ describe('config karma test', () => {
       }
     });
   });
+
+  it('should configure the mochaReporter to ignoreSkipped if --suppressUnfocusedTestOutput flag set', (done) => {
+    mockArgv = {
+      suppressUnfocusedTestOutput: true
+    };
+
+    require('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.mochaReporter).toEqual({ ignoreSkipped: true });
+        done();
+      }
+    });
+  });
+
 });
