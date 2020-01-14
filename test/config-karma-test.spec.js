@@ -55,4 +55,17 @@ describe('config karma test', () => {
       }
     });
   });
+
+  it('should include the desktop notifications reporter if --enableDesktopNotifications flag set', (done) => {
+    mockArgv = {
+      enableDesktopNotifications: true
+    };
+
+    require('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.reporters).toContain('notify');
+        done();
+      }
+    });
+  });
 });
