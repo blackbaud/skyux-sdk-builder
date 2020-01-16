@@ -55,4 +55,31 @@ describe('config karma test', () => {
       }
     });
   });
+
+  it('should include the desktop notifications reporter if --enableDesktopNotifications flag set', (done) => {
+    mockArgv = {
+      enableDesktopNotifications: true
+    };
+
+    require('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.reporters).toContain('notify');
+        done();
+      }
+    });
+  });
+
+  it('should configure the mochaReporter to ignoreSkipped if --suppressUnfocusedTestOutput flag set', (done) => {
+    mockArgv = {
+      suppressUnfocusedTestOutput: true
+    };
+
+    require('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.mochaReporter).toEqual({ ignoreSkipped: true });
+        done();
+      }
+    });
+  });
+
 });

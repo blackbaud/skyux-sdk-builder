@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "coverage:builder": "istanbul cover --report=html --dir=./coverage/builder ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
     "coverage:runtime": "node ./utils/cli-test.js dev-runtime",
     "coverage:src-app": "node ./utils/cli-test.js dev-src-app",
-    "e2e": "webdriver-manager update --standalone false --gecko false && npm run protractor",
+    "e2e": "node ./utils/cli-chromedriver-manager-update && npm run protractor",
     "protractor": "protractor ./config/protractor/protractor-dev.conf.js",
     "lint": "eslint -c .eslintrc.json cli config lib loader plugin utils index.js",
     "test": "npm run lint && npm run coverage && npm run e2e"
@@ -70,7 +70,7 @@
     "angular2-template-loader": "0.6.2",
     "async": "2.6.3",
     "awesome-typescript-loader": "5.2.1",
-    "chromedriver-version-matcher": "^1.0.0-alpha.2",
+    "chromedriver-version-matcher": "^1.0.0",
     "cors": "2.8.5",
     "cross-spawn": "6.0.5",
     "enhanced-resolve": "4.1.1",
@@ -83,7 +83,7 @@
     "istanbul": "0.4.5",
     "istanbul-api": "2.1.7",
     "istanbul-instrumenter-loader": "3.0.1",
-    "istanbul-reports": "2.2.6",
+    "istanbul-reports": "2.2.7",
     "jasmine": "2.99.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "4.3.0",
@@ -91,6 +91,7 @@
     "karma-coverage-istanbul-reporter": "2.1.0",
     "karma-jasmine": "1.1.2",
     "karma-mocha-reporter": "2.2.5",
+    "karma-notify-reporter": "1.2.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "4.0.2",
     "loader-utils": "1.2.3",

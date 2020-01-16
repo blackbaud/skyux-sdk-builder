@@ -47,3 +47,5 @@ yarn.lock
 *.iml
 *.ipr
 *.iws
+
+dist
