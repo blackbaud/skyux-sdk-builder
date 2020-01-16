@@ -80,14 +80,14 @@ function browser(argv, skyPagesConfig, stats, port) {
 
       logger.info(`Launching Local URL: ${localUrl}`);
       open(localUrl, {
-        app: argv.browser
+        app: getApp(argv)
       });
       break;
 
     case 'host':
       logger.info(`Launching Host URL: ${hostUrl}`);
       open(hostUrl, {
-        app: argv.browser
+        app: getApp(argv)
       });
       break;
 
@@ -96,6 +96,13 @@ function browser(argv, skyPagesConfig, stats, port) {
       logger.info(`Local URL: ${localUrl}`);
       break;
   }
+}
+
+function getApp(argv) {
+  if (argv.browser && argv.browserArgs) {
+    return [argv.browser, argv.browserArgs];
+  }
+  return argv.browser;
 }
 
 module.exports = browser;

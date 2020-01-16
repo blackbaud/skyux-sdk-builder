@@ -214,4 +214,29 @@ describe('browser utils', () => {
     expect(openParamUrl.indexOf('microsoft-edge')).toBe(0);
   });
 
+  it('should pass array of --browser and --browserArgs to open if both are present', () => {
+    let browser = 'browser';
+    let browserArgs = '--incognito';
+
+    bind({
+      argv: {
+        browser: browser,
+        browserArgs: browserArgs
+      }
+    });
+
+    expect(openCalled).toBe(true);
+    expect(openParamBrowser).toEqual([browser, browserArgs]);
+  });
+
+  it('should pass undefined to open if --browserArgs is present but --browser is not', () => {
+    bind({
+      argv: {
+        browserArgs: '--incognito'
+      }
+    });
+
+    expect(openCalled).toBe(true);
+    expect(openParamBrowser).toBe(undefined);
+  });
 });
