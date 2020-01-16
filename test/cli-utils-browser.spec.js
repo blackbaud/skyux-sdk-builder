@@ -229,6 +229,23 @@ describe('browser utils', () => {
     expect(openParamBrowser).toEqual([browser, browserArgs]);
   });
 
+  it('should split --browserArgs on whitespace so each arg is passed as an array member to open', () => {
+    let browser = 'browser';
+    let firstBrowserArg = '--foo';
+    let secondBrowserArg = '--bar';
+    let thirdBrowserArg = '--baz';
+
+    bind({
+      argv: {
+        browser: browser,
+        browserArgs: [firstBrowserArg, secondBrowserArg, thirdBrowserArg].join(' ')
+      }
+    });
+
+    expect(openCalled).toBe(true);
+    expect(openParamBrowser).toEqual([browser, firstBrowserArg, secondBrowserArg, thirdBrowserArg]);
+  });
+
   it('should pass undefined to open if --browserArgs is present but --browser is not', () => {
     bind({
       argv: {

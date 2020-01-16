@@ -100,7 +100,7 @@ function browser(argv, skyPagesConfig, stats, port) {
 
 function getApp(argv) {
   if (argv.browser && argv.browserArgs) {
-    return [argv.browser, argv.browserArgs];
+    return [argv.browser].concat(argv.browserArgs.split(' '));
   }
   return argv.browser;
 }
