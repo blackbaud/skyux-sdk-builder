@@ -252,7 +252,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private initShellComponents() {
     const omnibarConfig = this.config.skyux.omnibar;
     const helpConfig = this.config.skyux.help;
-    const skyuxHost = (this.windowRef.nativeWindow as any).SKYUX_HOST;
 
     const loadOmnibar = (args?: SkyAppOmnibarReadyArgs) => {
       this.setParamsFromQS(omnibarConfig);
