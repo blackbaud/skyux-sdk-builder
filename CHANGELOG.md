@@ -1,3 +1,12 @@
+# 3.13.0 (2020-01-15)
+
+- Fixed the generation of coverage reports when running `skyux test`. [#194](https://github.com/blackbaud/skyux-sdk-builder/pull/194)
+- Added support for `--enableDesktopNotifications` and `--suppressUnfocusedTestOutput` flags to the `skyux test` command. [#186](https://github.com/blackbaud/skyux-sdk-builder/pull/186) [#187](https://github.com/blackbaud/skyux-sdk-builder/pull/187) Thanks, [@Blackbaud-JasonBodnar](https://github.com/Blackbaud-JasonBodnar)!
+
+# 3.12.0 (2019-12-02)
+
+- Added `SkyAppTitleService` to the Angular app's providers. When the omnibar is enabled, this is replaced with a service that updates the window title through the omnibar and preserves the selected service and number of unread notifications in the title. [#182](https://github.com/blackbaud/skyux-sdk-builder/pull/182)
+
 # 3.11.0 (2019-10-28)
 
 - Updated the local server to use the self-signed certificate implementation introduced in `@skyux-sdk/cli@3.2.0`. See the [SSL documentation](https://developer.blackbaud.com/skyux/learn/get-started/prereqs/ssl-certificate). [#168](https://github.com/blackbaud/skyux-sdk-builder/pull/168)
