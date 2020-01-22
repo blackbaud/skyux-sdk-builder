@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/builder",
-  "version": "3.11.0",
+  "version": "3.13.0",
   "description": "Builds the output of a SKY UX application.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "coverage:builder": "istanbul cover --report=html --dir=./coverage/builder ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
     "coverage:runtime": "node ./utils/cli-test.js dev-runtime",
     "coverage:src-app": "node ./utils/cli-test.js dev-src-app",
-    "e2e": "webdriver-manager update --standalone false --gecko false && npm run protractor",
+    "e2e": "node ./utils/cli-chromedriver-manager-update && npm run protractor",
     "protractor": "protractor ./config/protractor/protractor-dev.conf.js",
     "lint": "eslint -c .eslintrc.json cli config lib loader plugin utils index.js",
     "test": "npm run lint && npm run coverage && npm run e2e"
@@ -56,7 +56,7 @@
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.803.19",
     "@blackbaud/help-client": "2.1.0",
-    "@blackbaud/skyux-lib-help": "3.1.2",
+    "@blackbaud/skyux-lib-help": "3.2.0",
     "@blackbaud/skyux-logger": "1.1.1",
     "@ngtools/webpack": "9.0.0-rc.4",
     "@pact-foundation/karma-pact": "2.2.0",
@@ -66,7 +66,7 @@
     "ajv": "6.10.2",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "5.2.1",
-    "chromedriver-version-matcher": ">1.0.0-alpha < 2.0.0",
+    "chromedriver-version-matcher": "^1.0.0",
     "cors": "2.8.5",
     "cross-spawn": "7.0.1",
     "enhanced-resolve": "4.1.1",
@@ -87,6 +87,7 @@
     "karma-coverage-istanbul-reporter": "2.1.1",
     "karma-jasmine": "2.0.1",
     "karma-mocha-reporter": "2.2.5",
+    "karma-notify-reporter": "1.2.0",
     "karma-sourcemap-loader": "0.3.7",
     "karma-webpack": "4.0.2",
     "loader-utils": "1.2.3",
