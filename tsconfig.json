@@ -16,6 +16,11 @@
       "dom",
       "es6"
     ],
+    "types": [
+      "core-js",
+      "node",
+      "jasmine"
+    ],
     "baseUrl": ".",
     "paths": {
       "@skyux-sdk/builder/*": [
