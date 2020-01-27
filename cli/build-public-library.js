@@ -99,6 +99,7 @@ function writeTSConfig() {
       '**/*.pact-spec.ts'
     ],
     'angularCompilerOptions': {
+      'enableIvy': false,
       'annotateForClosureCompiler': true,
       'fullTemplateTypeCheck': false,
       'skipTemplateCodegen': true,
