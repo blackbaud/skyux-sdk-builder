@@ -99,6 +99,8 @@ function writeTSConfig() {
       '**/*.pact-spec.ts'
     ],
     'angularCompilerOptions': {
+      // Disable Ivy for now. Libraries should continue to use View Engine, per Angular's guidance.
+      // See: https://next.angular.io/guide/ivy#maintaining-library-compatibility
       'enableIvy': false,
       'annotateForClosureCompiler': true,
       'fullTemplateTypeCheck': false,
