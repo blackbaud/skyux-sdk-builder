@@ -5,20 +5,6 @@ const fs = require('fs-extra');
 const logger = require('@blackbaud/skyux-logger');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
-function makePackageFileForDist() {
-  const contents = fs.readJsonSync(
-    skyPagesConfigUtil.spaPath('package.json')
-  );
-  contents.module = 'index.js';
-  contents.main = 'bundles/bundle.umd.js';
-
-  fs.writeJsonSync(
-    skyPagesConfigUtil.spaPath('dist', 'package.json'),
-    contents,
-    { spaces: 2 }
-  );
-}
-
 function copyFilesToDist() {
   const pathsToCopy = [
     ['README.md'],
@@ -40,6 +26,5 @@ function copyFilesToDist() {
 }
 
 module.exports = () => {
-  makePackageFileForDist();
   copyFilesToDist();
 };

@@ -15,6 +15,21 @@ function copySource() {
     skyPagesConfigUtil.spaPath('src', 'app', 'public'),
     skyPagesConfigUtil.spaPathTemp()
   );
+
+  const contents = fs.readJsonSync(
+    skyPagesConfigUtil.spaPath('package.json'),
+    {
+      encoding: 'utf8'
+    }
+  );
+
+  fs.writeJsonSync(
+    skyPagesConfigUtil.spaPathTemp('package.json'),
+    contents,
+    {
+      spaces: 2
+    }
+  );
 }
 
 function deleteNonDistFiles() {

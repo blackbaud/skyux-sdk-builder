@@ -1,77 +1,82 @@
 /*jshint node: true*/
 'use strict';
 
-const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+const fs = require('fs-extra');
 const ngPackage = require('ng-packagr');
+const rimraf = require('rimraf');
 
-// const tsConfig = {
-//   compilerOptions: {
-//     target: 'es5',
-//     module: 'es2015',
-//     moduleResolution: 'node',
-//     emitDecoratorMetadata: true,
-//     experimentalDecorators: true,
-//     allowSyntheticDefaultImports: true,
-//     sourceMap: true,
-//     importHelpers: true,
-//     noEmitHelpers: true,
-//     noImplicitAny: true,
-//     declaration: true,
-//     skipLibCheck: true,
-//     inlineSources: true,
-//     'lib': [
-//       'dom',
-//       'es6'
-//     ],
-//     typeRoots: [
-//       skyPagesConfigUtil.spaPath('node_modules', '@types')
-//     ],
-//     outDir: skyPagesConfigUtil.spaPath('dist'),
-//     rootDir: skyPagesConfigUtil.spaPathTemp(),
-//     baseUrl: '.',
-//     paths: {
-//       '@skyux-sdk/builder/*': [
-//         '*'
-//       ],
-//       '.skypageslocales/*': [
-//         '../src/assets/locales/*'
-//       ]
-//     }
-//   },
-//   files: getEntryPointFiles(),
-//   exclude: [
-//     'node_modules',
-//     '**/*.spec.ts',
-//     '**/*.e2e-spec.ts',
-//     '**/*.pact-spec.ts'
-//   ],
-//   angularCompilerOptions: {
-//     annotateForClosureCompiler: true,
-//     fullTemplateTypeCheck: false,
-//     skipTemplateCodegen: true,
-//     strictMetadataEmit: true,
-//     strictInjectionParameters: true,
-//     enableResourceInlining: true
-//   },
-//   compileOnSave: false
-// };
+const stageTypeScriptFiles = require('./utils/stage-library-ts');
+const preparePackage = require('./utils/prepare-library-package');
+const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+
+const DIST_DIR = skyPagesConfigUtil.spaPath('dist');
+
+const cleanDist = () => rimraf.sync(DIST_DIR);
+const cleanTemp = () => rimraf.sync(skyPagesConfigUtil.spaPathTemp());
+
+function cleanAll() {
+  cleanTemp();
+  cleanDist();
+}
+
+function writeTsConfig() {
+  const defaultConfigPath = skyPagesConfigUtil.spaPath(
+    'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
+  );
+
+  const tsConfig = {
+    extends: defaultConfigPath,
+    compilerOptions: {}
+  };
+
+  fs.writeJsonSync(
+    skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'),
+    tsConfig
+  );
+}
+
+function createNgPackageJson() {
+  const ngPackageConfig = {
+    lib: {
+      entryFile: 'index.ts'
+    }
+  };
+
+  fs.writeJsonSync(
+    skyPagesConfigUtil.spaPathTemp('ng-package.json'),
+    ngPackageConfig
+  );
+}
 
 function runPackager() {
-  const projectConfigPath = skyPagesConfigUtil.outPath('config/ng-packagr/ng-package.json');
-  const tsConfig = {
-    extends: skyPagesConfigUtil.spaPath('node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json')
-  };
+  const projectConfigPath = skyPagesConfigUtil.spaPathTemp('ng-package.json');
+  const tsConfigPath = skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json');
 
   return ngPackage
     .ngPackagr()
     .forProject(projectConfigPath)
-    .withTsConfig(tsConfig)
+    .withTsConfig(tsConfigPath)
     .build();
 }
 
+function finalPolish() {
+  preparePackage();
+
+  fs.copySync(
+    skyPagesConfigUtil.spaPathTemp('dist'),
+    DIST_DIR
+  );
+}
+
 async function buildPublicLibrary() {
+  cleanAll();
+  stageTypeScriptFiles();
+  writeTsConfig();
+  createNgPackageJson();
+
   try {
     await runPackager();
+    finalPolish();
     console.log('Package success.');
   } catch (error) {
     console.log('Package error:', error);
