@@ -4,15 +4,13 @@
 const mock = require('mock-require');
 const rimraf = require('rimraf');
 const logger = require('@blackbaud/skyux-logger');
-const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 
 describe('cli build-public-library', () => {
   const requirePath = '../cli/build-public-library';
-  let webpackConfig;
-  let mockWebpack;
   let mockFs;
-  let mockSpawn;
   let mockPluginFileProcessor;
+  let mockPackagerBuildResult;
+  let mockSkyPagesConfig;
 
   beforeEach(() => {
     mockFs = {
@@ -22,29 +20,16 @@ describe('cli build-public-library', () => {
       existsSync() {}
     };
 
-    mockSpawn = {
-      sync() {
-        return {
-          status: 0
-        };
-      }
-    };
-
-    mockWebpack = () => {
-      return {
-        run: (cb) => {
-          cb(null, {
-            toJson: () => ({
-              errors: [],
-              warnings: []
-            })
-          });
-        }
-      };
-    };
-
     mockPluginFileProcessor = {
       processFiles: () => {}
+    };
+
+    mockPackagerBuildResult = Promise.resolve();
+
+    mockSkyPagesConfig = {
+      outPath: (...args) => ['builder', ...args].join('/'),
+      spaPath: (...args) => args.join('/'),
+      spaPathTemp: (...args) => ['temp', ...args].join('/')
     };
 
     mock('../cli/utils/ts-linter', {
@@ -54,29 +39,34 @@ describe('cli build-public-library', () => {
         };
       }
     });
-    mock('../cli/utils/stage-library-ts', () => {});
-    mock('../cli/utils/prepare-library-package', () => {});
-    mock('../config/webpack/build-public-library.webpack.config.js', {
-      getWebpackConfig: () => {
-        webpackConfig = {
-          entry: ''
+
+    mock('../lib/plugin-file-processor', mockPluginFileProcessor);
+
+    mock('../config/sky-pages/sky-pages.config', mockSkyPagesConfig);
+
+    mock('fs-extra', mockFs);
+
+    mock('ng-packagr', {
+      ngPackagr() {
+        return {
+          forProject() {
+            return {
+              withTsConfig() {
+                return {
+                  build() {
+                    return mockPackagerBuildResult;
+                  }
+                };
+              }
+            };
+          }
         };
-        return webpackConfig;
       }
     });
 
-    mock('../lib/plugin-file-processor', mockPluginFileProcessor);
-    mock('fs-extra', mockFs);
-    mock('cross-spawn', mockSpawn);
-
+    spyOn(logger, 'info').and.callFake(() => {});
+    spyOn(logger, 'warn').and.callFake(() => {});
     spyOn(process, 'exit').and.callFake(() => {});
-    spyOn(skyPagesConfigUtil, 'spaPath').and.returnValue('');
-    spyOn(skyPagesConfigUtil, 'spaPathTemp').and.callFake((...fragments) => {
-      return fragments.join('/');
-    });
-    spyOn(skyPagesConfigUtil, 'outPath').and.callFake((fileName = '') => {
-      return fileName;
-    });
     spyOn(rimraf, 'sync').and.callFake(() => {});
   });
 
@@ -92,19 +82,22 @@ describe('cli build-public-library', () => {
   it('should copy the runtime folder before compiling then clean it before packaging', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'copySync').and.callThrough();
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(spy).toHaveBeenCalledWith('runtime', 'runtime');
+    cliCommand({}, {}).then(() => {
+      expect(spy).toHaveBeenCalledWith('builder/runtime', 'temp/runtime');
       expect(rimraf.sync).toHaveBeenCalledTimes(4);
       done();
     });
   });
 
   it('should clean the dist and temp directories', (done) => {
+    const pathSpy = spyOn(mockSkyPagesConfig, 'spaPath').and.callThrough();
+    const pathTempSpy = spyOn(mockSkyPagesConfig, 'spaPathTemp').and.callThrough();
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(rimraf.sync).toHaveBeenCalled();
-      expect(skyPagesConfigUtil.spaPathTemp).toHaveBeenCalled();
-      expect(skyPagesConfigUtil.spaPath).toHaveBeenCalledWith('dist');
+    cliCommand({}, {}).then(() => {
+      expect(rimraf.sync).toHaveBeenCalledWith('temp');
+      expect(rimraf.sync).toHaveBeenCalledWith('dist');
+      expect(pathTempSpy).toHaveBeenCalledWith();
+      expect(pathSpy).toHaveBeenCalledWith('dist');
       done();
     });
   });
@@ -112,33 +105,30 @@ describe('cli build-public-library', () => {
   it('should write a tsconfig.json file', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
-    cliCommand({}, {}, mockWebpack).then(() => {
-      const firstArg = spy.calls.argsFor(0)[0];
-      expect(firstArg).toEqual('tsconfig.json');
+    cliCommand({}, {}).then(() => {
+      expect(spy).toHaveBeenCalledWith('temp/tsconfig.json', {
+        extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
+        compilerOptions: {
+          lib: ['dom', 'es6']
+        },
+        angularCompilerOptions: {
+          fullTemplateTypeCheck: false,
+        }
+      });
       done();
     });
   });
 
-  it('should pass config to webpack', (done) => {
+  it('should write a ng-package.json file for the primary entry point', (done) => {
+    const writeSpy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(webpackConfig).toEqual(jasmine.any(Object));
-      expect(webpackConfig.entry).toEqual(jasmine.any(String));
-      done();
-    });
-  });
 
-  it('should handle errors thrown by webpack', (done) => {
-    const errorMessage = 'Something bad happened.';
-    spyOn(logger, 'error').and.returnValue();
-    mockWebpack = () => {
-      return {
-        run: (cb) => cb(errorMessage)
-      };
-    };
-    const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(logger.error).toHaveBeenCalledWith(errorMessage);
+    cliCommand({}, {}).then(() => {
+      expect(writeSpy).toHaveBeenCalledWith('temp/ng-package.json', {
+        lib: {
+          entryFile: 'index.ts'
+        }
+      });
       done();
     });
   });
@@ -153,44 +143,29 @@ describe('cli build-public-library', () => {
       }
     });
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {}, mockWebpack).then(() => {
+    cliCommand({}, {}).then(() => {
       expect(process.exit).toHaveBeenCalledWith(1);
       done();
     });
   });
 
   it('should handle transpilation errors', (done) => {
-    const cliCommand = mock.reRequire(requirePath);
+    const error = new Error('Packaging error.');
+    mockPackagerBuildResult = Promise.reject(error);
     const spy = spyOn(logger, 'error');
-    spyOn(mockSpawn, 'sync').and.returnValue({
-      err: 'something bad happened'
-    });
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(spy).toHaveBeenCalledWith('something bad happened');
-      done();
-    });
-  });
-
-  it('should catch non-zero status codes during transpilation', (done) => {
     const cliCommand = mock.reRequire(requirePath);
-    const spy = spyOn(logger, 'error').and.returnValue();
-    spyOn(mockSpawn, 'sync').and.returnValue({
-      err: null,
-      status: 1
-    });
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(spy).toHaveBeenCalledWith(
-        new Error(`Angular compiler (ngc) exited with status code 1.`)
-      );
-      done();
-    });
+    cliCommand({}, {})
+      .then(() => {
+        expect(spy).toHaveBeenCalledWith(error);
+        done();
+      });
   });
 
   it('should process files', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockPluginFileProcessor, 'processFiles').and.callThrough();
 
-    cliCommand({}, {}, mockWebpack).then(() => {
+    cliCommand({}, {}).then(() => {
       expect(spy).toHaveBeenCalled();
       done();
     });
@@ -198,13 +173,31 @@ describe('cli build-public-library', () => {
 
   it('should include testing entry point if directory exists', (done) => {
     spyOn(mockFs, 'existsSync').and.returnValue(true);
-    const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+
+    const writeSpy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+    const pathSpy = spyOn(mockSkyPagesConfig, 'spaPathTemp').and.callThrough();
+
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {}, mockWebpack).then(() => {
-      expect(spy).toHaveBeenCalled();
-      const files = spy.calls.argsFor(0)[1].files;
-      expect(files[1]).toEqual('testing/index.ts');
+    cliCommand({}, {}).then(() => {
+      expect(pathSpy).toHaveBeenCalledWith('testing');
+      expect(writeSpy).toHaveBeenCalledWith('temp/testing/ng-package.json', {
+        lib: {
+          entryFile: 'index.ts'
+        }
+      });
       done();
+    });
+  });
+
+  it('should copy readme, changelog, and assets to dist', () => {
+    spyOn(mockFs, 'existsSync').and.returnValue(true);
+    const copySpy = spyOn(mockFs, 'copySync').and.returnValue();
+
+    const cliCommand = mock.reRequire(requirePath);
+    cliCommand().then(() => {
+      expect(copySpy).toHaveBeenCalledWith('README.md', 'dist/README.md');
+      expect(copySpy).toHaveBeenCalledWith('CHANGELOG.md', 'dist/CHANGELOG.md');
+      expect(copySpy).toHaveBeenCalledWith('src/assets', 'dist/src/assets');
     });
   });
 });

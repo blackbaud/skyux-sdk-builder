@@ -126,12 +126,12 @@ function writePackagerConfig() {
     }
   };
 
-  fs.writeJsonSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
+  fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
 
   // Create a secondary entrypoint for a testing module, if it exists.
   const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing');
   if (fs.existsSync(testingEntryPoint)) {
-    fs.writeJsonSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), ngPackageConfig);
+    fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), ngPackageConfig);
   }
 }
 
