@@ -44,24 +44,19 @@ function copyRuntime() {
 }
 
 function stageSourceFiles() {
-  // Copy everything in the public folder.
+  // Copy everything in the `public` folder.
   fs.copySync(
     skyPagesConfigUtil.spaPath('src/app/public'),
     skyPagesConfigUtil.spaPathTemp()
   );
 
-  // Copy the package.json.
-  const contents = fs.readJsonSync(
+  // Copy `package.json`.
+  fs.copySync(
     skyPagesConfigUtil.spaPath('package.json'),
-    { encoding: 'utf8' }
+    skyPagesConfigUtil.spaPathTemp('package.json')
   );
 
-  fs.writeJsonSync(
-    skyPagesConfigUtil.spaPathTemp('package.json'),
-    contents,
-    { spaces: 2 }
-  );
-
+  // Copy specific static files.
   const pathsToCopy = [
     ['README.md'],
     ['CHANGELOG.md'],
@@ -91,6 +86,9 @@ function writeTSConfig() {
     extends: skyPagesConfigUtil.spaPath(
       'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
     ),
+    compilerOptions: {
+      lib: ['dom', 'es6']
+    },
     angularCompilerOptions: {
       fullTemplateTypeCheck: false,
     }
@@ -129,6 +127,12 @@ function writePackagerConfig() {
   };
 
   fs.writeJsonSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
+
+  // Create a secondary entrypoint for a testing module, if it exists.
+  const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing');
+  if (fs.existsSync(testingEntryPoint)) {
+    fs.writeJsonSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), ngPackageConfig);
+  }
 }
 
 module.exports = (argv, skyPagesConfig) => {
