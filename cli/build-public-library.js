@@ -6,8 +6,6 @@ const ngPackage = require('ng-packagr');
 const rimraf = require('rimraf');
 const logger = require('@blackbaud/skyux-logger');
 
-const stageTypeScriptFiles = require('./utils/stage-library-ts');
-const preparePackage = require('./utils/prepare-library-package');
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 const tsLinter = require('./utils/ts-linter');
 
@@ -36,7 +34,6 @@ function copyDist() {
     skyPagesConfigUtil.spaPathTemp('dist'),
     skyPagesConfigUtil.spaPath('dist')
   );
-
 }
 
 function copyRuntime() {
@@ -46,11 +43,50 @@ function copyRuntime() {
   );
 }
 
+function stageSourceFiles() {
+  // Copy everything in the public folder.
+  fs.copySync(
+    skyPagesConfigUtil.spaPath('src/app/public'),
+    skyPagesConfigUtil.spaPathTemp()
+  );
+
+  // Copy the package.json.
+  const contents = fs.readJsonSync(
+    skyPagesConfigUtil.spaPath('package.json'),
+    { encoding: 'utf8' }
+  );
+
+  fs.writeJsonSync(
+    skyPagesConfigUtil.spaPathTemp('package.json'),
+    contents,
+    { spaces: 2 }
+  );
+
+  const pathsToCopy = [
+    ['README.md'],
+    ['CHANGELOG.md'],
+    ['src', 'assets']
+  ];
+
+  pathsToCopy.forEach(pathArr => {
+    const sourcePath = skyPagesConfigUtil.spaPath(...pathArr);
+    if (fs.existsSync(sourcePath)) {
+      fs.copySync(
+        sourcePath,
+        skyPagesConfigUtil.spaPath('dist', ...pathArr)
+      );
+    } else {
+      logger.warn(`File(s) not found: ${sourcePath}`);
+    }
+  });
+}
+
 function cleanRuntime() {
   rimraf.sync(skyPagesConfigUtil.spaPath('dist', 'runtime'));
 }
 
 function writeTSConfig() {
+  // TODO: Enable template checking in a breaking change.
   const config = {
     extends: skyPagesConfigUtil.spaPath(
       'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
@@ -95,10 +131,10 @@ function writePackagerConfig() {
   fs.writeJsonSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
 }
 
-module.exports = (argv, skyPagesConfig, webpack) => {
+module.exports = (argv, skyPagesConfig) => {
   runLinter(argv);
   cleanAll();
-  stageTypeScriptFiles();
+  stageSourceFiles();
   writeTSConfig();
   writePackagerConfig();
   copyRuntime();
@@ -108,7 +144,6 @@ module.exports = (argv, skyPagesConfig, webpack) => {
     .then(() => {
       cleanRuntime();
       copyDist();
-      preparePackage();
       cleanTemp();
       logger.info('SKY UX library built successfully.');
       process.exit(0);
