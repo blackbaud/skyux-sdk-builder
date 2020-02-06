@@ -175,7 +175,7 @@ describe('cli build-public-library', () => {
 
     const cliCommand = mock.reRequire(requirePath);
     cliCommand({}, {}).then(() => {
-      expect(pathSpy).toHaveBeenCalledWith('testing');
+      expect(pathSpy).toHaveBeenCalledWith('testing/index.ts');
       expect(writeSpy).toHaveBeenCalledWith('temp/testing/ng-package.json', {
         lib: {
           entryFile: 'index.ts'

@@ -125,7 +125,7 @@ function writePackagerConfig() {
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
 
   // Create a secondary entrypoint for a testing module, if it exists.
-  const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing');
+  const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing/index.ts');
   if (fs.existsSync(testingEntryPoint)) {
     fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), ngPackageConfig);
   }
