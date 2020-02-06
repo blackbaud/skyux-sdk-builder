@@ -110,9 +110,6 @@ describe('cli build-public-library', () => {
         extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
         compilerOptions: {
           lib: ['dom', 'es6']
-        },
-        angularCompilerOptions: {
-          fullTemplateTypeCheck: false,
         }
       });
       done();
@@ -154,11 +151,10 @@ describe('cli build-public-library', () => {
     mockPackagerBuildResult = Promise.reject(error);
     const spy = spyOn(logger, 'error');
     const cliCommand = mock.reRequire(requirePath);
-    cliCommand({}, {})
-      .then(() => {
-        expect(spy).toHaveBeenCalledWith(error);
-        done();
-      });
+    cliCommand({}, {}).then(() => {
+      expect(spy).toHaveBeenCalledWith(error);
+      done();
+    });
   });
 
   it('should process files', (done) => {
@@ -189,7 +185,7 @@ describe('cli build-public-library', () => {
     });
   });
 
-  it('should copy readme, changelog, and assets to dist', () => {
+  it('should copy readme, changelog, and assets to dist', (done) => {
     spyOn(mockFs, 'existsSync').and.returnValue(true);
     const copySpy = spyOn(mockFs, 'copySync').and.returnValue();
 
@@ -198,6 +194,7 @@ describe('cli build-public-library', () => {
       expect(copySpy).toHaveBeenCalledWith('README.md', 'dist/README.md');
       expect(copySpy).toHaveBeenCalledWith('CHANGELOG.md', 'dist/CHANGELOG.md');
       expect(copySpy).toHaveBeenCalledWith('src/assets', 'dist/src/assets');
+      done();
     });
   });
 });
