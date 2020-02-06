@@ -50,7 +50,7 @@ function pact(command, argv) {
     // proxy requests to pact server to contain actual host url rather than the karma url
     proxy.on('proxyReq', req => req.setHeader(
       'Origin',
-      (skyPagesConfig.skyux.host || {}).url || 'https://host.nxt.blackbaud.com'
+      (skyPagesConfig.skyux.host || {}).url || 'https://app.blackbaud.com'
     ));
 
     // revert CORS header value back to karma url so that requests are successful

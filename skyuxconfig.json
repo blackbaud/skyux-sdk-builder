@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
   "mode": "advanced",
   "host": {
-    "url": "https://host.nxt.blackbaud.com"
+    "url": "https://app.blackbaud.com"
   },
   "app": {
     "title": "Blackbaud - SKY UX Application"

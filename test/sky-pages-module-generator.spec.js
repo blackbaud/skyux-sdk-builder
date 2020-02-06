@@ -118,7 +118,7 @@ describe('SKY UX Builder module generator', () => {
     });
     expect(source).toContain('NotFoundComponent');
     expect(source).not.toContain(
-      `template: \`<iframe src="https://host.nxt.blackbaud.com/errors/notfound"`
+      `template: \`<iframe src="https://app.blackbaud.com/errors/notfound"`
     );
   });
 

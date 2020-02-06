@@ -353,7 +353,7 @@ describe('SKY UX Builder route generator', () => {
       }
     });
     expect(routes.definitions).toContain(
-      `template: \`<iframe src="https://host.nxt.blackbaud.com/errors/notfound"`
+      `template: \`<iframe src="https://app.blackbaud.com/errors/notfound"`
     );
   });
 

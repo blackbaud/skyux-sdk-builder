@@ -191,7 +191,7 @@ describe('cli pact', () => {
   }
 
   it('sets headers upon request and response on proxy server', (done) => {
-    testOriginHeader('https://host.nxt.blackbaud.com', done);
+    testOriginHeader('https://app.blackbaud.com', done);
   });
 
   it('sets custom headers upon request and response on proxy server', (done) => {
