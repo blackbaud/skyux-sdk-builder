@@ -81,16 +81,12 @@ function cleanRuntime() {
 }
 
 function writeTSConfig() {
-  // TODO: Enable template checking in a breaking change.
   const config = {
     extends: skyPagesConfigUtil.spaPath(
       'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
     ),
     compilerOptions: {
       lib: ['dom', 'es6']
-    },
-    angularCompilerOptions: {
-      fullTemplateTypeCheck: false,
     }
   };
 
