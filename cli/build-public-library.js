@@ -81,7 +81,7 @@ function cleanRuntime() {
 }
 
 function writeTSConfig() {
-  const config = {
+  const tsConfig = {
     extends: skyPagesConfigUtil.spaPath(
       'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
     ),
@@ -90,7 +90,7 @@ function writeTSConfig() {
     }
   };
 
-  fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.json'), config);
+  fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'), tsConfig);
 }
 
 function processFiles(skyPagesConfig) {
@@ -107,7 +107,7 @@ function processFiles(skyPagesConfig) {
  */
 function transpile() {
   const projectConfigPath = skyPagesConfigUtil.spaPathTemp('ng-package.json');
-  const tsConfigPath = skyPagesConfigUtil.spaPathTemp('tsconfig.json');
+  const tsConfigPath = skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json');
 
   return ngPackage.ngPackagr()
     .forProject(projectConfigPath)
@@ -115,19 +115,61 @@ function transpile() {
     .build();
 }
 
-function writePackagerConfig() {
+function writePackagerConfig(skyPagesConfig) {
   const ngPackageConfig = {
     lib: {
       entryFile: 'index.ts'
     }
   };
 
+  // Allow consumers to provide a list of whitelisted peer dependencies.
+  // See: https://github.com/ng-packagr/ng-packagr/blob/master/docs/dependencies.md#whitelisting-the-dependencies-section
+  const whitelist = (
+    skyPagesConfig.skyux &&
+    skyPagesConfig.skyux.librarySettings &&
+    skyPagesConfig.skyux.librarySettings.whitelistedNonPeerDependencies
+  ) || [];
+
+  const wildcardIndex = whitelist.indexOf('.');
+  if (wildcardIndex > -1) {
+    logger.warn(
+      'Removing wildcard whitelist entry (`.`). ' +
+      'Please enter whitelisted peer dependencies individually.'
+    );
+    whitelist.splice(wildcardIndex, 1);
+  }
+
+  if (whitelist.length > 0) {
+    ngPackageConfig.whitelistedNonPeerDependencies = [...whitelist];
+  }
+
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('ng-package.json'), ngPackageConfig);
 
-  // Create a secondary entrypoint for a testing module, if it exists.
+  createTestingEntryPoint();
+}
+
+/**
+ * Create a secondary entrypoint for a `testing` module, if it exists.
+ */
+function createTestingEntryPoint() {
   const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing/index.ts');
   if (fs.existsSync(testingEntryPoint)) {
-    fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), ngPackageConfig);
+    // Need to create a root-level barrel file so that the `testing` files can locate
+    // the primary source files during compilation.
+    // See: https://github.com/ng-packagr/ng-packagr/issues/358#issuecomment-526650736
+    fs.writeFileSync(
+      skyPagesConfigUtil.spaPathTemp('public_api.testing.ts'),
+      `export * from './testing';\n`,
+      {
+        encoding: 'utf8'
+      }
+    );
+
+    fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), {
+      lib: {
+        entryFile: '../public_api.testing.ts'
+      }
+    });
   }
 }
 
@@ -136,7 +178,7 @@ module.exports = (argv, skyPagesConfig) => {
   cleanAll();
   stageSourceFiles();
   writeTSConfig();
-  writePackagerConfig();
+  writePackagerConfig(skyPagesConfig);
   copyRuntime();
   processFiles(skyPagesConfig);
 
