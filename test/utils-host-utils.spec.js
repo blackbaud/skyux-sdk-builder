@@ -24,12 +24,12 @@ describe('host-utils', () => {
     mock('html-webpack-plugin/lib/chunksorter', {
       dependency: (chunks) => chunks
     });
-    utils = require('../utils/host-utils');
+    utils = mock.reRequire('../utils/host-utils');
   });
 
   afterEach(() => {
     utils = null;
-    mock.stop('html-webpack-plugin/lib/chunksorter');
+    mock.stopAll();
   });
 
   it('should resolve a url, trim trailing slash from host and leading slash from url', () => {
@@ -110,6 +110,22 @@ describe('host-utils', () => {
     expect(resolved).toContain(`base.com/my-name/url?local=true&_cfg=`);
     expect(decoded.externals).toEqual(externals);
     mock.stop('../package.json');
+  });
+
+  it('should add host config', () => {
+    const expectedHostConfig = {
+      url: 'any-url',
+      frameOptions: {
+        none: true
+      }
+    };
+
+    skyPagesConfig.skyux.host = expectedHostConfig;
+
+    const resolved = utils.resolve('/url', '', [], skyPagesConfig);
+    const decoded = decode(resolved);
+
+    expect(decoded.host).toEqual(expectedHostConfig);
   });
 
 });
