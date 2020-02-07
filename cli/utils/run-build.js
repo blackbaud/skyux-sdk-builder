@@ -66,7 +66,7 @@ function writeTSConfig(skyPagesConfig) {
     'compileOnSave': false,
     'buildOnSave': false,
     'angularCompilerOptions': {
-      'enableIvy': true,
+      'enableIvy': false,
       'fullTemplateTypeCheck': true,
       'strictInjectionParameters': true
     }
