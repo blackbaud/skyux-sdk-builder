@@ -1,3 +1,7 @@
+# 3.14.0 (2020-02-07)
+
+- Updated `skyux serve` to include the `host` properties from `skyuxconfig.json` in the Host URL.
+
 # 3.13.0 (2020-01-15)
 
 - Fixed the generation of coverage reports when running `skyux test`. [#194](https://github.com/blackbaud/skyux-sdk-builder/pull/194)
