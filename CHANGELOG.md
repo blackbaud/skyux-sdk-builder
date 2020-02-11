@@ -1,7 +1,7 @@
 # 3.14.0 (2020-02-07)
 
 - Updated `skyux serve` to include the `host` properties from `skyuxconfig.json` in the Host URL.
-- Move help-widget logic into latest `@blackbaud/skyux-lib-help`. [#190](https://github.com/blackbaud/skyux-sdk-builder/pull/190)
+- Moved help widget logic into the latest `@blackbaud/skyux-lib-help`. [#190](https://github.com/blackbaud/skyux-sdk-builder/pull/190)
 
 # 3.13.0 (2020-01-15)
 
