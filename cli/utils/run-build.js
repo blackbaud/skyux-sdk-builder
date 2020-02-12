@@ -64,7 +64,12 @@ function writeTSConfig(skyPagesConfig) {
       '**/*.fixture.ts'
     ],
     'compileOnSave': false,
-    'buildOnSave': false
+    'buildOnSave': false,
+    'angularCompilerOptions': {
+      'enableIvy': false,
+      'fullTemplateTypeCheck': true,
+      'strictInjectionParameters': true
+    }
   };
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'), config);
