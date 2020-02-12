@@ -119,6 +119,25 @@ describe('cli build-public-library', () => {
     });
   });
 
+  it('should allow template checking', async (done) => {
+    const cliCommand = mock.reRequire(requirePath);
+    const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+
+    // First check that the default value is `false`.
+    await cliCommand({}, {}, mockWebpack);
+    let config = spy.calls.argsFor(0)[1];
+    expect(config.angularCompilerOptions.fullTemplateTypeCheck).toEqual(false);
+    spy.calls.reset();
+
+    await cliCommand({
+      fullTemplateTypeCheck: true
+    }, {}, mockWebpack);
+    config = spy.calls.argsFor(0)[1];
+    expect(config.angularCompilerOptions.fullTemplateTypeCheck).toEqual(true);
+
+    done();
+  });
+
   it('should pass config to webpack', (done) => {
     const cliCommand = mock.reRequire(requirePath);
     cliCommand({}, {}, mockWebpack).then(() => {

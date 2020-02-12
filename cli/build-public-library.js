@@ -56,7 +56,7 @@ function getEntryPointFiles() {
   return files;
 }
 
-function writeTSConfig() {
+function writeTSConfig(argv) {
   const config = {
     'compilerOptions': {
       'target': 'es5',
@@ -100,7 +100,7 @@ function writeTSConfig() {
     ],
     'angularCompilerOptions': {
       'annotateForClosureCompiler': true,
-      'fullTemplateTypeCheck': false,
+      'fullTemplateTypeCheck': !!argv.fullTemplateTypeCheck,
       'skipTemplateCodegen': true,
       'strictMetadataEmit': true,
       'strictInjectionParameters': true,
@@ -166,7 +166,7 @@ module.exports = (argv, skyPagesConfig, webpack) => {
   runLinter(argv);
   cleanAll();
   stageTypeScriptFiles();
-  writeTSConfig();
+  writeTSConfig(argv);
   copyRuntime();
   processFiles(skyPagesConfig);
 
