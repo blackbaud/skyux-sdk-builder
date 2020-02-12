@@ -1,3 +1,7 @@
+# 3.15.0 (2020-02-12)
+
+- Added support for `skyux build-public-library --fullTemplateTypeChecking`, which checks and validates TypeScript types within component HTML templates. [#208](https://github.com/blackbaud/skyux-sdk-builder/pull/208)
+
 # 3.14.0 (2020-02-07)
 
 - Updated `skyux serve` to include the `host` properties from `skyuxconfig.json` in the Host URL.
