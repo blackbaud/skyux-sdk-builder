@@ -1,6 +1,6 @@
 # 3.15.0 (2020-02-12)
 
-- Added support for `skyux build-public-library --fullTemplateTypeChecking` which will check and validate TypeScript types that are used within component HTML templates. [#208](https://github.com/blackbaud/skyux-sdk-builder/pull/208)
+- Added support for `skyux build-public-library --fullTemplateTypeChecking` which checks and validates TypeScript types used within component HTML templates. [#208](https://github.com/blackbaud/skyux-sdk-builder/pull/208)
 
 # 3.14.0 (2020-02-07)
 
