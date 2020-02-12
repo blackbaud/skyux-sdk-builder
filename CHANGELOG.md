@@ -1,6 +1,6 @@
 # 4.0.0-rc.0 (2020-02-13)
 
-### Features
+### New features
 
 - Added support for `@angular/core@9.0.1` (support for the Ivy compiler will be added at a later date). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for `typescript@3.6.4`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
