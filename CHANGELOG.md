@@ -1,3 +1,23 @@
+# 4.0.0-rc.0 (2020-02-13)
+
+### New features
+
+- Added support for `@angular/core@9.0.1`. (We will add support for the Ivy compiler at a later date.) [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `typescript@3.6.4`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+- Updated `skyux build-public-library` to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
+- Moved `core-js` and `@types/core-js` from `peerDependencies` to `dependencies` to emulate the Angular CLI's decision to manage those packages internally. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+
+### Breaking changes
+
+- Set the Angular Compiler to run `fullTemplateTypeCheck` to ensure that component HTML templates for SPAs and libraries reference `public` properties in component classes. This change may cause builds to fail if you have bindings to invalid properties. For more information about template type checking, seed [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for the `/deep/` SCSS modifier. Use `::ng-deep` or `:host-context` instead. [#157](https://github.com/blackbaud/skyux-sdk-builder/pull/157)
+- Dropped support for `@angular/http`. Use `@angular/common/http` instead. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `SkyAuthHttp` (found in `@skyux/http`). We recommend using Angular's `HttpClient` (found in `@angular/common/http`) and importing the `SkyAuthHttpClientModule` (found in `@skyux/http`) to implement features such as Blackbaud authentication. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `jasmine@3.5.0` (`3.5.0`), which may cause failures in some asynchronous tests that previously passed if you do not denote them as `async` in the `it` block. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+
 # 3.15.0 (2020-02-12)
 
 - Added support for `skyux build-public-library --fullTemplateTypeChecking`, which checks and validates TypeScript types within component HTML templates. [#208](https://github.com/blackbaud/skyux-sdk-builder/pull/208)
