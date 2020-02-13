@@ -6,7 +6,7 @@
 - Added support for `typescript@3.6.4`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
 - Updated `skyux build-public-library` to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
-- Moved `core-js` and `@types/core-js` from `peerDependencies` to `dependencies` to emulate Angular CLI's decision to manage those packages internally. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Moved `core-js` and `@types/core-js` from `peerDependencies` to `dependencies` to emulate the Angular CLI's decision to manage those packages internally. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 
 ### Breaking changes
 
