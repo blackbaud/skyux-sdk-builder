@@ -2,7 +2,7 @@
 
 ### New features
 
-- Added support for `@angular/core@9.0.1` (support for the Ivy compiler will be added at a later date). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `@angular/core@9.0.1`. (We will add support for the Ivy compiler at a later date.) [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for `typescript@3.6.4`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
 - Updated `skyux build-public-library` to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
