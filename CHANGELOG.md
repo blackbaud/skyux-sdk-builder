@@ -15,8 +15,8 @@
 - Dropped support for `@angular/http`. Use `@angular/common/http` instead. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Dropped support for `SkyAuthHttp` (found in `@skyux/http`). We recommend using Angular's `HttpClient` (found in `@angular/common/http`) and importing the `SkyAuthHttpClientModule` (found in `@skyux/http`) to implement features such as Blackbaud authentication. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
-- Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. The modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) should be imported directly, as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
-- The latest version of `jasmine` (`3.5.0`) may cause some previosly-passing asynchronous tests to fail if they are not denoted as `async` in the `it` block. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+- Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `jasmine@3.5.0` (`3.5.0`), which may cause failures in some asynchronous tests that previously passed if you do not denote them as `async` in the `it` block. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
 
 # 3.15.0 (2020-02-12)
 
