@@ -10,7 +10,7 @@
 
 ### Breaking changes
 
-- We've set the Angular Compiler to run `fullTemplateTypeCheck` which ensures that your SPA and library component HTML templates are referencing `public` properties in the component's class. This change may cause your builds to fail if you have bindings to invalid properties. Read [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck) for more information about template type checking. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Set the Angular Compiler to run `fullTemplateTypeCheck` to ensure that component HTML templates for SPAs and libraries reference `public` properties in component classes. This change may cause builds to fail if you have bindings to invalid properties. For more information about template type checking, seed [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Dropped support for the `/deep/` SCSS modifier; use `::ng-deep` or `:host-context` instead.
 - Dropped support for `@angular/http`; use `@angular/common/http` instead. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Dropped support for `SkyAuthHttp` (found in `@skyux/http`). We recommend using Angular's `HttpClient` (found in `@angular/common/http`) and importing the `SkyAuthHttpClientModule` (found in `@skyux/http`) to implement features such as Blackbaud authentication. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
