@@ -44,7 +44,6 @@ import {
   BBAuthClientFactory
 } from '@skyux/auth-client-factory';
 
-require('style-loader!@skyux/theme/css/sky.css');
 require('style-loader!./app.component.scss');
 
 let omnibarLoaded: boolean;
