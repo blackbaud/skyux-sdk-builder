@@ -1,3 +1,3 @@
 export {
   SkyAppConfig
-} from '@skyux/config/config';
+} from '@skyux/config';
