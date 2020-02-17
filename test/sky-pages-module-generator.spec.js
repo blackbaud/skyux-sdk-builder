@@ -336,8 +336,8 @@ BBAuthClientFactory.BBAuth.mock = true;`
   it('should add require statements for style sheets', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedRequire = `
-require('!style-loader!css-loader!@foo/bar/style.scss');
-require('!style-loader!css-loader!src/styles/custom.css');
+require('!style-loader!css-loader!sass-loader!@foo/bar/style.scss');
+require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
 `;
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
