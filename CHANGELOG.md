@@ -10,7 +10,7 @@
 
 ### Breaking changes
 
-- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Consumers should import from `@skyux/config`, instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Consumers should import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
 
 # 4.0.0-rc.0 (2020-02-13)
 
