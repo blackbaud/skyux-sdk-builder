@@ -1,3 +1,17 @@
+# 4.0.0-rc.1 (2020-02-18)
+
+### New features
+
+- Added support for `@skyux/config@4.0.0-rc.0`. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
+### Bug fixes
+
+- Fixed the compiler to handle CSS `@import` statements properly. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
+### Breaking changes
+
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Consumers should import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
 # 4.0.0-rc.0 (2020-02-13)
 
 ### New features
