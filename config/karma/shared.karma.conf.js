@@ -78,7 +78,7 @@ function getConfig(config) {
       }
     ],
     proxies: {
-      '/~/': `/absolute/${srcPath}`
+      '/~/': `/absolute${srcPath}`
     },
     preprocessors: preprocessors,
     skyPagesConfig: skyPagesConfig,
