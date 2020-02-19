@@ -74,7 +74,7 @@ describe('config karma shared', () => {
     mock.reRequire('../config/karma/shared.karma.conf')({
       set: (config) => {
         expect(config.files.pop()).toEqual({
-          pattern: path.join(cwd, `src/assets/**`),
+          pattern: path.join(cwd, 'src') + '/assets/**',
           included: false,
           served: true
         });

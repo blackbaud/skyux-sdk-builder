@@ -44,6 +44,7 @@ function getConfig(config) {
   const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
 
   // Used in conjunction with `proxies` property to remove 404 and correctly serve assets
+  // Karma normalizes the pattern before glob, so no need to accomodate different OSes.
   const assetsPattern = `${srcPath}/assets/**`;
 
   const preprocessors = {};
