@@ -29,6 +29,8 @@ function writeTSConfig(skyPagesConfig) {
     });
   }
 
+  const enableIvy = !(skyPagesConfig.skyux.enableIvy === false);
+
   const config = {
     'compilerOptions': {
       'target': 'es5',
@@ -66,7 +68,7 @@ function writeTSConfig(skyPagesConfig) {
     'compileOnSave': false,
     'buildOnSave': false,
     'angularCompilerOptions': {
-      'enableIvy': false,
+      'enableIvy': enableIvy,
       'fullTemplateTypeCheck': true,
       'strictInjectionParameters': true
     }
