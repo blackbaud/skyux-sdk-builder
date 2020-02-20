@@ -165,7 +165,13 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
           test: /\.s?css$/,
           use: [
             'raw-loader',
-            'sass-loader'
+            {
+              loader: 'sass-loader',
+              options: {
+                // Prefer dart sass.
+                implementation: require('sass')
+              }
+            }
           ]
         },
         {

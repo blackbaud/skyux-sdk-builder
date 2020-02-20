@@ -143,7 +143,7 @@
     "no-output-rename": true,
     "no-outputs-metadata-property": true,
     "no-forward-ref": true,
-    "use-life-cycle-interface": true,
+    "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "pipe-prefix": "sky",
     "component-class-suffix": true,
