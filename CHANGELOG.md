@@ -1,3 +1,7 @@
+# 3.15.1 (2020-02-20)
+
+- Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
+
 # 4.0.0-rc.1 (2020-02-18)
 
 ### New features
@@ -31,10 +35,6 @@
 - Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for `jasmine@3.5.0` (`3.5.0`), which may cause failures in some asynchronous tests that previously passed if you do not denote them as `async` in the `it` block. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
-
-# 3.15.1 (2020-02-20)
-
-- Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
 
 # 3.15.0 (2020-02-12)
 
