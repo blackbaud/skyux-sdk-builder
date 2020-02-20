@@ -1,3 +1,7 @@
+# 3.15.1 (2020-02-20)
+
+- Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
+
 # 3.15.0 (2020-02-12)
 
 - Added support for `skyux build-public-library --fullTemplateTypeChecking`, which checks and validates TypeScript types within component HTML templates. [#208](https://github.com/blackbaud/skyux-sdk-builder/pull/208)
