@@ -67,6 +67,23 @@ describe('config karma shared', () => {
     });
   });
 
+  it('should serve and proxy assets', (done) => {
+    const cwd = 'custom-cwd';
+    spyOn(process, 'cwd').and.returnValue(cwd);
+
+    mock.reRequire('../config/karma/shared.karma.conf')({
+      set: (config) => {
+        expect(config.files.pop()).toEqual({
+          pattern: path.join(cwd, 'src') + '/assets/**',
+          included: false,
+          served: true
+        });
+        expect(config.proxies['/~/']).toContain(`/absolute${cwd}`);
+        done();
+      }
+    });
+  });
+
   it('should ignore anything outside the src directory in webpackMiddleware', (done) => {
     mock('../config/sky-pages/sky-pages.config.js', {
       getSkyPagesConfig: () => ({

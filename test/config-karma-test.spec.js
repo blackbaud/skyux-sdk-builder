@@ -23,7 +23,7 @@ describe('config karma test', () => {
   });
 
   it('should load the shared config', (done) => {
-    require('../config/karma/test.karma.conf')({
+    mock.reRequire('../config/karma/test.karma.conf')({
       set: (config) => {
         expect(config.browsers).toBeDefined();
         expect(called).toEqual(true);
@@ -34,7 +34,7 @@ describe('config karma test', () => {
 
   it('should use a custom launcher for Travis', (done) => {
     process.env.TRAVIS = true;
-    require('../config/karma/test.karma.conf')({
+    mock.reRequire('../config/karma/test.karma.conf')({
       set: (config) => {
         expect(config.browsers[0]).toBe('Chrome_travis_ci');
         delete process.env.TRAVIS;
@@ -48,7 +48,7 @@ describe('config karma test', () => {
       headless: true
     };
 
-    require('../config/karma/test.karma.conf')({
+    mock.reRequire('../config/karma/test.karma.conf')({
       set: (config) => {
         expect(config.browsers[0]).toBe('ChromeHeadless');
         done();
@@ -56,14 +56,31 @@ describe('config karma test', () => {
     });
   });
 
-  it('should include the desktop notifications reporter if --enableDesktopNotifications flag set', (done) => {
+  it('should include the desktop notifications reporter if --enableDesktopNotifications flag set without other reporters', (done) => {
     mockArgv = {
       enableDesktopNotifications: true
     };
 
-    require('../config/karma/test.karma.conf')({
+    mock.reRequire('../config/karma/test.karma.conf')({
       set: (config) => {
         expect(config.reporters).toContain('notify');
+        done();
+      }
+    });
+  });
+
+  it('should include the desktop notifications reporter if --enableDesktopNotifications flag set with other reporters', (done) => {
+    mockArgv = {
+      enableDesktopNotifications: true
+    };
+
+    mock(path, (config) => {
+      config.reporters = ['custom'];
+    });
+
+    mock.reRequire('../config/karma/test.karma.conf')({
+      set: (config) => {
+        expect(config.reporters).toEqual(['custom', 'notify']);
         done();
       }
     });
@@ -74,7 +91,7 @@ describe('config karma test', () => {
       suppressUnfocusedTestOutput: true
     };
 
-    require('../config/karma/test.karma.conf')({
+    mock.reRequire('../config/karma/test.karma.conf')({
       set: (config) => {
         expect(config.mochaReporter).toEqual({ ignoreSkipped: true });
         done();

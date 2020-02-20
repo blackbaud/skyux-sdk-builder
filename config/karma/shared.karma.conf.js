@@ -43,6 +43,10 @@ function getConfig(config) {
   const specStyles = `${__dirname}/../../utils/spec-styles.js`;
   const polyfillsBundle = `${__dirname}/../../src/polyfills.ts`;
 
+  // Used in conjunction with `proxies` property to remove 404 and correctly serve assets
+  // Karma normalizes the pattern before glob, so no need to accomodate different OSes.
+  const assetsPattern = `${srcPath}/assets/**`;
+
   const preprocessors = {};
 
   preprocessors[polyfillsBundle] = ['webpack'];
@@ -67,8 +71,16 @@ function getConfig(config) {
       {
         pattern: specStyles,
         watched: false
+      },
+      {
+        pattern: assetsPattern,
+        included: false,
+        served: true,
       }
     ],
+    proxies: {
+      '/~/': `/absolute${srcPath}`
+    },
     preprocessors: preprocessors,
     skyPagesConfig: skyPagesConfig,
     webpack: testWebpackConfig.getWebpackConfig(skyPagesConfig, argv),
