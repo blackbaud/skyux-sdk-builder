@@ -58,6 +58,8 @@
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.13.9",
+    "@babel/core": "7.8.4",
+    "@babel/preset-env": "7.8.4",
     "@blackbaud/help-client": "2.1.0",
     "@blackbaud/skyux-lib-help": "3.2.0",
     "@blackbaud/skyux-logger": "1.1.1",
@@ -70,6 +72,7 @@
     "angular2-template-loader": "0.6.2",
     "async": "2.6.3",
     "awesome-typescript-loader": "5.2.1",
+    "babel-loader": "8.0.6",
     "chromedriver-version-matcher": "^1.0.0",
     "cors": "2.8.5",
     "cross-spawn": "6.0.5",
