@@ -1,4 +1,13 @@
+# 4.0.0-rc.2 (2020-02-21)
+
+### New features
+
+- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default; if you wish to disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+- Added support for `@skyux/config@4.0.0-rc.1`. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+
 # 3.15.1 (2020-02-20)
+
+### Bug fixes
 
 - Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
 
