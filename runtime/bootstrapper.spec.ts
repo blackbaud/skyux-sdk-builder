@@ -85,7 +85,7 @@ describe('bootstrapper', () => {
 
     SkyAppBootstrapper.config = {
       auth: true,
-      params: []
+      params: {}
     };
 
     SkyAppBootstrapper.processBootstrapConfig().then(() => {
