@@ -38,10 +38,10 @@ module.exports = {
         url: ''
       },
       mode: '',
-      params: [
-        'envid',
-        'svcid'
-      ]
+      params: {
+        envid: true,
+        svcid: true
+      }
     }, skyux);
   }
 };
