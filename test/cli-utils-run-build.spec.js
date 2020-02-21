@@ -10,11 +10,26 @@ describe('cli utils run build', () => {
   let mockAssetsProcessor;
   let mockLocaleProcessor;
   let mockFsExtra;
+  let mockWebpack;
 
   let skyPagesConfigUtil;
 
   beforeEach(() => {
     skyPagesConfigUtil = mock.reRequire('../config/sky-pages/sky-pages.config');
+
+    mockWebpack = () => ({
+      run: (cb) => {
+        cb(
+          null,
+          {
+            toJson: () => ({
+              errors: [],
+              warnings: []
+            })
+          }
+        );
+      }
+    });
 
     mockLocaleProcessor = {
       getDefaultLocaleFiles: localeAssetsProcessor.getDefaultLocaleFiles,
@@ -74,9 +89,7 @@ describe('cli utils run build', () => {
       }
     });
 
-    mock.reRequire('../cli/utils/run-build')({}, {}, () => ({
-      run: () => {}
-    }));
+    mock.reRequire('../cli/utils/run-build')({}, {}, mockWebpack);
     expect(called).toEqual(true);
   });
 
@@ -123,19 +136,7 @@ describe('cli utils run build', () => {
           compileMode: 'aot'
         }
       },
-      () => ({
-        run: (cb) => {
-          cb(
-            null,
-            {
-              toJson: () => ({
-                errors: [],
-                warnings: []
-              })
-            }
-          );
-        }
-      })
+      mockWebpack
     ).then(() => {
       // The temp folder should be deleted after the build is complete.
       expect(removeSpy).toHaveBeenCalledWith(
@@ -264,19 +265,11 @@ describe('cli utils run build', () => {
       done();
     });
 
-    mock.reRequire('../cli/utils/run-build')({ serve: true }, runtimeUtils.getDefault(), () => ({
-      run: (cb) => {
-        cb(
-          null,
-          {
-            toJson: () => ({
-              errors: [],
-              warnings: []
-            })
-          }
-        );
-      }
-    }));
+    mock.reRequire('../cli/utils/run-build')(
+      { serve: true },
+      runtimeUtils.getDefault(),
+      mockWebpack
+    );
   });
 
   it('should call prepareLocaleFiles()', () => {
@@ -286,9 +279,7 @@ describe('cli utils run build', () => {
       getWebpackConfig: () => ({})
     });
 
-    mock.reRequire('../cli/utils/run-build')({}, {}, () => ({
-      run: () => {}
-    }));
+    mock.reRequire('../cli/utils/run-build')({}, {}, mockWebpack);
     expect(spy).toHaveBeenCalledWith();
   });
 
@@ -310,24 +301,59 @@ describe('cli utils run build', () => {
           '@foobar': 'foo/bar/baz.ts'
         }
       }
-    }, () => ({
-      run: (cb) => {
-        cb(
-          null,
-          {
-            toJson: () => ({
-              errors: [],
-              warnings: []
-            })
-          }
-        );
-      }
-    })).then(() => {
+    }, mockWebpack).then(() => {
       const tsConfig = fsSpy.calls.argsFor(0)[1];
       const compilerOptionsPath = tsConfig.compilerOptions.paths['@foobar'][0];
       expect(compilerOptionsPath).toEqual(
         skyPagesConfigUtil.spaPathTemp('foo/bar/baz.ts')
       );
+      done();
+    });
+  });
+
+  it('should run Angular Ivy Compiler by default', (done) => {
+    mock('../config/webpack/build-aot.webpack.config', {
+      getWebpackConfig: () => ({})
+    });
+
+    const fsSpy = spyOn(mockFsExtra, 'writeJSONSync').and.callThrough();
+
+    const runBuild = mock.reRequire('../cli/utils/run-build');
+
+    const skyPagesConfig = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        compileMode: 'aot'
+      }
+    };
+
+    runBuild({}, skyPagesConfig, mockWebpack).then(() => {
+      const tsConfig = fsSpy.calls.argsFor(0)[1];
+      expect(tsConfig.angularCompilerOptions.enableIvy).toEqual(true);
+      done();
+    });
+  });
+
+  it('should allow disabling Angular Ivy Compiler', (done) => {
+    mock('../config/webpack/build-aot.webpack.config', {
+      getWebpackConfig: () => ({})
+    });
+
+    const fsSpy = spyOn(mockFsExtra, 'writeJSONSync').and.callThrough();
+
+    const runBuild = mock.reRequire('../cli/utils/run-build');
+
+    const skyPagesConfig = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        compileMode: 'aot',
+        enableIvy: false
+      }
+    };
+
+    runBuild({}, skyPagesConfig, mockWebpack).then(() => {
+      const tsConfig = fsSpy.calls.argsFor(0)[1];
+      expect(tsConfig.angularCompilerOptions.enableIvy).toEqual(false);
       done();
     });
   });
