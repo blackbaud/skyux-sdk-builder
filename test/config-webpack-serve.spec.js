@@ -76,7 +76,7 @@ describe('config webpack serve', () => {
     const config = lib.getWebpackConfig({}, runtimeUtils.getDefault());
     const babelLoader = config.module.rules.pop();
 
-    expect(babelLoader.test).toEqual(/ansi-regex/);
+    expect(babelLoader.test).toEqual(/strip-ansi|ansi-regex/);
     expect(babelLoader.include).toEqual(/node_modules/);
   });
 

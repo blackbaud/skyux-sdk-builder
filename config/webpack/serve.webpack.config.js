@@ -59,7 +59,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
         // https://github.com/blackbaud/skyux-sdk-builder/issues/220
         // Limited to known node_module packages that do not target ES5.
         {
-          test: /ansi-regex/,
+          test: /strip-ansi|ansi-regex/,
           include: /node_modules/,
           use: {
             loader: 'babel-loader',
