@@ -1,3 +1,7 @@
+# 3.15.2 (2020-02-25)
+
+- Updated the Webpack configuration handle using `skyux serve` and `skyux test` with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)
+
 # 3.15.1 (2020-02-20)
 
 - Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
