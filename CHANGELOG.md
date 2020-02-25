@@ -1,6 +1,6 @@
 # 3.15.2 (2020-02-25)
 
-- Updated the Webpack configuration to make using `skyux serve` and `skyux test` work with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)
+- Updated the Webpack configuration to make `skyux serve` and `skyux test` work with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)
 
 # 3.15.1 (2020-02-20)
 
