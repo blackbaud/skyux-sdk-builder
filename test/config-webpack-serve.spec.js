@@ -71,4 +71,13 @@ describe('config webpack serve', () => {
     expect(spyCertResolver.readKey).toHaveBeenCalledWith(argv);
   });
 
+  it('should use the babel-loader only for the `ansi-regex` package in `node_modules`', () => {
+    const lib = mock.reRequire('../config/webpack/serve.webpack.config');
+    const config = lib.getWebpackConfig({}, runtimeUtils.getDefault());
+    const babelLoader = config.module.rules.pop();
+
+    expect(babelLoader.test).toEqual(/strip-ansi|ansi-regex/);
+    expect(babelLoader.include).toEqual(/node_modules/);
+  });
+
 });
