@@ -1,3 +1,9 @@
+# 4.0.0-rc.3 (2020-02-26)
+
+### New features
+
+- Upgraded the Angular packages and merged the latest updates from the `master` branch. [#222](https://github.com/blackbaud/skyux-sdk-builder/pull/222)
+
 # 3.15.2 (2020-02-25)
 
 - Updated the Webpack configuration to make `skyux serve` and `skyux test` work with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)
