@@ -28,14 +28,14 @@ function getCoverageThreshold(skyPagesConfig) {
 function getConfig(config) {
 
   // This file is spawned so we'll need to read the args again
-  const minimist = require('minimist');
-  const argv = minimist(process.argv.slice(2));
+  const rc = require('rc');
+  const argv = rc('skyux', {});
   const path = require('path');
   const srcPath = path.join(process.cwd(), 'src');
 
   const testWebpackConfig = require('../webpack/test.webpack.config');
 
-  // See minimist documentation regarding `argv._` https://github.com/substack/minimist
+  // rc uses minimist. See minimist documentation regarding `argv._` https://github.com/substack/minimist
   const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
 
   // Using __dirname so this file can be extended from other configuration file locations

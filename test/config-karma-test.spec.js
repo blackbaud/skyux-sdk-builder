@@ -15,7 +15,7 @@ describe('config karma test', () => {
       called = true;
     });
 
-    mock('minimist', () => mockArgv);
+    mock('rc', () => mockArgv);
   });
 
   afterEach(() => {
