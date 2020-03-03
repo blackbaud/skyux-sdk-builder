@@ -8,8 +8,8 @@
  */
 function getConfig(config) {
   const logger = require('@blackbaud/skyux-logger');
-  const minimist = require('minimist');
-  const argv = minimist(process.argv.slice(2));
+  const rc = require('rc');
+  const argv = rc('skyux', {});
   require(`./${argv.watch ? 'watch' : 'test'}.karma.conf`)(config);
   let skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
   let testWebpackConfig = require('../webpack/test.webpack.config');

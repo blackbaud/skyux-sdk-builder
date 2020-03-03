@@ -27,7 +27,7 @@ describe('config karma pact', () => {
       testCalled = true;
     });
 
-    mock('minimist', (options) => {
+    mock('rc', (options) => {
 
       return {
         "_": ['pact'],
@@ -104,8 +104,8 @@ describe('config karma pact', () => {
 
   it('should load the test config if watch command is not given', (done) => {
 
-    mock.stop('minimist');
-    mock('minimist', (options) => {
+    mock.stop('rc');
+    mock('rc', (options) => {
 
       return {
         "_": ['pact'],

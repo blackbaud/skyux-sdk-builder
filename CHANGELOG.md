@@ -1,3 +1,7 @@
+# 3.15.3 (2020-03-02)
+
+- Switched from `minimist` to `rc` to get both command line arg processing and rc file processing
+
 # 3.15.2 (2020-02-25)
 
 - Updated the Webpack configuration to make `skyux serve` and `skyux test` work with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)

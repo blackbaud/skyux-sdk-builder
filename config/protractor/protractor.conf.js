@@ -2,12 +2,12 @@
 'use strict';
 
 const path = require('path');
-const minimist = require('minimist');
+const rc = require('rc');
 const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
 const logger = require('@blackbaud/skyux-logger');
 
-// See minimist documentation regarding `argv._` https://github.com/substack/minimist
-const argv = minimist(process.argv.slice(2));
+// rc uses minimist. See minimist documentation regarding `argv._` https://github.com/substack/minimist
+const argv = rc('skyux', {});
 const skyPagesConfig = require('../sky-pages/sky-pages.config').getSkyPagesConfig(argv._[0]);
 
 const chromeArgs = [

@@ -12,7 +12,7 @@ describe('config protractor test', () => {
     mockArgv = {
       _: ['e2e']
     };
-    mock('minimist', () => mockArgv);
+    mock('rc', () => mockArgv);
 
     lib = mock.reRequire('../config/protractor/protractor.conf.js');
     config = lib.config;

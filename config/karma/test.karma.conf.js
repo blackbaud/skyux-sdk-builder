@@ -1,7 +1,7 @@
 /*jshint node: true*/
 'use strict';
 
-const minimist = require('minimist');
+const rc = require('rc');
 
 /**
  * Requires the shared karma config and sets any local properties.
@@ -11,7 +11,7 @@ const minimist = require('minimist');
 function getConfig(config) {
   require('./shared.karma.conf')(config);
 
-  const argv = minimist(process.argv.slice(2), {
+  const argv = rc('skyux', {
     boolean: ['headless', 'enableDesktopNotifications', 'suppressUnfocusedTestOutput']
   });
   const browser = (argv.headless) ? 'ChromeHeadless' : 'Chrome';
