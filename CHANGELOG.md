@@ -1,6 +1,6 @@
 # 3.16.0 (2020-03-04)
 
-- Set the viewport margin top configuration option to `SkyViewkeeperHostOptions` when the omnibar is enabled. [#227](https://github.com/blackbaud/skyux-sdk-builder/pull/227)
+- Set the `viewportMarginTop` property on `SkyViewkeeperHostOptions` when the omnibar is enabled. [#227](https://github.com/blackbaud/skyux-sdk-builder/pull/227)
 
 # 3.15.2 (2020-02-25)
 
