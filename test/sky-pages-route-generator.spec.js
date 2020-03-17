@@ -342,6 +342,35 @@ describe('SKY UX Builder route generator', () => {
     expect(redirectIndex).toBeLessThan(rootIndex);
   });
 
+  it('should set `pathMatch` to prefix unless root redirect', () => {
+    spyOn(glob, 'sync').and.returnValue(['custom/nested/index.html']);
+    spyOn(path, 'join').and.returnValue('');
+    spyOn(fs, 'readFileSync').and.returnValue('');
+
+    const routes = generator.getRoutes({
+      runtime: {
+        srcPath: ''
+      },
+      skyux: {
+        redirects: {
+          '': 'root-redirect',
+          'old': 'new'
+        }
+      }
+    });
+
+    expect(routes.declarations).toContain(`{
+  path: '',
+  redirectTo: 'root-redirect',
+  pathMatch: 'full'
+},
+{
+  path: 'old',
+  redirectTo: 'new',
+  pathMatch: 'prefix'
+}`);
+  });
+
   it('should add the NotFoundComponent if route does not exist', () => {
     spyOn(glob, 'sync').and.returnValue(['index.html']);
     spyOn(path, 'join').and.returnValue('');
