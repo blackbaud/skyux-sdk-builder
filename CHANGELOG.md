@@ -1,6 +1,6 @@
 # 3.16.1 (2020-03-18)
 
-- Fixed redirecting the empty-path (root) route. [#230](https://github.com/blackbaud/skyux-sdk-builder/pull/230)
+- Fixed the redirect for the empty-path (root) route. [#230](https://github.com/blackbaud/skyux-sdk-builder/pull/230)
 
 # 3.16.0 (2020-03-04)
 
