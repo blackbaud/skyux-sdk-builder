@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.13.9",
-    "@babel/core": "7.8.4",
-    "@babel/preset-env": "7.8.4",
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.0",
     "@blackbaud/help-client": "2.1.0",
     "@blackbaud/skyux-lib-help": "3.2.0",
     "@blackbaud/skyux-logger": "1.1.1",
