@@ -1,3 +1,7 @@
+# 4.0.0-rc.4 (2020-03-31)
+
+- Added bug fixes and features from the `master` branch. [#236](https://github.com/blackbaud/skyux-sdk-builder/pull/236)
+
 # 3.16.2 (2020-03-23)
 
 - Updated the version of `babel` to fix errors when running `skyux serve`. [#234](https://github.com/blackbaud/skyux-sdk-builder/pull/234)
