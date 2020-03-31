@@ -1,3 +1,15 @@
+# 3.16.2 (2020-03-23)
+
+- Updated the version of `babel` to fix errors when running `skyux serve`. [#234](https://github.com/blackbaud/skyux-sdk-builder/pull/234)
+
+# 3.16.1 (2020-03-18)
+
+- Fixed the redirect for the empty-path (root) route. [#230](https://github.com/blackbaud/skyux-sdk-builder/pull/230)
+
+# 3.16.0 (2020-03-04)
+
+- Set the `viewportMarginTop` property on `SkyViewkeeperHostOptions` when the omnibar is enabled. [#227](https://github.com/blackbaud/skyux-sdk-builder/pull/227)
+
 # 4.0.0-rc.3 (2020-02-26)
 
 ### New features
