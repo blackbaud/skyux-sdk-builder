@@ -1,9 +1,6 @@
-/*jslint node: true */
-'use strict';
-
-// HTML Webpack Plugin has already solved sorting the entries
 const sorter = require('html-webpack-plugin/lib/chunksorter');
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+
 /**
  * Creates a resolved host url.
  * @param {string} url
@@ -48,26 +45,18 @@ function resolve(url, localUrl, chunks, skyPagesConfig) {
  * @param {Array} chunks
  */
 function getScripts(chunks) {
-  let scripts = [];
-
   // Used when skipping the build, short-circuit to return metadata
   if (chunks.metadata) {
     return chunks.metadata;
   }
 
-  sorter.dependency(chunks, undefined, {}).forEach((chunk) => {
-    scripts.push({
-      name: chunk.files[0]
-    });
-  });
-
-  // Webpack reversed the order of these scripts
-  scripts.reverse();
-
-  return scripts;
+  // Using 'auto' since the HTMLWebpackPlugin sorting operation is configured in the webpack config.
+  return sorter.auto.map(chunk => ({
+    name: chunk.files[0]
+  }));
 }
 
 module.exports = {
-  resolve: resolve,
-  getScripts: getScripts
+  resolve,
+  getScripts
 };
