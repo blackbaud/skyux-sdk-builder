@@ -1,4 +1,3 @@
-const sorter = require('html-webpack-plugin/lib/chunksorter');
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 
 /**
@@ -50,8 +49,7 @@ function getScripts(chunks) {
     return chunks.metadata;
   }
 
-  // Using 'auto' since the HTMLWebpackPlugin sorting operation is configured in the webpack config.
-  return sorter.auto.map(chunk => ({
+  return chunks.map(chunk => ({
     name: chunk.files[0]
   }));
 }
