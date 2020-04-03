@@ -65,7 +65,6 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
   let plugins = [
     // Some properties are required on the root object passed to HtmlWebpackPlugin
     new HtmlWebpackPlugin({
-      chunksSortMode: 'manual',
       template: skyPagesConfig.runtime.app.template,
       inject: skyPagesConfig.runtime.app.inject,
       runtime: skyPagesConfig.runtime,
