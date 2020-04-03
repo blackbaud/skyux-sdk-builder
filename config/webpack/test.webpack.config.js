@@ -76,12 +76,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
         },
         {
           enforce: 'pre',
-          test: /\.js$/,
-          loader: 'source-map-loader',
-          exclude: excludes
-        },
-        {
-          enforce: 'pre',
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
@@ -169,9 +163,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
           options: {
             esModules: true
           }
-        },
-        {
-          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,
