@@ -1,3 +1,4 @@
+const sorter = require('html-webpack-plugin/lib/chunksorter');
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 
 /**
@@ -44,14 +45,24 @@ function resolve(url, localUrl, chunks, skyPagesConfig) {
  * @param {Array} chunks
  */
 function getScripts(chunks) {
+  let scripts = [];
+
   // Used when skipping the build, short-circuit to return metadata
   if (chunks.metadata) {
     return chunks.metadata;
   }
 
-  return chunks.map(chunk => ({
-    name: chunk.files[0]
-  }));
+  // Using 'manual' since it uses the order of the chunks listed in the webpack config.
+  sorter.manual(chunks, undefined, {}).forEach((chunk) => {
+    scripts.push({
+      name: chunk.files[0]
+    });
+  });
+
+  // Webpack reversed the order of these scripts
+  scripts.reverse();
+
+  return scripts;
 }
 
 module.exports = {
