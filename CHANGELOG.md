@@ -1,3 +1,10 @@
+# 4.0.0-rc.5 (2020-04-08)
+
+### New features
+
+- Added support for `html-webpack-plugin@4.0.4`. [#238](https://github.com/blackbaud/skyux-sdk-builder/pull/238)
+- Added support for `jasmine-spec-reporter@5.0.1`. [#238](https://github.com/blackbaud/skyux-sdk-builder/pull/238)
+
 # 4.0.0-rc.4 (2020-03-31)
 
 - Added bug fixes and features from the `master` branch. [#236](https://github.com/blackbaud/skyux-sdk-builder/pull/236)
