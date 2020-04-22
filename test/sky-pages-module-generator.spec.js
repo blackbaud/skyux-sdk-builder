@@ -361,9 +361,29 @@ BBAuthClientFactory.BBAuth.mock = true;`
     }`);
   });
 
-  it('should add require statements for style sheets', () => {
+  it('should add require statements for SKY UX Theme style sheet by default', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedRequire = `
+require('style-loader!@skyux/theme/css/sky.css');
+`;
+    const config = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux()
+    };
+
+    config.skyux.app = undefined;
+
+    const source = generator.getSource(config);
+    expect(source).toContain(expectedRequire);
+  });
+
+  it('should add require statements for style sheets', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+
+    // The SKY UX Theme style sheet should be injected first, if it's not provided in
+    // the consumer's config.
+    const expectedRequire = `
+require('style-loader!@skyux/theme/css/sky.css');
 require('style-loader!@foo/bar/style.scss');
 require('style-loader!src/styles/custom.css');
 `;
@@ -381,6 +401,71 @@ require('style-loader!src/styles/custom.css');
 
     const source = generator.getSource(config);
     expect(source).toContain(expectedRequire);
+  });
+
+  it('should only add SKY UX Theme style sheet once', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+    const themeStyleSheet = '@skyux/theme/css/sky.css';
+
+    // The SKY UX Theme style sheet should be injected first, if it's not provided in
+    // the consumer's config.
+    const expectedRequire = `
+require('style-loader!@foo/bar/style.scss');
+require('style-loader!src/styles/custom.css');
+require('style-loader!${themeStyleSheet}');
+`;
+    const config = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux()
+    };
+
+    config.skyux.app = {
+      styles: [
+        '@foo/bar/style.scss',
+        'src/styles/custom.css',
+        themeStyleSheet // Some consumers provide the Theme style sheet manually.
+      ]
+    };
+
+    const source = generator.getSource(config);
+    expect(source).toContain(expectedRequire);
+
+    // The Theme style sheet should only be required once.
+    expect(source.match(themeStyleSheet).length).toEqual(1);
+  });
+
+  it('should add supported theme stylesheets immediately after the default stylesheet', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+    const themeStyleSheet = '@skyux/theme/css/sky.css';
+
+    const expectedRequire = `
+require('style-loader!@foo/bar/style.scss');
+require('style-loader!${themeStyleSheet}');
+require('style-loader!@skyux/theme/css/themes/foo/styles.css');
+require('style-loader!@skyux/theme/css/themes/bar/styles.css');
+require('style-loader!src/styles/custom.css');
+`;
+    const config = {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux()
+    };
+
+    config.skyux.app = {
+      styles: [
+        '@foo/bar/style.scss',
+        themeStyleSheet,
+        'src/styles/custom.css'
+      ],
+      theming: {
+        supportedThemes: ['foo', 'bar']
+      }
+    };
+
+    const source = generator.getSource(config);
+    expect(source).toContain(expectedRequire);
+
+    // The Theme style sheet should only be required once.
+    expect(source.match(themeStyleSheet).length).toEqual(1);
   });
 
   it('should ignore external style sheets', () => {
