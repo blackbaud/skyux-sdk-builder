@@ -1,3 +1,7 @@
+# 3.17.0 (2020-04-22)
+
+- Added theming support. [#242](https://github.com/blackbaud/skyux-sdk-builder/pull/242)
+
 # 3.16.2 (2020-03-23)
 
 - Updated the version of `babel` to fix errors when running `skyux serve`. [#234](https://github.com/blackbaud/skyux-sdk-builder/pull/234)
