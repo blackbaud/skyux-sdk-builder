@@ -3,7 +3,8 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
-  Optional
+  Optional,
+  Renderer2
 } from '@angular/core';
 
 import {
@@ -37,7 +38,11 @@ import {
 
 import {
   SkyAppStyleLoader,
-  SkyAppViewportService
+  SkyAppViewportService,
+  SkyTheme,
+  SkyThemeMode,
+  SkyThemeService,
+  SkyThemeSettings
 } from '@skyux/theme';
 
 import {
@@ -88,7 +93,10 @@ function fixUpNav(nav: any, baseUrl: string, config: SkyAppConfig) {
 
 @Component({
   selector: 'sky-pages-app',
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
+  providers: [
+    SkyThemeService
+  ]
 })
 export class AppComponent implements OnInit, OnDestroy {
   public isReady = false;
@@ -102,8 +110,24 @@ export class AppComponent implements OnInit, OnDestroy {
     @Optional() private searchProvider?: SkyAppSearchResultsProvider,
     @Optional() viewport?: SkyAppViewportService,
     @Optional() private zone?: NgZone,
-    @Optional() private omnibarProvider?: SkyAppOmnibarProvider
+    @Optional() private omnibarProvider?: SkyAppOmnibarProvider,
+    @Optional() renderer?: Renderer2,
+    @Optional() private themeSvc?: SkyThemeService
   ) {
+    /* istanbul ignore else */
+    if (themeSvc) {
+      const themingConfig = config.skyux && config.skyux.app && config.skyux.app.theming;
+      const themeName = (themingConfig && themingConfig.theme) || 'default';
+
+      const theme = SkyTheme.presets[themeName];
+
+      this.themeSvc.init(
+        document.body,
+        renderer,
+        new SkyThemeSettings(theme, SkyThemeMode.presets.light)
+      );
+    }
+
     this.styleLoader.loadStyles()
       .then((result?: any) => {
         this.isReady = true;
@@ -140,6 +164,11 @@ export class AppComponent implements OnInit, OnDestroy {
     if (omnibarLoaded) {
       BBAuthClientFactory.BBOmnibar.destroy();
       omnibarLoaded = false;
+    }
+
+    /* istanbul ignore else */
+    if (this.themeSvc) {
+      this.themeSvc.destroy();
     }
   }
 

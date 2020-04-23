@@ -1,3 +1,7 @@
+# 3.17.0 (2020-04-22)
+
+- Added theming support. [#242](https://github.com/blackbaud/skyux-sdk-builder/pull/242)
+
 # 4.0.0-rc.5 (2020-04-08)
 
 ### New features
