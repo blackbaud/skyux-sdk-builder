@@ -118,7 +118,7 @@ function transpile() {
 function writePackagerConfig(skyPagesConfig) {
   const ngPackageConfig = {
     lib: {
-      entryFile: 'index.ts'
+      entryFile: 'public_api.ts'
     }
   };
 

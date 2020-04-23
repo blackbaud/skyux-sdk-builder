@@ -130,7 +130,7 @@ describe('cli build-public-library', () => {
 
     expect(writeSpy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       }
     });
 
@@ -248,7 +248,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       },
       whitelistedNonPeerDependencies: [
         'foobar'
@@ -276,7 +276,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       }
     });
 
