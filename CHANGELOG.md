@@ -1,3 +1,7 @@
+# 4.0.0-rc.6 (2020-04-24)
+
+- Added bug fixes and features from the `master` branch. [#244](https://github.com/blackbaud/skyux-sdk-builder/pull/244)
+
 # 3.17.0 (2020-04-22)
 
 - Added theming support. [#242](https://github.com/blackbaud/skyux-sdk-builder/pull/242)
