@@ -196,7 +196,7 @@ describe('cli build-public-library', () => {
     expect(pathSpy).toHaveBeenCalledWith('testing/index.ts');
 
     expect(writeSpy).toHaveBeenCalledWith(
-      'temp/index.testing.ts',
+      'temp/public_api.testing.ts',
       `export * from './testing';\n`,
       {
         encoding: 'utf8'
@@ -205,7 +205,7 @@ describe('cli build-public-library', () => {
 
     expect(writeJsonSpy).toHaveBeenCalledWith('temp/testing/ng-package.json', {
       lib: {
-        entryFile: '../index.testing.ts'
+        entryFile: '../public_api.testing.ts'
       }
     });
 
