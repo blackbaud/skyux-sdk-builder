@@ -130,7 +130,7 @@ describe('cli build-public-library', () => {
 
     expect(writeSpy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'public_api.ts'
+        entryFile: 'index.ts'
       }
     });
 
@@ -196,7 +196,7 @@ describe('cli build-public-library', () => {
     expect(pathSpy).toHaveBeenCalledWith('testing/index.ts');
 
     expect(writeSpy).toHaveBeenCalledWith(
-      'temp/public_api.testing.ts',
+      'temp/index.testing.ts',
       `export * from './testing';\n`,
       {
         encoding: 'utf8'
@@ -205,7 +205,7 @@ describe('cli build-public-library', () => {
 
     expect(writeJsonSpy).toHaveBeenCalledWith('temp/testing/ng-package.json', {
       lib: {
-        entryFile: '../public_api.testing.ts'
+        entryFile: '../index.testing.ts'
       }
     });
 
@@ -248,7 +248,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'public_api.ts'
+        entryFile: 'index.ts'
       },
       whitelistedNonPeerDependencies: [
         'foobar'
@@ -276,7 +276,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'public_api.ts'
+        entryFile: 'index.ts'
       }
     });
 
