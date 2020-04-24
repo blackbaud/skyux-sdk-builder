@@ -315,7 +315,7 @@ BBAuthClientFactory.BBAuth.mock = true;`
   it('should add require statements for SKY UX Theme style sheet by default', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
     const expectedRequire = `
-require('style-loader!@skyux/theme/css/sky.css');
+require('!style-loader!css-loader!sass-loader!@skyux/theme/css/sky.css');
 `;
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
@@ -334,9 +334,9 @@ require('style-loader!@skyux/theme/css/sky.css');
     // The SKY UX Theme style sheet should be injected first, if it's not provided in
     // the consumer's config.
     const expectedRequire = `
-require('style-loader!@skyux/theme/css/sky.css');
-require('style-loader!@foo/bar/style.scss');
-require('style-loader!src/styles/custom.css');
+require('!style-loader!css-loader!sass-loader!@skyux/theme/css/sky.css');
+require('!style-loader!css-loader!sass-loader!@foo/bar/style.scss');
+require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
 `;
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
@@ -361,9 +361,9 @@ require('style-loader!src/styles/custom.css');
     // The SKY UX Theme style sheet should be injected first, if it's not provided in
     // the consumer's config.
     const expectedRequire = `
-require('style-loader!@foo/bar/style.scss');
-require('style-loader!src/styles/custom.css');
-require('style-loader!${themeStyleSheet}');
+require('!style-loader!css-loader!sass-loader!@foo/bar/style.scss');
+require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
+require('!style-loader!css-loader!sass-loader!${themeStyleSheet}');
 `;
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
@@ -390,11 +390,11 @@ require('style-loader!${themeStyleSheet}');
     const themeStyleSheet = '@skyux/theme/css/sky.css';
 
     const expectedRequire = `
-require('style-loader!@foo/bar/style.scss');
-require('style-loader!${themeStyleSheet}');
-require('style-loader!@skyux/theme/css/themes/foo/styles.css');
-require('style-loader!@skyux/theme/css/themes/bar/styles.css');
-require('style-loader!src/styles/custom.css');
+require('!style-loader!css-loader!sass-loader!@foo/bar/style.scss');
+require('!style-loader!css-loader!sass-loader!${themeStyleSheet}');
+require('!style-loader!css-loader!sass-loader!@skyux/theme/css/themes/foo/styles.css');
+require('!style-loader!css-loader!sass-loader!@skyux/theme/css/themes/bar/styles.css');
+require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
 `;
     const config = {
       runtime: runtimeUtils.getDefaultRuntime(),
