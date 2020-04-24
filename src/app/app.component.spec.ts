@@ -1,5 +1,7 @@
 import {
-  NgZone
+  NgZone,
+  Renderer2,
+  Type
 } from '@angular/core';
 
 import {
@@ -47,7 +49,11 @@ import {
 
 import {
   SkyAppStyleLoader,
-  SkyAppViewportService
+  SkyAppViewportService,
+  SkyTheme,
+  SkyThemeMode,
+  SkyThemeService,
+  SkyThemeSettings
 } from '@skyux/theme';
 
 import {
@@ -55,6 +61,7 @@ import {
 } from './app.component';
 
 describe('AppComponent', () => {
+  let mockThemeSvc: any;
   let mockSkyuxHost: any;
   let mockWindow: any;
   let comp: AppComponent;
@@ -92,6 +99,15 @@ describe('AppComponent', () => {
     omnibarProvider?: any
   ) {
     mockWindow = new MockWindow();
+
+    mockThemeSvc = jasmine.createSpyObj(
+      'themeSvc',
+      [
+        'init',
+        'destroy'
+      ]
+    );
+
     const providers: any[] = [
       {
         provide: Router,
@@ -157,6 +173,19 @@ describe('AppComponent', () => {
       ],
       providers: providers
     })
+      .overrideComponent(
+        AppComponent,
+        {
+          set: {
+            providers: [
+              {
+                provide: SkyThemeService,
+                useValue: mockThemeSvc
+              }
+            ]
+          }
+        }
+      )
       .compileComponents()
       .then(() => {
         fixture = TestBed.createComponent(AppComponent);
@@ -825,6 +854,62 @@ describe('AppComponent', () => {
       });
 
       expect(navigateParams).not.toEqual(badUrl);
+    });
+  }));
+
+  it('should initialize the theme service with the specified theme', async(() => {
+    skyAppConfig.skyux.app = {
+      theming: {
+        theme: 'modern'
+      }
+    };
+
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+
+      const renderer2 = fixture.componentRef.injector.get<Renderer2>(
+        Renderer2 as Type<Renderer2>
+      );
+
+      expect(mockThemeSvc.init).toHaveBeenCalledWith(
+        document.body,
+        renderer2,
+        new SkyThemeSettings(
+          SkyTheme.presets.modern,
+          SkyThemeMode.presets.light
+        )
+      );
+    });
+  }));
+
+  it(
+    'should initialize the theme service with the default theme when no theme is specified',
+    async(() => {
+      setup(skyAppConfig).then(() => {
+        fixture.detectChanges();
+
+        const renderer = fixture.componentRef.injector.get<Renderer2>(
+          Renderer2 as Type<Renderer2>
+        );
+
+        expect(mockThemeSvc.init).toHaveBeenCalledWith(
+          document.body,
+          renderer,
+          new SkyThemeSettings(
+            SkyTheme.presets.default,
+            SkyThemeMode.presets.light
+          )
+        );
+      });
+    })
+  );
+
+  it('should destroy the theme service when the component is destroyed', async(() => {
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+      fixture.destroy();
+
+      expect(mockThemeSvc.destroy).toHaveBeenCalled();
     });
   }));
 

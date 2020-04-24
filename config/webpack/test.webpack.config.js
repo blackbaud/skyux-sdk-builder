@@ -79,6 +79,11 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
+        {
+          enforce: 'pre',
+          test: /skyux-i18n-testing\.js$/,
+          loader: outPath('loader', 'sky-fix-require-context')
+        },
 
         tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
 
