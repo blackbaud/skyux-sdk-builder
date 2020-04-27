@@ -130,7 +130,7 @@ describe('cli build-public-library', () => {
 
     expect(writeSpy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       }
     });
 
@@ -186,26 +186,17 @@ describe('cli build-public-library', () => {
   it('should include testing entry point if directory exists', async (done) => {
     spyOn(mockFs, 'existsSync').and.returnValue(true);
 
-    const writeSpy = spyOn(mockFs, 'writeFileSync').and.callThrough();
     const writeJsonSpy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
     const pathSpy = spyOn(mockSkyPagesConfig, 'spaPathTemp').and.callThrough();
     const cliCommand = mock.reRequire(requirePath);
 
     await cliCommand({}, {});
 
-    expect(pathSpy).toHaveBeenCalledWith('testing/index.ts');
-
-    expect(writeSpy).toHaveBeenCalledWith(
-      'temp/public_api.testing.ts',
-      `export * from './testing';\n`,
-      {
-        encoding: 'utf8'
-      }
-    );
+    expect(pathSpy).toHaveBeenCalledWith('testing/public_api.ts');
 
     expect(writeJsonSpy).toHaveBeenCalledWith('temp/testing/ng-package.json', {
       lib: {
-        entryFile: '../public_api.testing.ts'
+        entryFile: 'public_api.ts'
       }
     });
 
@@ -248,7 +239,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       },
       whitelistedNonPeerDependencies: [
         'foobar'
@@ -276,7 +267,7 @@ describe('cli build-public-library', () => {
 
     expect(spy).toHaveBeenCalledWith('temp/ng-package.json', {
       lib: {
-        entryFile: 'index.ts'
+        entryFile: 'public_api.ts'
       }
     });
 

@@ -118,7 +118,7 @@ function transpile() {
 function writePackagerConfig(skyPagesConfig) {
   const ngPackageConfig = {
     lib: {
-      entryFile: 'index.ts'
+      entryFile: 'public_api.ts'
     }
   };
 
@@ -149,25 +149,14 @@ function writePackagerConfig(skyPagesConfig) {
 }
 
 /**
- * Create a secondary entrypoint for a `testing` module, if it exists.
+ * Configure a secondary entrypoint for a `testing` module, if it exists.
  */
 function createTestingEntryPoint() {
-  const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing/index.ts');
+  const testingEntryPoint = skyPagesConfigUtil.spaPathTemp('testing/public_api.ts');
   if (fs.existsSync(testingEntryPoint)) {
-    // Need to create a root-level barrel file so that the `testing` files can locate
-    // the primary source files during compilation.
-    // See: https://github.com/ng-packagr/ng-packagr/issues/358#issuecomment-526650736
-    fs.writeFileSync(
-      skyPagesConfigUtil.spaPathTemp('public_api.testing.ts'),
-      `export * from './testing';\n`,
-      {
-        encoding: 'utf8'
-      }
-    );
-
     fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('testing/ng-package.json'), {
       lib: {
-        entryFile: '../public_api.testing.ts'
+        entryFile: 'public_api.ts'
       }
     });
   }
