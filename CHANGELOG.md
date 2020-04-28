@@ -1,3 +1,9 @@
+# 4.0.0-rc.7 (2020-04-28)
+
+## Breaking changes
+
+- Changed the name of the entry point file for building SKY UX libraries from `./src/app/public/index.ts` to `./src/app/public/public_api.ts`. This follows Angular guidance against `index.ts` "barrel" files in libraries and mimics Angular CLI requirements. [#248](https://github.com/blackbaud/skyux-sdk-builder/pull/248)
+
 # 4.0.0-rc.6 (2020-04-24)
 
 - Added bug fixes and features from the `master` branch. [#244](https://github.com/blackbaud/skyux-sdk-builder/pull/244)
