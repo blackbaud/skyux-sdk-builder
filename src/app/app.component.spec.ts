@@ -76,7 +76,7 @@ describe('AppComponent', () => {
   let spyOmnibarDestroy: any;
 
   class MockHelpInitService {
-    public load() { }
+    public load(config: any) { }
   }
 
   class MockWindow {
