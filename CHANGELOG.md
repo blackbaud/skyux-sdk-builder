@@ -1,3 +1,7 @@
+# 4.0.0-rc.8 (2020-05-07)
+
+- Updated the development and production dependencies. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/253)
+
 # 4.0.0-rc.7 (2020-04-28)
 
 ## Breaking changes
