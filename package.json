@@ -53,7 +53,7 @@
     "@angular-devkit/build-optimizer": "0.901.4",
     "@babel/core": "7.9.6",
     "@babel/preset-env": "7.9.6",
-    "@blackbaud/help-client": "2.2.0",
+    "@blackbaud/help-client": "2.1.0",
     "@blackbaud/skyux-lib-help": "3.3.0",
     "@blackbaud/skyux-logger": "1.1.2",
     "@ngtools/webpack": "9.1.4",
