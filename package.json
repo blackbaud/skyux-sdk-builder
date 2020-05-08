@@ -50,13 +50,15 @@
     "zone.js": "~0.10.3"
   },
   "dependencies": {
-    "@angular-devkit/build-optimizer": "0.901.4",
+    "@angular-devkit/build-optimizer": "0.901.5",
+    "@angular/common": "9.1.6",
+    "@angular/core": "9.1.6",
     "@babel/core": "7.9.6",
     "@babel/preset-env": "7.9.6",
     "@blackbaud/help-client": "3.0.0-rc.0",
     "@blackbaud/skyux-lib-help": "3.3.0",
     "@blackbaud/skyux-logger": "1.1.2",
-    "@ngtools/webpack": "9.1.4",
+    "@ngtools/webpack": "9.1.5",
     "@types/core-js": "2.5.3",
     "@types/jasmine": "3.5.10",
     "@types/node": "13.13.5",
