@@ -51,8 +51,6 @@
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.901.5",
-    "@angular/common": "9.1.6",
-    "@angular/core": "9.1.6",
     "@babel/core": "7.9.6",
     "@babel/preset-env": "7.9.6",
     "@blackbaud/help-client": "3.0.0-rc.0",
