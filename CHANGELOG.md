@@ -1,3 +1,8 @@
+# 4.0.0-rc.9 (2020-05-11)
+
+- Added support for `@blackbaud/help-client@3.0.0-rc.0`. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+- Updated the development and production dependencies. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+
 # 4.0.0-rc.8 (2020-05-07)
 
 - Updated the development and production dependencies. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/253)
