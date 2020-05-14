@@ -41,7 +41,7 @@
     "@skyux/http": "^4.0.0",
     "@skyux/i18n": "^4.0.0",
     "@skyux/omnibar-interop": "^4.0.0",
-    "@skyux/theme": "^4.0.0-rc.6",
+    "@skyux/theme": "^4.0.0",
     "codelyzer": "^5.2.2",
     "rxjs": "~6.5.4",
     "ts-node": "~8.3.0",
