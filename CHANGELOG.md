@@ -1,3 +1,8 @@
+# 4.0.0-rc.10 (2020-05-15)
+
+- Added logic to initialize a SPA with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
+- Upgraded the package dependencies. [#257](https://github.com/blackbaud/skyux-sdk-builder/pull/257)
+
 # 4.0.0-rc.9 (2020-05-11)
 
 - Added support for `@blackbaud/help-client@3.0.0-rc.0`. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
