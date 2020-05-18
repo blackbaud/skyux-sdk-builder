@@ -71,16 +71,8 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
       skyux: skyPagesConfig.skyux
     }),
 
-    // The `ngDevMode` property is defined by Angular CLI during a production build.
-    // We need to set it to 'false' to get the build to pass.
-    // See: https://github.com/angular/angular/issues/31595#issuecomment-519083266
-    // Setting these values to `false` also addresses some payload size issues.
-    // See: https://angular.io/guide/ivy-compatibility#payload-size-debugging
     new webpack.DefinePlugin({
-      'skyPagesConfig': JSON.stringify(skyPagesConfig),
-      'ngDevMode': false,
-      'ngI18nClosureMode': false,
-      'ngJitMode': false
+      'skyPagesConfig': JSON.stringify(skyPagesConfig)
     }),
 
     new LoaderOptionsPlugin({
