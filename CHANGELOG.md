@@ -1,3 +1,7 @@
+# 4.0.0-rc.11 (2020-05-18)
+
+- Added a few enhancements to the `skyux build` command to reduce bundle sizes. [#258](https://github.com/blackbaud/skyux-sdk-builder/pull/258)
+
 # 4.0.0-rc.10 (2020-05-15)
 
 - Added logic to initialize a SPA with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
