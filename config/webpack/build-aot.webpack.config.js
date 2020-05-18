@@ -1,6 +1,7 @@
 /*jslint node: true */
 'use strict';
 
+const { DefinePlugin } = require('webpack');
 const webpackMerge = require('webpack-merge');
 const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
@@ -53,13 +54,26 @@ function getWebpackConfig(skyPagesConfig, argv) {
         }
       ]
     },
+
     plugins: [
+      // These constants are defined by Angular CLI during a production build.
+      // We need to set them to `false` to get the build to pass.
+      // See: https://github.com/angular/angular/issues/31595#issuecomment-519083266
+      // Setting these values to `false` also addresses some payload size issues.
+      // See: https://angular.io/guide/ivy-compatibility#payload-size-debugging
+      new DefinePlugin({
+        'ngDevMode': false,
+        'ngI18nClosureMode': false,
+        'ngJitMode': false
+      }),
+
       new AngularCompilerPlugin({
         tsConfigPath: skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'),
         mainPath: skyPagesConfigUtil.spaPathTempSrc('main-internal.aot.ts'),
         // Type checking handled by Builder's ts-linter utility.
         typeChecking: false
       }),
+
       SaveMetadata
     ]
   });
