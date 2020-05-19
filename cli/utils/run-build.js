@@ -68,7 +68,7 @@ function writeTSConfig(skyPagesConfig) {
     'buildOnSave': false
   };
 
-  if(loadLocalCompilerOptions){
+  if (loadLocalCompilerOptions) {
     let localTsconfig = fs.readJsonSync('tsconfig.json', 'utf8');
     merge(config.compilerOptions, localTsconfig.compilerOptions);
   }
