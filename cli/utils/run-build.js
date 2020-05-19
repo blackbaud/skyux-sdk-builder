@@ -21,7 +21,7 @@ function writeTSConfig(skyPagesConfig) {
 
   // Add any module aliases to the tsconfig `paths` setting to support AoT builds.
   const moduleAliases = skyPagesConfig.skyux.moduleAliases;
-  const loadLocalCompilerOptions = skyPagesConfig.skyux.loadLocalCompilerOptions;
+  const loadLocalCompilerOptions = skyPagesConfig.skyux.useLocalCompilerOptions;
   if (moduleAliases) {
     Object.keys(moduleAliases).forEach((key) => {
       tsConfigPaths[key] = [
