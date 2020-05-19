@@ -21,6 +21,7 @@ function writeTSConfig(skyPagesConfig) {
 
   // Add any module aliases to the tsconfig `paths` setting to support AoT builds.
   const moduleAliases = skyPagesConfig.skyux.moduleAliases;
+  const loadLocalCompilerOptions = skyPagesConfig.skyux.loadLocalCompilerOptions;
   if (moduleAliases) {
     Object.keys(moduleAliases).forEach((key) => {
       tsConfigPaths[key] = [
@@ -66,6 +67,11 @@ function writeTSConfig(skyPagesConfig) {
     'compileOnSave': false,
     'buildOnSave': false
   };
+
+  if(loadLocalCompilerOptions){
+    let localTsconfig = fs.readJsonSync('tsconfig.json', 'utf8');
+    merge(config.compilerOptions, localTsconfig.compilerOptions);
+  }
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'), config);
 }
