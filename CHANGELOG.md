@@ -1,3 +1,7 @@
+# 3.18.0 (2020-05-22)
+
+- Added the `esModuleInterop` property to `tsconfig.json`. [#261](https://github.com/blackbaud/skyux-sdk-builder/pull/261) (Thanks [@gabe-bergstrom](https://github.com/gabe-bergstrom)!)
+
 # 3.17.0 (2020-04-22)
 
 - Added theming support. [#242](https://github.com/blackbaud/skyux-sdk-builder/pull/242)
