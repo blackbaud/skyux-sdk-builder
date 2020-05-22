@@ -328,22 +328,6 @@ require('!style-loader!css-loader!sass-loader!@skyux/theme/css/sky.css');
     expect(source).toContain(expectedRequire);
   });
 
-  it('should add require statements for SKY UX Theme style sheet by default', () => {
-    const generator = mock.reRequire(GENERATOR_PATH);
-    const expectedRequire = `
-require('style-loader!@skyux/theme/css/sky.css');
-`;
-    const config = {
-      runtime: runtimeUtils.getDefaultRuntime(),
-      skyux: runtimeUtils.getDefaultSkyux()
-    };
-
-    config.skyux.app = undefined;
-
-    const source = generator.getSource(config);
-    expect(source).toContain(expectedRequire);
-  });
-
   it('should add require statements for style sheets', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
 
