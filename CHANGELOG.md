@@ -1,3 +1,7 @@
+# 3.18.0 (2020-05-22)
+
+- Added the `esModuleInterop` property to `tsconfig.json`. [#261](https://github.com/blackbaud/skyux-sdk-builder/pull/261) (Thanks [@gabe-bergstrom](https://github.com/gabe-bergstrom)!)
+
 # 4.0.0-rc.11 (2020-05-18)
 
 - Added a few enhancements to the `skyux build` command to reduce bundle sizes. [#258](https://github.com/blackbaud/skyux-sdk-builder/pull/258)
