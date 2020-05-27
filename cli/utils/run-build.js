@@ -31,7 +31,7 @@ function writeTSConfig(skyPagesConfig) {
 
   const enableIvy = !(skyPagesConfig.skyux.enableIvy === false);
 
-  const config = {
+  let config = {
     'compilerOptions': {
       'target': 'es5',
       'module': 'es2015',
@@ -75,7 +75,28 @@ function writeTSConfig(skyPagesConfig) {
     }
   };
 
+  config = applySpaTsConfig(config);
+
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'), config);
+}
+
+/**
+ * Applies supported properties from the SPA's tsconfig.json file to the build config.
+ * @param {*} config The tsconfig.json JSON contents.
+ */
+function applySpaTsConfig(config) {
+  const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
+  const compilerOptionsKeys = [
+    'esModuleInterop'
+  ];
+
+  compilerOptionsKeys.forEach(key => {
+    if (spaTsConfig.compilerOptions[key]) {
+      config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
+    }
+  });
+
+  return config;
 }
 
 function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
