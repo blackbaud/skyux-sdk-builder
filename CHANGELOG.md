@@ -1,3 +1,7 @@
+# 4.0.0-rc.13 (2020-05-27)
+
+- Added bug fixes and features from the `master` branch. [#266](https://github.com/blackbaud/skyux-sdk-builder/pull/266)
+
 # 3.18.1 (2020-05-27)
 
 - Fixed the `esModuleInterop` compiler option to be opt-in since it was causing build issues with previously supported `import * as` imports. To enable `esModuleInterop` for your project, add the property to your SPA's local `tsconfig.json` file. [#265](https://github.com/blackbaud/skyux-sdk-builder/pull/265)
