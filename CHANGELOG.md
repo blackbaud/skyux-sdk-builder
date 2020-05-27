@@ -1,3 +1,7 @@
+# 4.0.0-rc.12 (2020-05-27)
+
+- Added bug fixes and features from the `master` branch. [#263](https://github.com/blackbaud/skyux-sdk-builder/pull/263)
+
 # 3.18.0 (2020-05-22)
 
 - Added the `esModuleInterop` property to `tsconfig.json`. [#261](https://github.com/blackbaud/skyux-sdk-builder/pull/261) (Thanks [@gabe-bergstrom](https://github.com/gabe-bergstrom)!)
