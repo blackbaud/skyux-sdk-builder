@@ -1,3 +1,15 @@
+# 3.18.1 (2020-05-27)
+
+- Fixed the `esModuleInterop` compiler option to be opt-in since it was causing build issues with previously supported `import * as` imports. To enable `esModuleInterop` for your project, add the property to your SPA's local `tsconfig.json` file. [#265](https://github.com/blackbaud/skyux-sdk-builder/pull/265)
+
+```
+{
+  "compilerOptions": {
+    "esModuleInterop": true
+  }
+}
+```
+
 # 3.18.0 (2020-05-22)
 
 - Added the `esModuleInterop` property to `tsconfig.json`. [#261](https://github.com/blackbaud/skyux-sdk-builder/pull/261) (Thanks [@gabe-bergstrom](https://github.com/gabe-bergstrom)!)
