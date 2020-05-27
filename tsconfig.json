@@ -12,7 +12,6 @@
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "noResolve": false,
-    "esModuleInterop": true,
     "lib": [
       "dom",
       "es6"
