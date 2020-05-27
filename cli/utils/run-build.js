@@ -45,7 +45,6 @@ function writeTSConfig(skyPagesConfig) {
       'inlineSources': true,
       'declaration': true,
       'skipLibCheck': true,
-      'esModuleInterop': true,
       'lib': [
         'es2015',
         'dom'

@@ -1,3 +1,7 @@
+# 4.0.0-rc.14 (2020-05-27)
+
+- Fixed invalid merge from `master` branch.
+
 # 4.0.0-rc.13 (2020-05-27)
 
 - Added bug fixes and features from the `master` branch. [#266](https://github.com/blackbaud/skyux-sdk-builder/pull/266)
