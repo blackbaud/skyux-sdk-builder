@@ -5,8 +5,6 @@
 require('zone.js/dist/zone');
 require('zone.js/dist/zone-testing');
 
-require('reflect-metadata');
-
 const testing = require('@angular/core/testing');
 const browser = require('@angular/platform-browser-dynamic/testing');
 
