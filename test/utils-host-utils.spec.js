@@ -78,15 +78,15 @@ describe('host-utils', () => {
 
   it('should add externals, trim slash from host, and read name from package.json', () => {
 
-    const readJsonSync = fs.readJsonSync;
-    spyOn(fs, 'readJsonSync').and.callFake((filename, encoding) => {
-      if (filename.indexOf('package.json') > -1) {
-        return {
+    const readFileSync = fs.readFileSync;
+    spyOn(fs, 'readFileSync').and.callFake((filename, encoding) => {
+      if (filename.includes('package.json')) {
+        return JSON.stringify({
           name: 'my-name'
-        };
+        });
       }
 
-      return readJsonSync(filename, encoding);
+      return readFileSync(filename, encoding);
     });
 
     const externals = {

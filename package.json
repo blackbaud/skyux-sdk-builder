@@ -89,6 +89,7 @@
     "istanbul-reports": "2.2.7",
     "jasmine": "2.99.0",
     "jasmine-spec-reporter": "4.2.1",
+    "jsonc-parser": "2.2.1",
     "karma": "4.3.0",
     "karma-chrome-launcher": "3.1.0",
     "karma-coverage-istanbul-reporter": "2.1.0",

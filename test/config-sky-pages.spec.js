@@ -48,7 +48,7 @@ describe('config sky-pages', () => {
 
   it('should load the config files that exist in order', () => {
     const tempSpaReference = 'SPA_REFERENCE';
-    const readJsonSync = fs.readJsonSync;
+    const readFileSync = fs.readFileSync;
     const existsSync = fs.existsSync;
 
     spyOn(logger, 'info');
@@ -69,7 +69,7 @@ describe('config sky-pages', () => {
       return existsSync(filename);
     });
 
-    spyOn(fs, 'readJsonSync').and.callFake((filename, encoding) => {
+    spyOn(fs, 'readFileSync').and.callFake((filename, encoding) => {
 
       const isSpaDirectory = filename.includes(tempSpaReference);
       const isDefaultConfig = filename.includes('skyuxconfig.json');
@@ -99,7 +99,7 @@ describe('config sky-pages', () => {
           config.n = {
             toDelete: true
           }; // Testing merge override
-          config.arr = ['stringTwo'] // Testing array values not concatenated
+          config.arr = ['stringTwo']; // Testing array values not concatenated
 
         // Asking for builder's skyuxconfig.build.json
         } else if (!isSpaDirectory && isCommandConfig) {
@@ -130,11 +130,11 @@ describe('config sky-pages', () => {
           config.arr = ['stringOne', 'stringThree'];
         }
 
-        return config;
+        return JSON.stringify(config);
       }
 
       // Pass through normal behavior
-      return readJsonSync(filename, encoding);
+      return readFileSync(filename, encoding);
     });
 
     const lib = require('../config/sky-pages/sky-pages.config');
@@ -207,6 +207,39 @@ describe('config sky-pages', () => {
     expect(noAppProperty).toBe('/' + defaultName + '/');
     expect(noBaseProperty).toBe('/' + defaultName + '/');
     expect(hasBaseProperty).toBe(customBase);
+  });
+
+  it('should support config files with comments', () => {
+    const propertyName = 'commentSetting';
+    const propertyValue = 'actualValue';
+    const tempSpaReference = 'SPA_REFERENCE';
+    const readFileSync = fs.readFileSync;
+
+    spyOn(logger, 'info');
+    spyOn(process, 'cwd').and.returnValue(tempSpaReference);
+    spyOn(fs, 'existsSync').and.callFake(filename => {
+      return filename.includes('skyuxconfig.build.json');
+    });
+
+    spyOn(fs, 'readFileSync').and.callFake((filename, encoding) => {
+      if (filename.includes('skyuxconfig.build.json')) {
+        return `{
+          // "${propertyName}": "single",
+          "${propertyName}": "${propertyValue}"  // End of line comment
+          /*
+          "${propertyName}": "multi-line",
+          */
+        }`;
+      }
+
+      // Pass through normal behavior
+      return readFileSync(filename, encoding);
+    });
+
+    const lib = require('../config/sky-pages/sky-pages.config');
+    const config = lib.getSkyPagesConfig('build').skyux;
+
+    expect(config[propertyName]).toEqual(propertyValue);
   });
 
 });

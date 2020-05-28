@@ -2,6 +2,7 @@
 'use strict';
 
 const fs = require('fs-extra');
+const jsoncParser = require('jsonc-parser');
 const path = require('path');
 const merge = require('../../utils/merge');
 const logger = require('@blackbaud/skyux-logger');
@@ -19,13 +20,15 @@ function resolve(root, args) {
 }
 
 function readConfig(file) {
-  return fs.readJsonSync(file, 'utf8');
+  let content = fs.readFileSync(file, 'utf8');
+  content = jsoncParser.stripComments(content);
+  return JSON.parse(content);
 }
 
 module.exports = {
 
   /**
-   * Merge's configs in the following order:
+   * Merges configs in the following order:
    *   1. Builder's skyuxconfig.json
    *   2. Builder's skyuxconfig.{command}.json
    *   3. App's skyuxconfig.json
