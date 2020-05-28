@@ -19,7 +19,8 @@
     "types": [
       "core-js",
       "node",
-      "jasmine"
+      "jasmine",
+      "cypress"
     ],
     "baseUrl": ".",
     "paths": {
@@ -29,7 +30,8 @@
       ],
       ".skypageslocales/*": [
         ".skypageslocales/*"
-      ]
+      ],
+      "@angular/*": ["./node_modules/@angular/*"]
     }
   },
   "exclude": [

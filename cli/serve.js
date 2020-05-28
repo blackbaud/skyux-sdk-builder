@@ -82,7 +82,9 @@ function serve(argv, skyPagesConfig, webpack, WebpackDevServer) {
       }
     });
   }).catch(err => logger.error(err));
-
 }
 
-module.exports = serve;
+module.exports = {
+  serve,
+  getPort
+};

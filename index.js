@@ -34,7 +34,7 @@ module.exports = {
         require('./cli/build-public-library')(argv, getConfig(command), webpack);
         break;
       case 'e2e':
-        require('./cli/e2e')(command, argv, getConfig(command), webpack);
+        require('./cli/e2e')(command, argv, getConfig(command), webpack, WebpackDevServer);
         break;
       case 'serve':
         require('./cli/serve')(argv, getConfig(command), webpack, WebpackDevServer);

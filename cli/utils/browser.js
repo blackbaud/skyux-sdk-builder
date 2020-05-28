@@ -73,8 +73,7 @@ function browser(argv, skyPagesConfig, stats, port) {
       localUrl += queryStringBase;
 
       logger.info(`Launching Local URL: ${localUrl}`);
-      open(localUrl, {
-        app: argv.browser,
+      open(localUrl, { app: argv.browser,
         url: true
       });
       break;
@@ -92,6 +91,7 @@ function browser(argv, skyPagesConfig, stats, port) {
       logger.info(`Local URL: ${localUrl}`);
       break;
   }
+  return localUrl;
 }
 
 module.exports = browser;

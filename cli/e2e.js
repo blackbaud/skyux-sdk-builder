@@ -7,11 +7,14 @@ const path = require('path');
 const selenium = require('selenium-standalone');
 const protractorLauncher = require('protractor/built/launcher');
 const logger = require('@blackbaud/skyux-logger');
+const assetsProcessor = require('../lib/assets-processor');
+const localeAssetsProcessor = require('../lib/locale-assets-processor');
 
 const build = require('./utils/run-build');
 const server = require('./utils/server');
 const configResolver = require('./utils/config-resolver');
 const chromeDriverManager = require('./utils/chromedriver-manager');
+const getPort = require('./serve').getPort;
 
 let seleniumServer;
 let start;
@@ -80,7 +83,7 @@ function spawnSelenium(configPath) {
         });
       });
 
-    // Otherwise we need to prep protractor's selenium
+      // Otherwise we need to prep protractor's selenium
     } else {
       chromeDriverManager.update()
         .then(() => resolve())
@@ -111,12 +114,7 @@ function spawnBuild(argv, skyPagesConfig, webpack) {
     .then(stats => stats.toJson().chunks);
 }
 
-/**
- * Spawns the necessary commands for e2e.
- * Assumes build was ran.
- * @name e2e
- */
-function e2e(command, argv, skyPagesConfig, webpack) {
+function runProtractor(command, argv, skyPagesConfig, webpack) {
   start = new Date().getTime();
   process.on('SIGINT', killServers);
 
@@ -159,6 +157,60 @@ function e2e(command, argv, skyPagesConfig, webpack) {
       logger.error(err);
       killServers(1);
     });
+}
+
+function runCypressTest(command, argv, skyPagesConfig, webpack, WebpackDevServer) {
+  const webpackConfig = require('../config/webpack/cypress.webpack.config');
+  let config = webpackConfig.getWebpackConfig(argv, skyPagesConfig);
+
+  getPort(config, skyPagesConfig).then(port => {
+    const localUrl = `https://localhost:${port}`;
+
+    assetsProcessor.setSkyAssetsLoaderUrl(config, skyPagesConfig, localUrl);
+    localeAssetsProcessor.prepareLocaleFiles();
+
+    // Save our found or defined port
+    config.devServer.port = port;
+
+    /* istanbul ignore else */
+    if (config.devServer.inline) {
+      const inline = `webpack-dev-server/client?${localUrl}`;
+      Object.keys(config.entry).forEach((entry) => {
+        config.entry[entry].unshift(inline);
+      });
+    }
+
+    if (config.devServer.hot) {
+      const hot = `webpack/hot/only-dev-server`;
+      Object.keys(config.entry).forEach((entry) => {
+        config.entry[entry].unshift(hot);
+      });
+
+      // This is required in order to not have HMR requests routed to host.
+      config.output.publicPath = `${localUrl}${config.devServer.publicPath}`;
+      logger.info('Using hot module replacement.');
+    }
+
+    const compiler = webpack(config);
+    const server = new WebpackDevServer(compiler, config.devServer);
+    server.listen(config.devServer.port, 'localhost', (err) => {
+      if (err) {
+        logger.error(err);
+      }
+    });
+  }).catch(err => logger.error(err));
+}
+
+/**
+ * Spawns the necessary commands for e2e.
+ * Assumes build was ran.
+ * @name e2e
+ */
+function e2e(command, argv, skyPagesConfig, webpack, WebpackDevServer) {
+  if (argv._[1] === 'cypress') {
+    runCypressTest(command, argv, skyPagesConfig, webpack, WebpackDevServer);
+  } else
+    runProtractor(command, argv, skyPagesConfig, webpack);
 }
 
 module.exports = e2e;
