@@ -1,3 +1,7 @@
+# 3.18.2 (2020-05-28)
+
+- Adding ability to include comments in skyuxconfig json files.
+
 # 3.18.1 (2020-05-27)
 
 - Fixed the `esModuleInterop` compiler option to be opt-in since it was causing build issues with previously supported `import * as` imports. To enable `esModuleInterop` for your project, add the property to your SPA's local `tsconfig.json` file. [#265](https://github.com/blackbaud/skyux-sdk-builder/pull/265)
