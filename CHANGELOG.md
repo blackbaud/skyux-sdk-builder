@@ -1,3 +1,8 @@
+# 4.0.0-rc.15 (2020-06-01)
+
+- Upgraded dependencies. [#271](https://github.com/blackbaud/skyux-sdk-builder/pull/271)
+- Added support for `@blackbaud/skyux-lib-help@4.0.0-rc.0`. [#271](https://github.com/blackbaud/skyux-sdk-builder/pull/271)
+
 # 4.0.0-rc.14 (2020-05-27)
 
 - Fixed invalid merge from `master` branch.
