@@ -61,7 +61,7 @@
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.0",
     "@blackbaud/help-client": "2.1.0",
-    "@blackbaud/skyux-lib-help": "3.2.0",
+    "@blackbaud/skyux-lib-help": "3.3.0",
     "@blackbaud/skyux-logger": "1.1.2",
     "@ngtools/webpack": "7.3.9",
     "@pact-foundation/karma-pact": "2.2.0",
