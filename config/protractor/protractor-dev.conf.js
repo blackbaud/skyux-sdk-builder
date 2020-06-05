@@ -35,7 +35,7 @@ let config = {
       } else {
 
         const url = 'https://github.com/blackbaud/skyux-sdk-template';
-        const branch = 'rc-4.0.0';
+        const branch = 'master';
 
         console.log('Running command using full install.');
         common.rimrafPromise(common.tmp)
