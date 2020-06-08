@@ -1,4 +1,4 @@
-# 3.19.0 (2020-06-08)
+# 3.19.0 (2020-06-09)
 
 - Added support for `@blackbaud/skyux-lib-help@3.3.0`. [#274](https://github.com/blackbaud/skyux-sdk-builder/pull/274)
 
