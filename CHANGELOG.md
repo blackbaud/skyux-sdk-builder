@@ -1,3 +1,7 @@
+# 4.0.0-rc.16 (2020-06-08)
+
+- Added the `no-unused-variable` property to `tslint.json`. [#277](https://github.com/blackbaud/skyux-sdk-builder/pull/277)
+
 # 4.0.0-rc.15 (2020-06-01)
 
 - Upgraded dependencies. [#271](https://github.com/blackbaud/skyux-sdk-builder/pull/271)
