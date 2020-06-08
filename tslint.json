@@ -152,6 +152,7 @@
     "no-disabled-tests": {
       "severity": "warning"
     },
+    "no-unused-variable": true,
     "deprecation": {
       "severity": "warning"
     }
