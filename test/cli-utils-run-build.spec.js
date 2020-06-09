@@ -404,4 +404,46 @@ describe('cli utils run build', () => {
       done();
     }).catch(err => fail(err));
   });
+
+  it('should apply supported properties to `compilerOptions` from SPA\'s tsconfig.json', (done) => {
+
+    mock('../config/webpack/build-aot.webpack.config', {
+      getWebpackConfig: () => ({})
+    });
+
+    spyOn(mockFsExtra, 'readJsonSync').and.returnValue({
+      compilerOptions: {
+        esModuleInterop: true,
+        foo: 'bar'
+      }
+    });
+
+    const fsSpy = spyOn(mockFsExtra, 'writeJSONSync').and.callThrough();
+
+    const runBuild = mock.reRequire('../cli/utils/run-build');
+
+    runBuild({}, {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        compileMode: 'aot'
+      }
+    }, () => ({
+      run: (cb) => {
+        cb(
+          null,
+          {
+            toJson: () => ({
+              errors: [],
+              warnings: []
+            })
+          }
+        );
+      }
+    })).then(() => {
+      const tsConfig = fsSpy.calls.argsFor(0)[1];
+      expect(tsConfig.compilerOptions.esModuleInterop).toEqual(true);
+      expect(tsConfig.compilerOptions.foo).toBeUndefined();
+      done();
+    }).catch(err => fail(err));
+  });
 });
