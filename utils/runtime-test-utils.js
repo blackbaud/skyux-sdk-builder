@@ -1,7 +1,7 @@
 /*jslint node: true */
 'use strict';
 
-const merge = require('../utils/merge');
+const merge = require('./merge');
 
 module.exports = {
   getDefault: function (runtime, skyux) {
@@ -38,10 +38,10 @@ module.exports = {
         url: ''
       },
       mode: '',
-      params: [
-        'envid',
-        'svcid'
-      ]
+      params: {
+        envid: true,
+        svcid: true
+      }
     }, skyux);
   }
 };

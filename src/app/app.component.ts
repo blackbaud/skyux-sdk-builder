@@ -116,15 +116,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {
     /* istanbul ignore else */
     if (themeSvc) {
-      const themingConfig = config.skyux && config.skyux.app && config.skyux.app.theming;
-      const themeName = (themingConfig && themingConfig.theme) || 'default';
-
-      const theme = SkyTheme.presets[themeName];
+      const themeSettings = this.getInitialThemeSettings();
 
       this.themeSvc.init(
         document.body,
         renderer,
-        new SkyThemeSettings(theme, SkyThemeMode.presets.light)
+        themeSettings
       );
     }
 
@@ -324,5 +321,38 @@ export class AppComponent implements OnInit, OnDestroy {
         this.helpInitService.load(helpConfig);
       }
     }
+  }
+
+  private getInitialThemeSettings(): SkyThemeSettings {
+    return new SkyThemeSettings(
+      SkyTheme.presets[this.getInitialThemeName()],
+      SkyThemeMode.presets.light
+    );
+  }
+
+  private getInitialThemeName(): 'default' | 'modern' {
+    const appConfig = this.config.skyux.app;
+    const themingConfig = appConfig && appConfig.theming;
+
+    if (themingConfig) {
+      const svcId = this.config.runtime.params.get('svcid');
+
+      if (svcId) {
+        const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+        const svcIdMap = skyuxHost && skyuxHost.theming && skyuxHost.theming.serviceIdMap;
+
+        if (svcIdMap) {
+          const mappedTheme = svcIdMap[svcId];
+
+          if (mappedTheme && themingConfig.supportedThemes.indexOf(mappedTheme) >= 0) {
+            return mappedTheme;
+          }
+        }
+      }
+
+      return themingConfig.theme;
+    }
+
+    return 'default';
   }
 }

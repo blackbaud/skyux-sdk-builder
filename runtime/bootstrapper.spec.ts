@@ -32,7 +32,7 @@ describe('bootstrapper', () => {
 
       SkyAppBootstrapper.config = {
         auth: true,
-        params: []
+        params: {}
       };
 
       SkyAppBootstrapper.processBootstrapConfig().then(() => {
@@ -73,7 +73,7 @@ describe('bootstrapper', () => {
 
   it('should immediately resolve if SkyAppConfig.config.skyux.auth is not set', (done) => {
     SkyAppBootstrapper.config = {
-      params: []
+      params: {}
     };
 
     SkyAppBootstrapper.processBootstrapConfig().then(done);
@@ -85,7 +85,7 @@ describe('bootstrapper', () => {
 
     SkyAppBootstrapper.config = {
       auth: true,
-      params: []
+      params: {}
     };
 
     SkyAppBootstrapper.processBootstrapConfig().then(() => {

@@ -19,16 +19,10 @@ function getQueryStringFromArgv(argv, skyPagesConfig) {
 
   const configParams = skyPagesConfig.skyux.params;
 
-  let params;
-
-  if (Array.isArray(configParams)) {
-    params = configParams;
-  } else {
-    // Get the params that have truthy values, since false/undefined indicates
-    // the parameter should not be added.
-    params = Object.keys(configParams)
-      .filter(configParam => configParams[configParam]);
-  }
+  // Get the params that have truthy values, since false/undefined indicates
+  // the parameter should not be added.
+  const params = Object.keys(configParams)
+    .filter(configParam => configParams[configParam]);
 
   let found = [];
   params.forEach(param => {
@@ -80,14 +74,16 @@ function browser(argv, skyPagesConfig, stats, port) {
 
       logger.info(`Launching Local URL: ${localUrl}`);
       open(localUrl, {
-        app: argv.browser
+        app: argv.browser,
+        url: true
       });
       break;
 
     case 'host':
       logger.info(`Launching Host URL: ${hostUrl}`);
       open(hostUrl, {
-        app: argv.browser
+        app: argv.browser,
+        url: true
       });
       break;
 
