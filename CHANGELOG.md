@@ -2,9 +2,9 @@
 
 ### New features
 
-- Added support for `@angular/core@9.0.1`. (We will add support for the Ivy compiler at a later date.) [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `@angular/core@9`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default. To disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
-- Added logic to initialize a SPA with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
+- Added logic to initialize SPAs with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
 - Updated the `skyux build-public-library` command to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
 - Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
 - Added the `no-unused-variable` property to `tslint.json`. [#277](https://github.com/blackbaud/skyux-sdk-builder/pull/277)
@@ -65,17 +65,17 @@
 
 # 4.0.0-rc.11 (2020-05-18)
 
-- Added a few enhancements to the `skyux build` command to reduce bundle sizes. [#258](https://github.com/blackbaud/skyux-sdk-builder/pull/258)
+- Updated the `skyux build` command to reduce bundle sizes. [#258](https://github.com/blackbaud/skyux-sdk-builder/pull/258)
 
 # 4.0.0-rc.10 (2020-05-15)
 
-- Added logic to initialize a SPA with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
+- Added logic to initialize SPAs with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
 - Upgraded the package dependencies. [#257](https://github.com/blackbaud/skyux-sdk-builder/pull/257)
 
 # 4.0.0-rc.9 (2020-05-11)
 
-- Added support for `@blackbaud/help-client@3.0.0-rc.0`. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
-- Updated the development and production dependencies. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+- Added support for `@blackbaud/help-client@3.0.0-rc.0`. [#254](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+- Updated the development and production dependencies. [#254](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
 
 # 4.0.0-rc.8 (2020-05-07)
 
