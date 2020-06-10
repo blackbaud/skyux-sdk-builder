@@ -3,7 +3,7 @@
 ### New features
 
 - Added support for `@angular/core@9.0.1`. (We will add support for the Ivy compiler at a later date.) [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
-- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default; if you wish to disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default. To disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
 - Added logic to initialize a SPA with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
 - Updated the `skyux build-public-library` command to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
 - Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
@@ -132,7 +132,7 @@
 
 ### New features
 
-- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default; if you wish to disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default. To disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
 - Added support for `@skyux/config@4.0.0-rc.1`. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
 
 # 3.15.1 (2020-02-20)
