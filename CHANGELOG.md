@@ -37,7 +37,7 @@
 
 # 4.0.0-rc.14 (2020-05-27)
 
-- Fixed invalid merge from `master` branch.
+- Fixed an invalid merge from `master` branch.
 
 # 4.0.0-rc.13 (2020-05-27)
 
@@ -711,7 +711,7 @@ To opt into this new behavior, simply add the following to your `skyuxconfig.jso
 
 # 1.0.0-rc.2 (2017-06-21)
 
-- Fixed invalid glob pattern (and unit tests) for ignored auto-generated components.
+- Fixed an invalid glob pattern (and unit tests) for ignored auto-generated components.
 
 # 1.0.0-rc.1 (2017-06-20)
 
