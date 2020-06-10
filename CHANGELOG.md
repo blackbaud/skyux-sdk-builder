@@ -19,7 +19,7 @@
 - Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
 - Set the Angular Compiler to run `fullTemplateTypeCheck` to ensure that component HTML templates for SPAs and libraries reference `public` properties in component classes. This change may cause builds to fail if you have bindings to invalid properties. For more information about template type checking, see [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
-- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Consumers should import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
 - Changed the name of the entry point file for building SKY UX libraries from `./src/app/public/index.ts` to `./src/app/public/public_api.ts`. This follows Angular guidance against `index.ts` "barrel" files in libraries and mimics Angular CLI requirements. [#248](https://github.com/blackbaud/skyux-sdk-builder/pull/248)
 
 # 3.19.0 (2020-06-09)
@@ -153,7 +153,7 @@
 
 ### Breaking changes
 
-- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Consumers should import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
 
 # 4.0.0-rc.0 (2020-02-13)
 
