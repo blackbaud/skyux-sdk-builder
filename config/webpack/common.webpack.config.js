@@ -8,6 +8,7 @@ const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const { OutputKeepAlivePlugin } = require('../../plugin/output-keep-alive');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
 
@@ -98,7 +99,9 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
 
     new OutputKeepAlivePlugin({
       enabled: argv['output-keep-alive']
-    })
+    }),
+
+    new BundleAnalyzerPlugin()
   ];
 
   // Supporting a custom logging type of none
