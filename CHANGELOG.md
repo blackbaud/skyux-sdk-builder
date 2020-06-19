@@ -1,3 +1,7 @@
+# 4.1.0 (2020-06-19)
+
+- Moved the `SkyThemeService` provider from the application's root component to the application module. This enables components created outside of the root component's hierarchy, such as the modal component, to inject the application's `SkyThemeService` instance. [#282](https://github.com/blackbaud/skyux-sdk-builder/pull/282)
+
 # 4.0.0 (2020-06-10)
 
 ### New features
