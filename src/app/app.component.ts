@@ -93,10 +93,7 @@ function fixUpNav(nav: any, baseUrl: string, config: SkyAppConfig) {
 
 @Component({
   selector: 'sky-pages-app',
-  templateUrl: './app.component.html',
-  providers: [
-    SkyThemeService
-  ]
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
   public isReady = false;
