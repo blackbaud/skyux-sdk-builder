@@ -5,11 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 
-// This will fix a mapping bug for the latest version of rxjs-compat.
-// See: https://github.com/ReactiveX/rxjs/issues/4070#issuecomment-429191227
-const rxPaths = require('rxjs/_esm5/path-mapping')();
-rxPaths['rxjs/internal/Observable'] = 'rxjs/_esm5/internal/Observable';
-
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
 }
@@ -70,8 +65,6 @@ module.exports = {
     );
 
     setSpaAlias(alias, 'src/main', path.join('src', 'main.ts'));
-
-    Object.assign(alias, rxPaths);
 
     return alias;
   }

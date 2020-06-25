@@ -104,13 +104,10 @@ describe('config webpack build-aot', () => {
                     test: {
                       source: () => {}
                     },
-                    'test1.js': {
+                    'app.js': {
                       source: () => {}
                     },
-                    'test2.js': {
-                      source: () => {}
-                    },
-                    'test3.js': {
+                    'vendor.js': {
                       source: () => {}
                     }
                   }
@@ -121,24 +118,12 @@ describe('config webpack build-aot', () => {
                   toJson: () => ({
                     chunks: [
                       {
-                        id: 1,
-                        entry: false,
-                        names: ['test1'],
-                        parents: ['3'],
-                        files: ['test1.js']
+                        id: 'app',
+                        files: ['app.js', 'app.js.map']
                       },
                       {
-                        id: 2,
-                        entry: false,
-                        names: ['test2'],
-                        parents: ['3'],
-                        files: ['test2.js']
-                      },
-                      {
-                        id: 3,
-                        entry: true,
-                        names: ['test3'],
-                        files: ['test3.js']
+                        id: 'vendor',
+                        files: ['vendor.js', 'vendor.js.map']
                       }
                     ]
                   })
@@ -153,9 +138,8 @@ describe('config webpack build-aot', () => {
     expect(mockFsExtra.writeFileSync).toHaveBeenCalled();
 
     // Host Utils reverses the scripts.
-    expect(json[0].name).toEqual('test2.js');
-    expect(json[1].name).toEqual('test1.js');
-    expect(json[2].name).toEqual('test3.js');
+    expect(json[0].name).toEqual('vendor.js');
+    expect(json[1].name).toEqual('app.js');
   });
 
   it('should add the SKY_PAGES_READY_X variable to each entry, replacing periods', () => {

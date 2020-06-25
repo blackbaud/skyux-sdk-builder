@@ -76,14 +76,13 @@ function getWebpackConfig(skyPagesConfig, argv) {
         },
         {
           enforce: 'pre',
-          test: /\.js$/,
-          loader: 'source-map-loader',
+          loader: outPath('loader', 'sky-processor', 'preload'),
           exclude: excludes
         },
         {
           enforce: 'pre',
-          loader: outPath('loader', 'sky-processor', 'preload'),
-          exclude: excludes
+          test: /skyux-i18n-testing\.js$/,
+          loader: outPath('loader', 'sky-fix-require-context')
         },
 
         tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
@@ -169,9 +168,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
           options: {
             esModules: true
           }
-        },
-        {
-          loader: 'source-map-inline-loader'
         }
       ],
       include: srcPath,

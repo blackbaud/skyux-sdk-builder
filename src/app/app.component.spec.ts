@@ -62,7 +62,6 @@ import {
 
 describe('AppComponent', () => {
   let mockThemeSvc: any;
-  let mockSkyuxHost: any;
   let mockWindow: any;
   let comp: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -76,7 +75,7 @@ describe('AppComponent', () => {
   let spyOmnibarDestroy: any;
 
   class MockHelpInitService {
-    public load() { }
+    public load(config: any) { }
   }
 
   class MockWindow {
@@ -84,7 +83,7 @@ describe('AppComponent', () => {
       location: {
         href: ''
       },
-      SKYUX_HOST: mockSkyuxHost,
+      SKYUX_HOST: undefined as any,
       scroll: () => scrollCalled = true,
       addEventListener: () => {}
     };
@@ -96,9 +95,11 @@ describe('AppComponent', () => {
     config: any,
     includeSearchProvider?: boolean,
     styleLoadPromise?: Promise<any>,
-    omnibarProvider?: any
+    omnibarProvider?: any,
+    mockSkyuxHost?: any
   ) {
     mockWindow = new MockWindow();
+    mockWindow.nativeWindow.SKYUX_HOST = mockSkyuxHost;
 
     mockThemeSvc = jasmine.createSpyObj(
       'themeSvc',
@@ -226,6 +227,21 @@ describe('AppComponent', () => {
         );
       }
     });
+  }
+
+  function validateThemeInit(expectedTheme: SkyTheme, expectedMode: SkyThemeMode): void {
+    const renderer2 = fixture.componentRef.injector.get<Renderer2>(
+      Renderer2 as Type<Renderer2>
+    );
+
+    expect(mockThemeSvc.init).toHaveBeenCalledWith(
+      document.body,
+      renderer2,
+      new SkyThemeSettings(
+        expectedTheme,
+        expectedMode
+      )
+    );
   }
 
   // Reset skyAppConfig and scrollCalled
@@ -379,7 +395,7 @@ describe('AppComponent', () => {
     })
   );
 
-  it('should call omnibar destroy if it was loaded', () => {
+  it('should call omnibar destroy if it was loaded', async(() => {
     const spyOmnibarLoad = spyOn(BBOmnibar, 'load');
 
     skyAppConfig.skyux.omnibar = {};
@@ -390,7 +406,7 @@ describe('AppComponent', () => {
       expect(spyOmnibarLoad).toHaveBeenCalled();
       expect(spyOmnibarDestroy).toHaveBeenCalled();
     });
-  });
+  }));
 
   it('should not load the omnibar or help widget if the addin param is 1', () => {
     const spyOmnibar = spyOn(BBOmnibar, 'load');
@@ -867,17 +883,9 @@ describe('AppComponent', () => {
     setup(skyAppConfig).then(() => {
       fixture.detectChanges();
 
-      const renderer2 = fixture.componentRef.injector.get<Renderer2>(
-        Renderer2 as Type<Renderer2>
-      );
-
-      expect(mockThemeSvc.init).toHaveBeenCalledWith(
-        document.body,
-        renderer2,
-        new SkyThemeSettings(
-          SkyTheme.presets.modern,
-          SkyThemeMode.presets.light
-        )
+      validateThemeInit(
+        SkyTheme.presets.modern,
+        SkyThemeMode.presets.light
       );
     });
   }));
@@ -888,17 +896,103 @@ describe('AppComponent', () => {
       setup(skyAppConfig).then(() => {
         fixture.detectChanges();
 
-        const renderer = fixture.componentRef.injector.get<Renderer2>(
-          Renderer2 as Type<Renderer2>
+        validateThemeInit(
+          SkyTheme.presets.default,
+          SkyThemeMode.presets.light
         );
+      });
+    })
+  );
 
-        expect(mockThemeSvc.init).toHaveBeenCalledWith(
-          document.body,
-          renderer,
-          new SkyThemeSettings(
-            SkyTheme.presets.default,
-            SkyThemeMode.presets.light
-          )
+  it(
+    'should initialize the theme service with the theme mapped to the current service ID',
+    async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default',
+            'modern'
+          ],
+          theme: 'default'
+        }
+      };
+
+      const mockSkyuxHost = {
+        theming: {
+          serviceIdMap: {
+            'foo': 'modern'
+          }
+        }
+      };
+
+      skyAppConfig.runtime.params.get = (key: string) => key === 'svcid' ? 'foo' : undefined;
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        validateThemeInit(
+          SkyTheme.presets.modern,
+          SkyThemeMode.presets.light
+        );
+      });
+    })
+  );
+
+  it(
+    'should initialize the theme service with theme specified in config when not mapped ' +
+    'to a service ID',
+    async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default',
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      const mockSkyuxHost = {
+        theming: {
+          serviceIdMap: { }
+        }
+      };
+
+      skyAppConfig.runtime.params.get = (key: string) => key === 'svcid' ? 'bar' : undefined;
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        validateThemeInit(
+          SkyTheme.presets.modern,
+          SkyThemeMode.presets.light
+        );
+      });
+    })
+  );
+
+  it(
+    'should initialize the theme service with theme specified in config when a service ID ' +
+    'is specified but no service ID map is present',
+    async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default',
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      skyAppConfig.runtime.params.get = (key: string) => key === 'svcid' ? 'bar' : undefined;
+
+      setup(skyAppConfig).then(() => {
+        fixture.detectChanges();
+
+        validateThemeInit(
+          SkyTheme.presets.modern,
+          SkyThemeMode.presets.light
         );
       });
     })
