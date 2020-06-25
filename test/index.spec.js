@@ -47,10 +47,6 @@ describe('@skyux-sdk/builder', () => {
         cmd: 'test',
         lib: 'test'
       },
-      'pact': {
-        cmd: 'pact',
-        lib: 'pact'
-      },
       'watch': {
         cmd: 'watch',
         lib: 'watch'

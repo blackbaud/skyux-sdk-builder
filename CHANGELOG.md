@@ -1,3 +1,52 @@
+# 4.1.0 (2020-06-19)
+
+- Moved the `SkyThemeService` provider from the application's root component to the application module. This enables components created outside of the root component's hierarchy, such as the modal component, to inject the application's `SkyThemeService` instance. [#282](https://github.com/blackbaud/skyux-sdk-builder/pull/282)
+
+# 4.0.0 (2020-06-10)
+
+### New features
+
+- Added support for `@angular/core@9`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default. To disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+- Added logic to initialize SPAs with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
+- Updated the `skyux build-public-library` command to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
+- Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+- Added the `no-unused-variable` property to `tslint.json`. [#277](https://github.com/blackbaud/skyux-sdk-builder/pull/277)
+- Moved `core-js` and `@types/core-js` from `peerDependencies` to `dependencies` to emulate the Angular CLI's decision to manage those packages internally. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+
+### Breaking changes
+
+- Added support for `jasmine@3.5.0` (`3.5.0`), which may cause failures in some asynchronous tests that previously passed if you do not denote them as `async` in the `it` block. Also, "focused" tests (`fit` and `fdescribe`) will now fail builds. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+- Dropped support for the `/deep/` SCSS modifier. Use `::ng-deep` or `:host-context` instead. [#157](https://github.com/blackbaud/skyux-sdk-builder/pull/157)
+- Dropped support for `@angular/http`. Use `@angular/common/http` instead. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `SkyAuthHttp` (found in `@skyux/http`). We recommend using Angular's `HttpClient` (found in `@angular/common/http`) and importing the `SkyAuthHttpClientModule` (found in `@skyux/http`) to implement features such as Blackbaud authentication. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Set the Angular Compiler to run `fullTemplateTypeCheck` to ensure that component HTML templates for SPAs and libraries reference `public` properties in component classes. This change may cause builds to fail if you have bindings to invalid properties. For more information about template type checking, see [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+- Changed the name of the entry point file for building SKY UX libraries from `./src/app/public/index.ts` to `./src/app/public/public_api.ts`. This follows Angular guidance against `index.ts` "barrel" files in libraries and mimics Angular CLI requirements. [#248](https://github.com/blackbaud/skyux-sdk-builder/pull/248)
+
+# 3.19.0 (2020-06-09)
+
+- Added support for `@blackbaud/skyux-lib-help@3.3.0`. [#274](https://github.com/blackbaud/skyux-sdk-builder/pull/274)
+
+# 4.0.0-rc.16 (2020-06-08)
+
+- Added the `no-unused-variable` property to `tslint.json`. [#277](https://github.com/blackbaud/skyux-sdk-builder/pull/277)
+
+# 4.0.0-rc.15 (2020-06-01)
+
+- Upgraded dependencies. [#271](https://github.com/blackbaud/skyux-sdk-builder/pull/271)
+- Added support for `@blackbaud/skyux-lib-help@4.0.0-rc.0`. [#271](https://github.com/blackbaud/skyux-sdk-builder/pull/271)
+
+# 4.0.0-rc.14 (2020-05-27)
+
+- Fixed an invalid merge from `master` branch.
+
+# 4.0.0-rc.13 (2020-05-27)
+
+- Added bug fixes and features from the `master` branch. [#266](https://github.com/blackbaud/skyux-sdk-builder/pull/266)
+
 # 3.18.1 (2020-05-27)
 
 - Fixed the `esModuleInterop` compiler option to be opt-in since it was causing build issues with previously supported `import * as` imports. To enable `esModuleInterop` for your project, add the property to your SPA's local `tsconfig.json` file. [#265](https://github.com/blackbaud/skyux-sdk-builder/pull/265)
@@ -10,13 +59,56 @@
 }
 ```
 
+# 4.0.0-rc.12 (2020-05-27)
+
+- Added bug fixes and features from the `master` branch. [#263](https://github.com/blackbaud/skyux-sdk-builder/pull/263)
+
 # 3.18.0 (2020-05-22)
 
 - Added the `esModuleInterop` property to `tsconfig.json`. [#261](https://github.com/blackbaud/skyux-sdk-builder/pull/261) (Thanks [@gabe-bergstrom](https://github.com/gabe-bergstrom)!)
 
+# 4.0.0-rc.11 (2020-05-18)
+
+- Updated the `skyux build` command to reduce bundle sizes. [#258](https://github.com/blackbaud/skyux-sdk-builder/pull/258)
+
+# 4.0.0-rc.10 (2020-05-15)
+
+- Added logic to initialize SPAs with the theme associated with the current service ID. [#255](https://github.com/blackbaud/skyux-sdk-builder/pull/255)
+- Upgraded the package dependencies. [#257](https://github.com/blackbaud/skyux-sdk-builder/pull/257)
+
+# 4.0.0-rc.9 (2020-05-11)
+
+- Added support for `@blackbaud/help-client@3.0.0-rc.0`. [#254](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+- Updated the development and production dependencies. [#254](https://github.com/blackbaud/skyux-sdk-builder/pull/254)
+
+# 4.0.0-rc.8 (2020-05-07)
+
+- Updated the development and production dependencies. [#253](https://github.com/blackbaud/skyux-sdk-builder/pull/253)
+
+# 4.0.0-rc.7 (2020-04-28)
+
+## Breaking changes
+
+- Changed the name of the entry point file for building SKY UX libraries from `./src/app/public/index.ts` to `./src/app/public/public_api.ts`. This follows Angular guidance against `index.ts` "barrel" files in libraries and mimics Angular CLI requirements. [#248](https://github.com/blackbaud/skyux-sdk-builder/pull/248)
+
+# 4.0.0-rc.6 (2020-04-24)
+
+- Added bug fixes and features from the `master` branch. [#244](https://github.com/blackbaud/skyux-sdk-builder/pull/244)
+
 # 3.17.0 (2020-04-22)
 
 - Added theming support. [#242](https://github.com/blackbaud/skyux-sdk-builder/pull/242)
+
+# 4.0.0-rc.5 (2020-04-08)
+
+### New features
+
+- Added support for `html-webpack-plugin@4.0.4`. [#238](https://github.com/blackbaud/skyux-sdk-builder/pull/238)
+- Added support for `jasmine-spec-reporter@5.0.1`. [#238](https://github.com/blackbaud/skyux-sdk-builder/pull/238)
+
+# 4.0.0-rc.4 (2020-03-31)
+
+- Added bug fixes and features from the `master` branch. [#236](https://github.com/blackbaud/skyux-sdk-builder/pull/236)
 
 # 3.16.2 (2020-03-23)
 
@@ -30,13 +122,62 @@
 
 - Set the `viewportMarginTop` property on `SkyViewkeeperHostOptions` when the omnibar is enabled. [#227](https://github.com/blackbaud/skyux-sdk-builder/pull/227)
 
+# 4.0.0-rc.3 (2020-02-26)
+
+### New features
+
+- Upgraded the Angular packages and merged the latest updates from the `master` branch. [#222](https://github.com/blackbaud/skyux-sdk-builder/pull/222)
+
 # 3.15.2 (2020-02-25)
 
 - Updated the Webpack configuration to make `skyux serve` and `skyux test` work with IE 11. [#221](https://github.com/blackbaud/skyux-sdk-builder/pull/221)
 
+# 4.0.0-rc.2 (2020-02-21)
+
+### New features
+
+- Added support for the [Angular Ivy Compiler](https://angular.io/guide/ivy). Ivy is enabled by default. To disable Ivy during `skyux build`, set `enableIvy` to `false` in your project's `skyuxconfig.json` file. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+- Added support for `@skyux/config@4.0.0-rc.1`. [#218](https://github.com/blackbaud/skyux-sdk-builder/pull/218)
+
 # 3.15.1 (2020-02-20)
 
+### Bug fixes
+
 - Updated the Karma configuration to correctly proxy files from `~/assets` during `skyux test` and `skyux watch`. [#214](https://github.com/blackbaud/skyux-sdk-builder/pull/214)
+
+# 4.0.0-rc.1 (2020-02-18)
+
+### New features
+
+- Added support for `@skyux/config@4.0.0-rc.0`. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
+### Bug fixes
+
+- Fixed the compiler to handle CSS `@import` statements properly. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
+### Breaking changes
+
+- Removed the `SkyAppConfig` export from the `@skyux-sdk/builder/runtime` directory. Import it from `@skyux/config` instead. [#212](https://github.com/blackbaud/skyux-sdk-builder/pull/212)
+
+# 4.0.0-rc.0 (2020-02-13)
+
+### New features
+
+- Added support for `@angular/core@9.0.1`. (We will add support for the Ivy compiler at a later date.) [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `typescript@3.6.4`. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `jasmine@3.5.0` and `karma@4.4.1`. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
+- Updated the `skyux build-public-library` command to transpile component libraries to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#201](https://github.com/blackbaud/skyux-sdk-builder/pull/201)
+- Moved `core-js` and `@types/core-js` from `peerDependencies` to `dependencies` to emulate the Angular CLI's decision to manage those packages internally. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+
+### Breaking changes
+
+- Set the Angular Compiler to run `fullTemplateTypeCheck` to ensure that component HTML templates for SPAs and libraries reference `public` properties in component classes. This change may cause builds to fail if you have bindings to invalid properties. For more information about template type checking, see [Angular's documentation](https://angular.io/guide/angular-compiler-options#fulltemplatetypecheck). [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for the `/deep/` SCSS modifier. Use `::ng-deep` or `:host-context` instead. [#157](https://github.com/blackbaud/skyux-sdk-builder/pull/157)
+- Dropped support for `@angular/http`. Use `@angular/common/http` instead. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `SkyAuthHttp` (found in `@skyux/http`). We recommend using Angular's `HttpClient` (found in `@angular/common/http`) and importing the `SkyAuthHttpClientModule` (found in `@skyux/http`) to implement features such as Blackbaud authentication. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Dropped support for `rxjs-compat`. If you still wish to support `rxjs@<6`, install `rxjs-compat` as a development dependency of your SPA or library. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Removed the `SkyAppRuntimeModule` from Builder's `runtime` directory. You can directly import the modules that it exports (`SkyAppLinkModule` and `SkyI18nModule`) as needed. [#181](https://github.com/blackbaud/skyux-sdk-builder/pull/181)
+- Added support for `jasmine@3.5.0` (`3.5.0`), which may cause failures in some asynchronous tests that previously passed if you do not denote them as `async` in the `it` block. Also, "focused" tests (`fit` and `fdescribe`) will now fail builds. [#152](https://github.com/blackbaud/skyux-sdk-builder/pull/152)
 
 # 3.15.0 (2020-02-12)
 
@@ -574,7 +715,7 @@ To opt into this new behavior, simply add the following to your `skyuxconfig.jso
 
 # 1.0.0-rc.2 (2017-06-21)
 
-- Fixed invalid glob pattern (and unit tests) for ignored auto-generated components.
+- Fixed an invalid glob pattern (and unit tests) for ignored auto-generated components.
 
 # 1.0.0-rc.1 (2017-06-20)
 

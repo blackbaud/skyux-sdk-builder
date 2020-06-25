@@ -22,7 +22,7 @@ describe('host-utils', () => {
   let utils;
   beforeEach(() => {
     mock('html-webpack-plugin/lib/chunksorter', {
-      dependency: (chunks) => chunks
+      manual: (chunks) => chunks
     });
     utils = mock.reRequire('../utils/host-utils');
   });
