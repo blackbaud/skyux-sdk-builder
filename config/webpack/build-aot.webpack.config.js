@@ -18,13 +18,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let commonConfig = common.getWebpackConfig(skyPagesConfig, argv);
   commonConfig.entry = null;
 
-  // Allow source map generation if specifically enabled through the command-line
-  let devtool = false;
-  let sourceMap = false;
-  if (argv['source-maps']) {
-    devtool = 'hidden-source-map';
-    sourceMap = true;
-  }
+  // Enable source map generation
+  let devtool = 'hidden-source-map';
+  let sourceMap = true;
 
   // Since the preloader is executed against the file system during an AoT build,
   // we need to remove it from the webpack config, otherwise it will get executed twice.
