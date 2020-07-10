@@ -1,6 +1,6 @@
 # 4.1.1 (2020-07-10)
 
-- Updated `chromedriver-version-matcher` dependency. [#293](https://github.com/blackbaud/skyux-sdk-builder/pull/293)
+- Updated the `chromedriver-version-matcher` dependency. [#293](https://github.com/blackbaud/skyux-sdk-builder/pull/293)
 
 # 4.1.0 (2020-06-19)
 
