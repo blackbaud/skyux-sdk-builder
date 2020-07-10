@@ -63,7 +63,7 @@
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.1.0",
-    "chromedriver-version-matcher": "^1.1.0",
+    "chromedriver-version-matcher": "^1.1.1",
     "core-js": "3.6.5",
     "cors": "2.8.5",
     "cross-spawn": "7.0.3",
