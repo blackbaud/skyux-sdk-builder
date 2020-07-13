@@ -1,3 +1,7 @@
+# 4.2.0 (2020-07-13)
+
+- Added support for `rxjs@^6.5.4`. [#296](https://github.com/blackbaud/skyux-sdk-builder/pull/296)
+
 # 4.1.1 (2020-07-10)
 
 - Updated the `chromedriver-version-matcher` dependency. [#293](https://github.com/blackbaud/skyux-sdk-builder/pull/293)
