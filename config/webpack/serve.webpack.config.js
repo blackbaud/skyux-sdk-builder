@@ -3,7 +3,6 @@
 
 const path = require('path');
 const webpackMerge = require('webpack-merge');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
@@ -56,7 +55,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
 
     module: {
       rules: [
-        tsLoaderUtil.getRule(),
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
         // https://github.com/blackbaud/skyux-sdk-builder/issues/220
         // Limited to known node_module packages that do not target ES5.
         {
@@ -99,8 +98,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
         context: __dirname,
         debug: true
       }),
-      new HotModuleReplacementPlugin(),
-      new ForkTsCheckerWebpackPlugin()
+      new HotModuleReplacementPlugin()
     ]
   });
 }
