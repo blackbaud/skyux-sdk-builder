@@ -21,12 +21,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
 
     module: {
       rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            tsLoaderUtil.getRule('build')
-          ]
-        }
+        tsLoaderUtil.getRule()
       ]
     },
     plugins: [

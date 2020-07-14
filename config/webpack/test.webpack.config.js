@@ -86,7 +86,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-fix-require-context')
         },
 
-        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
+        tsLoaderUtil.getRule(),
 
         {
           test: /\.s?css$/,
