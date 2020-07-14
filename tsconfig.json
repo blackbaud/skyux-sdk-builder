@@ -7,7 +7,6 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "importHelpers": true,
-    "importsNotUsedAsValues": "preserve",
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "noUnusedLocals": true,

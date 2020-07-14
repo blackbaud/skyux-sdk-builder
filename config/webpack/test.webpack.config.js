@@ -5,7 +5,9 @@ const path = require('path');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
 const tsLoaderUtil = require('./ts-loader-rule');
@@ -153,7 +155,21 @@ function getWebpackConfig(skyPagesConfig, argv) {
         {}
       ),
 
-      new ForkTsCheckerWebpackPlugin()
+      new ForkTsCheckerWebpackPlugin(),
+
+      /**
+       * Suppressing the "export not found" warning produced when `transpileOnly` is set to `true`.
+       * When TypeScript doesn't do a full type check, it does not have enough information to
+       * determine whether an imported name is a type or not, so when the name is then exported,
+       * TypeScript has no choice but to emit the export.
+       * See: https://github.com/TypeStrong/ts-loader#transpileonly
+       * Using a plugin to suppress the warning since `stats.warningsFilter` is not recognized
+       * by `karma-webpack`.
+       * See: https://www.npmjs.com/package/webpack-filter-warnings-plugin#why-not-use-the-built-in-statswarningsfilter-option
+       */
+      new FilterWarningsPlugin({
+        exclude: /export .* was not found in/
+      })
     ],
 
     /**
@@ -167,19 +183,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
      */
     node: {
       process: false
-    },
-
-    /**
-     * Suppressing the "export not found" warning produced by `ForkTsCheckerWebpackPlugin`.
-     * When TypeScript doesn't do a full type check, it does not have enough information to
-     * determine whether an imported name is a type or not, so when the name is then exported,
-     * TypeScript has no choice but to emit the export.
-     * See: https://github.com/TypeStrong/ts-loader#transpileonly
-     */
-    stats: {
-      warningsFilter: [
-        /export .* was not found in/
-      ]
     }
   };
 
