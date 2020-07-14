@@ -158,10 +158,10 @@ function getWebpackConfig(skyPagesConfig, argv) {
       new ForkTsCheckerWebpackPlugin(),
 
       /**
-       * Suppressing the "export not found" warning produced when `transpileOnly` is set to `true`.
-       * When TypeScript doesn't do a full type check, it does not have enough information to
-       * determine whether an imported name is a type or not, so when the name is then exported,
-       * TypeScript has no choice but to emit the export.
+       * Suppressing the "export not found" warning produced when `ts-loader`'s `transpileOnly`
+       * option is set to `true`. When TypeScript doesn't do a full type check, it does not have
+       * enough information to determine whether an imported name is a type or not, so when the name
+       * is then exported, TypeScript has no choice but to emit the export.
        * See: https://github.com/TypeStrong/ts-loader#transpileonly
        * Using a plugin to suppress the warning since `stats.warningsFilter` is not recognized
        * by `karma-webpack`.
