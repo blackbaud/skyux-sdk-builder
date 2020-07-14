@@ -18,6 +18,7 @@ function getRule() {
       'angular2-template-loader'
     ],
     exclude: [
+      /node_modules/,
       /\.e2e-spec\.ts$/
     ]
   };

@@ -167,6 +167,17 @@ function getWebpackConfig(skyPagesConfig, argv) {
      */
     node: {
       process: false
+    },
+
+    /**
+     * Suppressing the "export not found" warning produced by `ForkTsCheckerWebpackPlugin`.
+     * When TypeScript doesn't do a full type check, it does not have enough information to
+     * determine whether an imported name is a type or not, so when the name is then exported,
+     * TypeScript has no choice but to emit the export.
+     * See: https://github.com/TypeStrong/ts-loader#transpileonly
+     */
+    stats: {
+      warningsFilter: /export .* was not found in/
     }
   };
 
