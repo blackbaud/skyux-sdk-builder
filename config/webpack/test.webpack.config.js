@@ -5,6 +5,7 @@ const path = require('path');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
 const tsLoaderUtil = require('./ts-loader-rule');
@@ -47,7 +48,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let config = {
     mode: 'development',
 
-    devtool: 'inline-source-map',
+    devtool: 'eval-cheap-source-map',
 
     resolveLoader: {
       modules: resolves
@@ -89,7 +90,16 @@ function getWebpackConfig(skyPagesConfig, argv) {
 
         {
           test: /\.s?css$/,
-          use: ['raw-loader', 'sass-loader']
+          use: [
+            'raw-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                // Prefer dart sass.
+                implementation: require('sass')
+              }
+            }
+          ]
         },
         {
           test: /\.html$/,
@@ -141,7 +151,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
         /\@angular(\\|\/)core(\\|\/)fesm5/,
         spaPath('src'),
         {}
-      )
+      ),
+
+      new ForkTsCheckerWebpackPlugin()
     ],
 
     /**

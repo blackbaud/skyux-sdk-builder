@@ -3,6 +3,7 @@
 
 const path = require('path');
 const webpackMerge = require('webpack-merge');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
@@ -98,7 +99,8 @@ function getWebpackConfig(argv, skyPagesConfig) {
         context: __dirname,
         debug: true
       }),
-      new HotModuleReplacementPlugin()
+      new HotModuleReplacementPlugin(),
+      new ForkTsCheckerWebpackPlugin()
     ]
   });
 }
