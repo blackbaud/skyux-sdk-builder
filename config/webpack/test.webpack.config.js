@@ -48,7 +48,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let config = {
     mode: 'development',
 
-    devtool: 'eval-cheap-source-map',
+    devtool: 'inline-source-map',
 
     resolveLoader: {
       modules: resolves
@@ -177,7 +177,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
      * See: https://github.com/TypeStrong/ts-loader#transpileonly
      */
     stats: {
-      warningsFilter: /export .* was not found in/
+      warningsFilter: [
+        /export .* was not found in/
+      ]
     }
   };
 
