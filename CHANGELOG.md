@@ -1,3 +1,7 @@
+# 4.2.1 (2020-07-15)
+
+- Fixed the TypeScript Webpack loader to reduce startup times for unit tests. [#299](https://github.com/blackbaud/skyux-sdk-builder/pull/299)
+
 # 4.2.0 (2020-07-13)
 
 - Added support for `rxjs@^6.5.4`. [#296](https://github.com/blackbaud/skyux-sdk-builder/pull/296)
