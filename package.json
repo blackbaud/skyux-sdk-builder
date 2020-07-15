@@ -61,7 +61,6 @@
     "@types/jasmine": "3.5.11",
     "@types/node": "14.0.22",
     "angular2-template-loader": "0.6.2",
-    "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.1.0",
     "chromedriver-version-matcher": "^1.1.1",
     "core-js": "3.6.5",
@@ -70,6 +69,7 @@
     "css-loader": "3.6.0",
     "enhanced-resolve": "4.2.0",
     "express": "4.17.1",
+    "fork-ts-checker-webpack-plugin": "5.0.7",
     "fs-extra": "9.0.1",
     "glob": "7.1.6",
     "hash-file": "3.0.0",
@@ -102,6 +102,7 @@
     "selenium-standalone": "6.17.0",
     "simple-progress-webpack-plugin": "1.1.2",
     "style-loader": "1.2.1",
+    "ts-loader": "8.0.0",
     "tslint-jasmine-rules": "1.6.1",
     "url": "0.11.0",
     "util": "0.12.3",
@@ -109,6 +110,7 @@
     "webpack-cli": "3.3.12",
     "webpack-dev-middleware": "3.7.2",
     "webpack-dev-server": "3.11.0",
+    "webpack-filter-warnings-plugin": "1.2.1",
     "webpack-merge": "4.2.2"
   },
   "devDependencies": {
