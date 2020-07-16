@@ -88,6 +88,18 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-fix-require-context')
         },
 
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          loader: 'source-map-loader',
+          exclude: [
+            /**
+             * These packages have problems with their sourcemaps
+             */
+            /@angular/
+          ]
+        },
+
         tsLoaderUtil.getRule(),
 
         {
@@ -183,6 +195,10 @@ function getWebpackConfig(skyPagesConfig, argv) {
      */
     node: {
       process: false
+    },
+
+    performance: {
+      hints: false
     }
   };
 

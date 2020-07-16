@@ -12,7 +12,10 @@ function getRule() {
           // an aliased file.  Webpack will still throw an error when a module
           // cannot be resolved via a file path or alias.
           ignoreDiagnostics: [2307],
-          transpileOnly: true
+          transpileOnly: true,
+          compilerOptions: {
+            removeComments: true
+          }
         }
       },
       'angular2-template-loader'

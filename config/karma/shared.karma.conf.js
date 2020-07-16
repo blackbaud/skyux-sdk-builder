@@ -50,7 +50,7 @@ function getConfig(config) {
   const preprocessors = {};
 
   preprocessors[polyfillsBundle] = ['webpack'];
-  preprocessors[specBundle] = ['webpack', 'sourcemap'];
+  preprocessors[specBundle] = ['coverage-istanbul', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
 
   const codeCoverageThresholdPercent = getCoverageThreshold(skyPagesConfig);
@@ -74,6 +74,7 @@ function getConfig(config) {
       },
       {
         pattern: assetsPattern,
+        watched: false,
         included: false,
         served: true,
       }
@@ -132,7 +133,7 @@ function getConfig(config) {
     browserConsoleLogOptions: {
       level: 'log'
     },
-    reporters: ['mocha', 'coverage-istanbul'],
+    reporters: ['mocha', 'coverage-istanbul', 'remap-coverage'],
     port: 9876,
     colors: logger.logColor,
     logLevel: config.LOG_INFO,
@@ -147,6 +148,11 @@ function getConfig(config) {
       jasmine: {
         random: false
       }
+    },
+    remapCoverageReporter: {
+      'text-summary': null,
+      json: './coverage/coverage.json',
+      html: './coverage/html'
     }
   });
 }
