@@ -50,7 +50,7 @@ function getConfig(config) {
   const preprocessors = {};
 
   preprocessors[polyfillsBundle] = ['webpack'];
-  preprocessors[specBundle] = ['coverage-istanbul', 'webpack', 'sourcemap'];
+  preprocessors[specBundle] = ['coverage', 'webpack', 'sourcemap'];
   preprocessors[specStyles] = ['webpack'];
 
   const codeCoverageThresholdPercent = getCoverageThreshold(skyPagesConfig);
