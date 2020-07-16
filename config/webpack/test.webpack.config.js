@@ -23,7 +23,7 @@ function outPath() {
 function getWebpackConfig(skyPagesConfig, argv) {
   const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
   const argvCoverage = (argv) ? argv.coverage : true;
-  const runCoverage = (argvCoverage !== false);
+  // const runCoverage = (argvCoverage !== false);
 
   let srcPath;
   if (argvCoverage === 'library') {
@@ -60,8 +60,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
       alias: alias,
       modules: resolves,
       extensions: [
+        '.ts',
         '.js',
-        '.ts'
+        '.json'
       ]
     },
 
@@ -86,6 +87,20 @@ function getWebpackConfig(skyPagesConfig, argv) {
           enforce: 'pre',
           test: /skyux-i18n-testing\.js$/,
           loader: outPath('loader', 'sky-fix-require-context')
+        },
+
+        {
+          test: /\.ts$/,
+          use: '@jsdevtools/coverage-istanbul-loader',
+          include: srcPath,
+          exclude: [
+            /\.(e2e-|pact-)?spec\.ts$/,
+            /(\\|\/)node_modules(\\|\/)/,
+            /(\\|\/)index\.ts/,
+            /(\\|\/)fixtures(\\|\/)/,
+            /(\\|\/)testing(\\|\/)/,
+            /(\\|\/)src(\\|\/)app(\\|\/)lib(\\|\/)/
+          ]
         },
 
         tsLoaderUtil.getRule(),
@@ -186,29 +201,22 @@ function getWebpackConfig(skyPagesConfig, argv) {
     }
   };
 
-  if (runCoverage) {
-    config.module.rules.push({
-      enforce: 'post',
-      test: /\.(js|ts)$/,
-      use: [
-        {
-          loader: 'istanbul-instrumenter-loader',
-          options: {
-            esModules: true
-          }
-        }
-      ],
-      include: srcPath,
-      exclude: [
-        /\.(e2e-|pact-)?spec\.ts$/,
-        /(\\|\/)node_modules(\\|\/)/,
-        /(\\|\/)index\.ts/,
-        /(\\|\/)fixtures(\\|\/)/,
-        /(\\|\/)testing(\\|\/)/,
-        /(\\|\/)src(\\|\/)app(\\|\/)lib(\\|\/)/
-      ]
-    });
-  }
+  // if (runCoverage) {
+  //   config.module.rules.push({
+  //     enforce: 'post',
+  //     test: /\.js$/,
+  //     use: '@jsdevtools/coverage-istanbul-loader',
+  //     include: srcPath,
+  //     exclude: [
+  //       /\.(e2e-|pact-)?spec\.ts$/,
+  //       /(\\|\/)node_modules(\\|\/)/,
+  //       /(\\|\/)index\.ts/,
+  //       /(\\|\/)fixtures(\\|\/)/,
+  //       /(\\|\/)testing(\\|\/)/,
+  //       /(\\|\/)src(\\|\/)app(\\|\/)lib(\\|\/)/
+  //     ]
+  //   });
+  // }
 
   return config;
 }
