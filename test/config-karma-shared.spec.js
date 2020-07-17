@@ -8,6 +8,10 @@ describe('config karma shared', () => {
 
   const testConfigFilename = '../config/webpack/test.webpack.config';
 
+  beforeEach(() => {
+    mock('fork-ts-checker-webpack-plugin', function () {});
+  });
+
   afterEach(() => {
     mock.stopAll();
   });
