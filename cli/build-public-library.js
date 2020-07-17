@@ -110,7 +110,7 @@ function writeTSConfig() {
     }
   };
 
-  tsconfig = applyLibraryTsConfig(tsconfig);
+  tsConfig = applyLibraryTsConfig(tsConfig);
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'), tsConfig);
 }
 
