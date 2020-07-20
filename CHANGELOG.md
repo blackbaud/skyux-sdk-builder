@@ -1,3 +1,7 @@
+# 4.2.2 (2020-07-20)
+
+- Fixed the `SkyAppLocaleProvider` so it can be overridden from the `AppExtrasModule`. [#284](https://github.com/blackbaud/skyux-sdk-builder/pull/284)
+
 # 4.2.1 (2020-07-15)
 
 - Fixed the TypeScript Webpack loader to reduce startup times for unit tests. [#299](https://github.com/blackbaud/skyux-sdk-builder/pull/299)
