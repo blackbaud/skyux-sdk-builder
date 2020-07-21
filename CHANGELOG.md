@@ -1,3 +1,19 @@
+# 4.2.2 (2020-07-20)
+
+- Fixed the `SkyAppLocaleProvider` so it can be overridden from the `AppExtrasModule`. [#284](https://github.com/blackbaud/skyux-sdk-builder/pull/284)
+
+# 4.2.1 (2020-07-15)
+
+- Fixed the TypeScript Webpack loader to reduce startup times for unit tests. [#299](https://github.com/blackbaud/skyux-sdk-builder/pull/299)
+
+# 4.2.0 (2020-07-13)
+
+- Added support for `rxjs@^6.5.4`. [#296](https://github.com/blackbaud/skyux-sdk-builder/pull/296)
+
+# 4.1.1 (2020-07-10)
+
+- Updated the `chromedriver-version-matcher` dependency. [#293](https://github.com/blackbaud/skyux-sdk-builder/pull/293)
+
 # 4.1.0 (2020-06-19)
 
 - Moved the `SkyThemeService` provider from the application's root component to the application module. This enables components created outside of the root component's hierarchy, such as the modal component, to inject the application's `SkyThemeService` instance. [#282](https://github.com/blackbaud/skyux-sdk-builder/pull/282)
