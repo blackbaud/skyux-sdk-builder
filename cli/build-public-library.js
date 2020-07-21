@@ -80,8 +80,28 @@ function cleanRuntime() {
   rimraf.sync(skyPagesConfigUtil.spaPath('dist', 'runtime'));
 }
 
+/**
+ * Applies supported properties from the Library's tsconfig.json file to the build config.
+ * @param {*} config The tsconfig.json JSON contents.
+ */
+function applyLibraryTsConfig(config) {
+  const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
+  const compilerOptionsKeys = [
+    'esModuleInterop',
+    'allowSyntheticDefaultImports'
+  ];
+
+  compilerOptionsKeys.forEach(key => {
+    if (spaTsConfig && spaTsConfig.compilerOptions && spaTsConfig.compilerOptions[key]) {
+      config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
+    }
+  });
+
+  return config;
+}
+
 function writeTSConfig() {
-  const tsConfig = {
+  let tsConfig = {
     extends: skyPagesConfigUtil.spaPath(
       'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json'
     ),
@@ -90,6 +110,7 @@ function writeTSConfig() {
     }
   };
 
+  tsConfig = applyLibraryTsConfig(tsConfig);
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'), tsConfig);
 }
 

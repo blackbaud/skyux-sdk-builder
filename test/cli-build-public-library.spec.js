@@ -15,6 +15,11 @@ describe('cli build-public-library', () => {
   beforeEach(() => {
     mockFs = {
       writeJSONSync() {},
+      readJsonSync() {
+        return {
+          compilerOptions: {}
+        };
+      },
       writeFileSync() {},
       copySync() {},
       existsSync() {}
@@ -106,12 +111,58 @@ describe('cli build-public-library', () => {
     done();
   });
 
-  it('should write a tsconfig.lib.json file', async (done) => {
+  it('should write a tsconfig.lib.json file using options from the library\'s', async (done) => {
     const cliCommand = mock.reRequire(requirePath);
     const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+    const readSpy = spyOn(mockFs, 'readJsonSync').and.returnValue({
+      compilerOptions: {
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+        foo: 'bar'
+      }
+    });
 
     await cliCommand({}, {});
 
+    expect(readSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith('temp/tsconfig.lib.json', {
+      extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
+      compilerOptions: {
+        lib: ['dom', 'es6'],
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true
+      }
+    });
+
+    done();
+  });
+
+  it('should write a tsconfig.lib.json file even when library does not have one', async (done) => {
+    const cliCommand = mock.reRequire(requirePath);
+    const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+    const readSpy = spyOn(mockFs, 'readJsonSync').and.returnValue(undefined);
+
+    await cliCommand({}, {});
+
+    expect(readSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith('temp/tsconfig.lib.json', {
+      extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
+      compilerOptions: {
+        lib: ['dom', 'es6']
+      }
+    });
+
+    done();
+  });
+
+  it('should write a tsconfig.lib.json file even when library does not have compiler options', async (done) => {
+    const cliCommand = mock.reRequire(requirePath);
+    const spy = spyOn(mockFs, 'writeJSONSync').and.callThrough();
+    const readSpy = spyOn(mockFs, 'readJsonSync').and.returnValue({});
+
+    await cliCommand({}, {});
+
+    expect(readSpy).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith('temp/tsconfig.lib.json', {
       extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
       compilerOptions: {

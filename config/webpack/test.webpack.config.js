@@ -5,6 +5,9 @@ const path = require('path');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
 const tsLoaderUtil = require('./ts-loader-rule');
@@ -85,11 +88,20 @@ function getWebpackConfig(skyPagesConfig, argv) {
           loader: outPath('loader', 'sky-fix-require-context')
         },
 
-        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
+        tsLoaderUtil.getRule(),
 
         {
           test: /\.s?css$/,
-          use: ['raw-loader', 'sass-loader']
+          use: [
+            'raw-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                // Prefer dart sass.
+                implementation: require('sass')
+              }
+            }
+          ]
         },
         {
           test: /\.html$/,
@@ -141,7 +153,23 @@ function getWebpackConfig(skyPagesConfig, argv) {
         /\@angular(\\|\/)core(\\|\/)fesm5/,
         spaPath('src'),
         {}
-      )
+      ),
+
+      new ForkTsCheckerWebpackPlugin(),
+
+      /**
+       * Suppressing the "export not found" warning produced when `ts-loader`'s `transpileOnly`
+       * option is set to `true`. When TypeScript doesn't do a full type check, it does not have
+       * enough information to determine whether an imported name is a type or not, so when the name
+       * is then exported, TypeScript has no choice but to emit the export.
+       * See: https://github.com/TypeStrong/ts-loader#transpileonly
+       * Using a plugin to suppress the warning since `stats.warningsFilter` is not recognized
+       * by `karma-webpack`.
+       * See: https://www.npmjs.com/package/webpack-filter-warnings-plugin#why-not-use-the-built-in-statswarningsfilter-option
+       */
+      new FilterWarningsPlugin({
+        exclude: /export .* was not found in/
+      })
     ],
 
     /**
