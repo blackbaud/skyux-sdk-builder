@@ -19,10 +19,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let commonConfig = common.getWebpackConfig(skyPagesConfig, argv);
   commonConfig.entry = null;
 
-  // Enable source map generation
-  let devtool = 'hidden-source-map';
-  let sourceMap = true;
-
   // Since the preloader is executed against the file system during an AoT build,
   // we need to remove it from the webpack config, otherwise it will get executed twice.
   commonConfig.module.rules = commonConfig.module.rules
@@ -39,9 +35,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
       app: [skyPagesConfigUtil.spaPathTempSrc('main-internal.aot.ts')]
     },
 
-    // Disable sourcemaps for production:
-    // https://webpack.js.org/configuration/devtool/#production
-    devtool: devtool,
+    // Include sourcemaps in the build to allow unminifying stack
+    // tracks in errors captured by Azure Application Insights
+    devtool: 'hidden-source-map',
 
     module: {
       rules: [
@@ -53,7 +49,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.js$/,
           loader: '@angular-devkit/build-optimizer/webpack-loader',
           options: {
-            sourceMap: sourceMap
+            sourceMap: true
           }
         }
       ]
