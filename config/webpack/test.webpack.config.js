@@ -1,6 +1,7 @@
 /*jslint node: true */
 'use strict';
 
+const { AngularCompilerPlugin } = require('@ngtools/webpack');
 const path = require('path');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
@@ -120,6 +121,11 @@ function getWebpackConfig(skyPagesConfig, argv) {
     },
 
     plugins: [
+      new AngularCompilerPlugin({
+        tsConfigPath: skyPagesConfigUtil.spaPath('tsconfig.json'),
+        mainPath: skyPagesConfigUtil.outPath('utils/spec-bundle.js')
+      }),
+
       new LoaderOptionsPlugin({
         debug: true,
         options: {
