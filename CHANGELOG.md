@@ -1,3 +1,9 @@
+# 4.2.3 (2020-07-21)
+
+- Added support for the `esModuleInterop` TypeScript setting during the `skyux build-public-library` command. [#302](https://github.com/blackbaud/skyux-sdk-builder/pull/302) (Thanks [@blackbaud-conorwright](https://github.com/blackbaud-conorwright)!)
+- Added support for the `allowSyntheticDefaultImports` TypeScript setting during the `skyux build` and `skyux build-public-library` commands. [#302](https://github.com/blackbaud/skyux-sdk-builder/pull/302) (Thanks [@blackbaud-conorwright](https://github.com/blackbaud-conorwright)!)
+- Added source map support for the `skyux build` command. [#286](https://github.com/blackbaud/skyux-sdk-builder/pull/286) (Thanks [@Blackbaud-DanielHiggins](https://github.com/Blackbaud-DanielHiggins)!)
+
 # 4.2.2 (2020-07-20)
 
 - Fixed the `SkyAppLocaleProvider` so it can be overridden from the `AppExtrasModule`. [#284](https://github.com/blackbaud/skyux-sdk-builder/pull/284)
