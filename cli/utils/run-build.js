@@ -86,7 +86,8 @@ function writeTSConfig(skyPagesConfig) {
 function applySpaTsConfig(config) {
   const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
   const compilerOptionsKeys = [
-    'esModuleInterop'
+    'esModuleInterop',
+    'allowSyntheticDefaultImports'
   ];
 
   compilerOptionsKeys.forEach(key => {
