@@ -50,7 +50,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   let config = {
     mode: 'development',
 
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
 
     resolveLoader: {
       modules: resolves
@@ -90,13 +90,11 @@ function getWebpackConfig(skyPagesConfig, argv) {
         },
 
         {
-          test: /\.ts$/,
+          test: /\.(ts|js)$/,
           use: '@jsdevtools/coverage-istanbul-loader',
           include: srcPath,
           exclude: [
             /\.(e2e-|pact-)?spec\.ts$/,
-            /(\\|\/)node_modules(\\|\/)/,
-            /(\\|\/)index\.ts/,
             /(\\|\/)fixtures(\\|\/)/,
             /(\\|\/)testing(\\|\/)/,
             /(\\|\/)src(\\|\/)app(\\|\/)lib(\\|\/)/
