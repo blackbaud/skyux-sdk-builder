@@ -45,8 +45,8 @@ function run(command, argv, specsPattern) {
       localeAssetsProcessor.prepareLocaleFiles();
     });
 
-    server.on('browser_error', () => {
-      logger.warn('Experienced a browser disconnect error.  Karma will retry up to 3 times.');
+    server.on('browser_error', (browser, error) => {
+      logger.error('Karma encountered a browser error:', error.message);
     });
 
     // Add extra handlers to run tslint asynchronously
