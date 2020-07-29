@@ -46,7 +46,8 @@ function run(command, argv, specsPattern) {
     });
 
     server.on('browser_error', (browser, error) => {
-      logger.warn(`Karma encountered a browser error: ${error.message}`);
+      logger.warn(`[SKY UX Builder] Karma encountered a browser error: ${error.message}`);
+      console.log('Karma error:', error);
     });
 
     // Add extra handlers to run tslint asynchronously
