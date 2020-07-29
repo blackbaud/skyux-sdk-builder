@@ -46,7 +46,7 @@ function run(command, argv, specsPattern) {
     });
 
     server.on('browser_error', (browser, error) => {
-      logger.error('Karma encountered a browser error:', error.message);
+      logger.warn(`Karma encountered a browser error: ${error.message}`);
     });
 
     // Add extra handlers to run tslint asynchronously
