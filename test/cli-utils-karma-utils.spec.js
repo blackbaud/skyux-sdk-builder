@@ -93,7 +93,7 @@ describe('cli util run-karma', () => {
     mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
     karmaHooks['browser_error'][0](undefined, new Error('Karma error.'));
     expect(logger.warn).toHaveBeenCalledWith(
-      'Karma encountered a browser error: Karma error.'
+      '[SKY UX Builder] Karma encountered a browser error: Karma error.'
     );
   });
 
