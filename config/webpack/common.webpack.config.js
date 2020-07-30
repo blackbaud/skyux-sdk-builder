@@ -172,8 +172,10 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
         {
           enforce: 'pre',
           loader: outPath('loader', 'sky-processor', 'preload'),
-          include: spaPath('src'),
-          exclude: /node_modules/
+          include: [
+            spaPath('src'),
+            outPath('runtime')
+          ]
         },
         {
           test: /\.s?css$/,

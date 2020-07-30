@@ -38,11 +38,6 @@ function getWebpackConfig(skyPagesConfig, argv) {
     outPath('node_modules')
   ];
 
-  const excludes = [
-    spaPath('node_modules'),
-    outPath('node_modules')
-  ];
-
   skyPagesConfig.runtime.includeRouteModule = false;
 
   let alias = aliasBuilder.buildAliasList(skyPagesConfig);
@@ -80,7 +75,10 @@ function getWebpackConfig(skyPagesConfig, argv) {
         {
           enforce: 'pre',
           loader: outPath('loader', 'sky-processor', 'preload'),
-          exclude: excludes
+          include: [
+            spaPath('src'),
+            outPath('runtime')
+          ]
         },
         {
           enforce: 'pre',
