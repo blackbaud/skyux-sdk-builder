@@ -1,3 +1,10 @@
+# 4.3.0 (2020-07-30)
+
+- Added support for `@angular-devkit/build-optimizer@0.901.12`. [#309](https://github.com/blackbaud/skyux-sdk-builder/pull/309)
+- Added verbose logging for Karma browser errors during `skyux test`. [https://github.com/blackbaud/skyux-sdk-builder/pull/309](https://github.com/blackbaud/skyux-sdk-builder/pull/309)
+- Fixed the `SkyAuthTokenProvider` so it can be overridden from the `AppExtrasModule`. [#311](https://github.com/blackbaud/skyux-sdk-builder/pull/311)
+- Fixed the `preload` plugin hook to allow Builder plugins to reference Builder's `runtime` folder. [#311](https://github.com/blackbaud/skyux-sdk-builder/pull/311)
+
 # 4.2.3 (2020-07-21)
 
 - Added support for the `esModuleInterop` TypeScript setting during the `skyux build-public-library` command. [#302](https://github.com/blackbaud/skyux-sdk-builder/pull/302) (Thanks [@blackbaud-conorwright](https://github.com/blackbaud-conorwright)!)
