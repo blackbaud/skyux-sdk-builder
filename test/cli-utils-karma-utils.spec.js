@@ -91,9 +91,9 @@ describe('cli util run-karma', () => {
 
   it('should log a warning in browser_error', () => {
     mock.reRequire('../cli/utils/karma-utils').run('', {}, '');
-    karmaHooks['browser_error'][0]();
+    karmaHooks['browser_error'][0](undefined, new Error('Karma error.'));
     expect(logger.warn).toHaveBeenCalledWith(
-      'Experienced a browser disconnect error.  Karma will retry up to 3 times.'
+      '[SKY UX Builder] Karma encountered a browser error: Karma error.'
     );
   });
 

@@ -3,10 +3,12 @@
 
 const logger = require('@blackbaud/skyux-logger');
 const webpack = require('webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const { OutputKeepAlivePlugin } = require('../../plugin/output-keep-alive');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
@@ -98,6 +100,22 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
 
     new OutputKeepAlivePlugin({
       enabled: argv['output-keep-alive']
+    }),
+
+    new ForkTsCheckerWebpackPlugin(),
+
+    /**
+     * Suppressing the "export not found" warning produced when `ts-loader`'s `transpileOnly`
+     * option is set to `true`. When TypeScript doesn't do a full type check, it does not have
+     * enough information to determine whether an imported name is a type or not, so when the name
+     * is then exported, TypeScript has no choice but to emit the export.
+     * See: https://github.com/TypeStrong/ts-loader#transpileonly
+     * Using a plugin to suppress the warning since `stats.warningsFilter` is not recognized
+     * by `karma-webpack`.
+     * See: https://www.npmjs.com/package/webpack-filter-warnings-plugin#why-not-use-the-built-in-statswarningsfilter-option
+     */
+    new FilterWarningsPlugin({
+      exclude: /export .* was not found in/
     })
   ];
 
@@ -154,8 +172,10 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
         {
           enforce: 'pre',
           loader: outPath('loader', 'sky-processor', 'preload'),
-          include: spaPath('src'),
-          exclude: /node_modules/
+          include: [
+            spaPath('src'),
+            outPath('runtime')
+          ]
         },
         {
           test: /\.s?css$/,

@@ -1,3 +1,32 @@
+# 4.3.0 (2020-07-30)
+
+- Added support for `@angular-devkit/build-optimizer@0.901.12`. [#309](https://github.com/blackbaud/skyux-sdk-builder/pull/309)
+- Added verbose logging for Karma browser errors during `skyux test`. [#309](https://github.com/blackbaud/skyux-sdk-builder/pull/309)
+- Fixed `SkyAuthTokenProvider` to allow `AppExtrasModule` to override it. [#311](https://github.com/blackbaud/skyux-sdk-builder/pull/311)
+- Fixed the `preload` plugin hook to allow Builder plugins to reference Builder's `runtime` folder. [#311](https://github.com/blackbaud/skyux-sdk-builder/pull/311)
+
+# 4.2.3 (2020-07-21)
+
+- Added support for the `esModuleInterop` TypeScript setting during the `skyux build-public-library` command. [#302](https://github.com/blackbaud/skyux-sdk-builder/pull/302) (Thanks [@blackbaud-conorwright](https://github.com/blackbaud-conorwright)!)
+- Added support for the `allowSyntheticDefaultImports` TypeScript setting during the `skyux build` and `skyux build-public-library` commands. [#302](https://github.com/blackbaud/skyux-sdk-builder/pull/302) (Thanks [@blackbaud-conorwright](https://github.com/blackbaud-conorwright)!)
+- Added source map support for the `skyux build` command. [#286](https://github.com/blackbaud/skyux-sdk-builder/pull/286) (Thanks [@Blackbaud-DanielHiggins](https://github.com/Blackbaud-DanielHiggins)!)
+
+# 4.2.2 (2020-07-20)
+
+- Fixed `SkyAppLocaleProvider` to allow `AppExtrasModule` to override it. [#284](https://github.com/blackbaud/skyux-sdk-builder/pull/284)
+
+# 4.2.1 (2020-07-15)
+
+- Fixed the TypeScript Webpack loader to reduce startup times for unit tests. [#299](https://github.com/blackbaud/skyux-sdk-builder/pull/299)
+
+# 4.2.0 (2020-07-13)
+
+- Added support for `rxjs@^6.5.4`. [#296](https://github.com/blackbaud/skyux-sdk-builder/pull/296)
+
+# 4.1.1 (2020-07-10)
+
+- Updated the `chromedriver-version-matcher` dependency. [#293](https://github.com/blackbaud/skyux-sdk-builder/pull/293)
+
 # 4.1.0 (2020-06-19)
 
 - Moved the `SkyThemeService` provider from the application's root component to the application module. This enables components created outside of the root component's hierarchy, such as the modal component, to inject the application's `SkyThemeService` instance. [#282](https://github.com/blackbaud/skyux-sdk-builder/pull/282)
