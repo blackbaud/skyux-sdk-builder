@@ -33,8 +33,12 @@ function getConfig(config) {
     })
   );
 
-  // Adjust the loader src path.
-  webpackConfig.module.rules[webpackConfig.module.rules.length - 1].include = runtimePath;
+  // Adjust the instrument loader src path.
+  webpackConfig.module.rules.forEach(rule => {
+    if (rule.use === '@jsdevtools/coverage-istanbul-loader') {
+      rule.include = runtimePath;
+    }
+  });
 
   // This is needed exclusively for internal runtime unit tests,
   // which is why it's here instead of alias-builder or the shared test.webpack.config.js
