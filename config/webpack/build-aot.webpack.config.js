@@ -35,9 +35,9 @@ function getWebpackConfig(skyPagesConfig, argv) {
       app: [skyPagesConfigUtil.spaPathTempSrc('main-internal.aot.ts')]
     },
 
-    // Disable sourcemaps for production:
-    // https://webpack.js.org/configuration/devtool/#production
-    devtool: false,
+    // Include sourcemaps in the build to allow unminifying stack
+    // tracks in errors captured by Azure Application Insights
+    devtool: 'hidden-source-map',
 
     module: {
       rules: [
@@ -49,7 +49,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
           test: /\.js$/,
           loader: '@angular-devkit/build-optimizer/webpack-loader',
           options: {
-            sourceMap: false
+            sourceMap: true
           }
         }
       ]

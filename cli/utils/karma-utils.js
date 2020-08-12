@@ -45,8 +45,9 @@ function run(command, argv, specsPattern) {
       localeAssetsProcessor.prepareLocaleFiles();
     });
 
-    server.on('browser_error', () => {
-      logger.warn('Experienced a browser disconnect error.  Karma will retry up to 3 times.');
+    server.on('browser_error', (browser, error) => {
+      logger.warn(`[SKY UX Builder] Karma encountered a browser error: ${error.message}`);
+      console.log('Karma error:', error);
     });
 
     // Add extra handlers to run tslint asynchronously
