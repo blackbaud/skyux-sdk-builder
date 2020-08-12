@@ -185,7 +185,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
   };
 
   if (runCoverage) {
-    const tsLoader = config.module.rules.find(rule => rule.test === /\.ts$/);
+    const tsLoader = config.module.rules.find(r => r.test && r.test.toString() === '/\\.ts$/');
     const tsLoaderIndex = config.module.rules.indexOf(tsLoader);
 
     // Insert the coverage loader before `ts-loader`.
