@@ -87,7 +87,7 @@ function getConfig(config) {
     coverageIstanbulReporter: {
       combineBrowserReports: true,
       fixWebpackSourcePaths: true,
-      skipFilesWithNoCoverage: false,
+      skipFilesWithNoCoverage: true,
       dir: path.join(process.cwd(), 'coverage'),
       reports: [
         'html',
@@ -99,11 +99,15 @@ function getConfig(config) {
         global: {
           statements: codeCoverageThresholdPercent,
           lines: codeCoverageThresholdPercent,
-          branches: codeCoverageThresholdPercent,
+          /**
+           * Don't track branch coverage since it is incorrectly reported when `ts-loader`
+           * sets `transpileOnly` to `true`.
+           * @see https://github.com/angular/angular-cli/issues/5526
+           */
+          branches: 0,
           functions: codeCoverageThresholdPercent
         }
-      },
-      verbose: true
+      }
     },
     webpackServer: {
       noInfo: true,

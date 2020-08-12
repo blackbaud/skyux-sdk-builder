@@ -7,15 +7,11 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "importHelpers": true,
-    "noEmitHelpers": false,
-    "noEmitOnError": false,
+    "noEmitHelpers": true,
+    "noEmitOnError": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "noResolve": false,
-    "noEmit": false,
-    "emitDeclarationOnly": false,
-    "declaration": true,
-    "importsNotUsedAsValues": "preserve",
     "lib": [
       "dom",
       "es6"

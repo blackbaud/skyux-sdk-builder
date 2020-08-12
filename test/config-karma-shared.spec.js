@@ -164,7 +164,12 @@ describe('config karma shared', () => {
           const thresholdConfig = config.coverageIstanbulReporter.thresholds.global;
 
           coverageProps.forEach((coverageProp) => {
-            expect(thresholdConfig[coverageProp]).toEqual(thresholdPercent);
+            // Expect branches coverage to be disabled.
+            if (coverageProp === 'branches') {
+              expect(thresholdConfig.branches).toEqual(0);
+            } else {
+              expect(thresholdConfig[coverageProp]).toEqual(thresholdPercent);
+            }
           });
 
           callback();
