@@ -57,7 +57,10 @@ function bindServe() {
     webpackServer.stderr.on('data', data => log(data));
     webpackServer.stdout.on('data', data => {
       const dataAsString = log(data);
-      if (dataAsString.indexOf('Compiled successfully.') > -1) {
+      if (
+        dataAsString.indexOf('Compiled successfully.') > -1 ||
+        dataAsString.indexOf('Compiled with warnings.') > -1
+      ) {
         resolve(spyPort);
       }
       if (dataAsString.indexOf('Failed to compile.') > -1) {
