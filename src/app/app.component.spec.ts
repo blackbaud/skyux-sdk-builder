@@ -23,6 +23,10 @@ import {
 } from '@angular/router/testing';
 
 import {
+  BehaviorSubject
+} from 'rxjs';
+
+import {
   BBOmnibar,
   BBOmnibarConfig,
   BBOmnibarNavigationItem,
@@ -72,7 +76,9 @@ describe('AppComponent', () => {
   let scrollCalled: boolean = false;
   let skyAppConfig: any;
   let viewport: SkyAppViewportService;
-  let spyOmnibarDestroy: any;
+  let spyOmnibarDestroy: jasmine.Spy;
+  let spyOmnibarUpdate: jasmine.Spy;
+  let defaultThemeSettings: SkyThemeSettings;
 
   class MockHelpInitService {
     public load(config: any) { }
@@ -101,13 +107,19 @@ describe('AppComponent', () => {
     mockWindow = new MockWindow();
     mockWindow.nativeWindow.SKYUX_HOST = mockSkyuxHost;
 
-    mockThemeSvc = jasmine.createSpyObj(
-      'themeSvc',
-      [
-        'init',
-        'destroy'
-      ]
+    defaultThemeSettings = new SkyThemeSettings(
+      SkyTheme.presets.default,
+      SkyThemeMode.presets.light
     );
+
+    mockThemeSvc = {
+      init: jasmine.createSpy('init'),
+      destroy: jasmine.createSpy('destroy'),
+      settingsChange: new BehaviorSubject<any>({
+        previousSettings: undefined,
+        currentSettings: defaultThemeSettings
+      })
+    };
 
     const providers: any[] = [
       {
@@ -269,6 +281,7 @@ describe('AppComponent', () => {
     navigateParams = undefined;
     navigateByUrlParams = undefined;
     spyOmnibarDestroy = spyOn(BBOmnibar, 'destroy');
+    spyOmnibarUpdate = spyOn(BBOmnibar, 'update');
   });
 
   afterEach(() => {
@@ -905,7 +918,7 @@ describe('AppComponent', () => {
   );
 
   it(
-    'should initialize the theme service with the theme mapped to the current service ID',
+    'should init the theme service and omnibar with the theme mapped to the current service ID',
     async(() => {
       skyAppConfig.skyux.app = {
         theming: {
@@ -917,6 +930,8 @@ describe('AppComponent', () => {
         }
       };
 
+      skyAppConfig.skyux.omnibar = {};
+
       const mockSkyuxHost = {
         theming: {
           serviceIdMap: {
@@ -927,12 +942,23 @@ describe('AppComponent', () => {
 
       skyAppConfig.runtime.params.get = (key: string) => key === 'svcid' ? 'foo' : undefined;
 
+      const spyOmnibarLoad = spyOn(BBOmnibar, 'load');
+
       setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
         fixture.detectChanges();
 
         validateThemeInit(
           SkyTheme.presets.modern,
           SkyThemeMode.presets.light
+        );
+
+        expect(spyOmnibarLoad).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            theme: {
+              mode: 'light',
+              name: 'modern'
+            }
+          })
         );
       });
     })
@@ -1004,6 +1030,29 @@ describe('AppComponent', () => {
       fixture.destroy();
 
       expect(mockThemeSvc.destroy).toHaveBeenCalled();
+    });
+  }));
+
+  it('should update the omnibar theme when the page theme changes', async(() => {
+    skyAppConfig.skyux.omnibar = {};
+
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+
+      mockThemeSvc.settingsChange.next({
+        previousSettings: defaultThemeSettings,
+        currentSettings: new SkyThemeSettings(
+          SkyTheme.presets.modern,
+          SkyThemeMode.presets.light
+        )
+      });
+
+      expect(spyOmnibarUpdate).toHaveBeenCalledWith({
+        theme: {
+          mode: 'light',
+          name: 'modern'
+        }
+      });
     });
   }));
 

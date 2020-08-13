@@ -13,6 +13,14 @@ import {
 } from '@angular/router';
 
 import {
+  Subject
+} from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
+
+import {
   BBOmnibarNavigation,
   BBOmnibarNavigationItem,
   BBOmnibarSearchArgs
@@ -98,6 +106,8 @@ function fixUpNav(nav: any, baseUrl: string, config: SkyAppConfig) {
 export class AppComponent implements OnInit, OnDestroy {
   public isReady = false;
 
+  private ngUnsubscribe = new Subject<any>();
+
   constructor(
     private router: Router,
     private windowRef: SkyAppWindowRef,
@@ -155,6 +165,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+
     if (omnibarLoaded) {
       BBAuthClientFactory.BBOmnibar.destroy();
       omnibarLoaded = false;
@@ -288,12 +301,39 @@ export class AppComponent implements OnInit, OnDestroy {
 
       this.setOmnibarArgsOverrides(omnibarConfig, args);
 
+      const initialThemeSettings = this.getInitialThemeSettings();
+
+      if (initialThemeSettings.theme !== SkyTheme.presets.default) {
+        omnibarConfig.theme = {
+          mode: initialThemeSettings.mode.name,
+          name: initialThemeSettings.theme.name
+        };
+      }
+
       // The omnibar uses setInterval() to poll for user activity, and setInterval()
       // triggers change detection on each interval.  Loading the omnibar outside
       // Angular will keep change detection from being triggered during each interval.
       this.zone.runOutsideAngular(() => {
         BBAuthClientFactory.BBOmnibar.load(omnibarConfig);
         omnibarLoaded = true;
+
+        /* istanbul ignore else */
+        if (this.themeSvc) {
+          this.themeSvc.settingsChange
+            .pipe(
+              takeUntil(this.ngUnsubscribe)
+            )
+            .subscribe((settings) => {
+              const currentSettings = settings.currentSettings;
+
+              BBAuthClientFactory.BBOmnibar.update({
+                theme: {
+                  mode: currentSettings.mode.name,
+                  name: currentSettings.theme.name
+                }
+              });
+            });
+        }
       });
     };
 
