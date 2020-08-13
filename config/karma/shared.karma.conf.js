@@ -99,7 +99,12 @@ function getConfig(config) {
         global: {
           statements: codeCoverageThresholdPercent,
           lines: codeCoverageThresholdPercent,
-          branches: codeCoverageThresholdPercent,
+          /**
+           * Don't track branch coverage since it is incorrectly reported when `ts-loader`
+           * sets `transpileOnly` to `true`.
+           * @see https://github.com/angular/angular-cli/issues/5526
+           */
+          branches: 0,
           functions: codeCoverageThresholdPercent
         }
       }
