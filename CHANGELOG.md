@@ -1,3 +1,8 @@
+# 4.3.1 (2020-08-13)
+
+- Disabled the `branches` code coverage threshold check (set via the `codeCoverageThreshold` property in `skyuxconfig.json`) since remapped coverage for branches is reported inaccurately. [#315](https://github.com/blackbaud/skyux-sdk-builder/pull/315)
+- Replaced `istanbul-instrumenter-loader` to address a security vulnerability. [#315](https://github.com/blackbaud/skyux-sdk-builder/pull/315)
+
 # 4.3.0 (2020-07-30)
 
 - Added support for `@angular-devkit/build-optimizer@0.901.12`. [#309](https://github.com/blackbaud/skyux-sdk-builder/pull/309)
