@@ -1,3 +1,7 @@
+# 4.4.0 (2020-08-17)
+
+- Added support for applying the application's theme to omnibar. [#316](https://github.com/blackbaud/skyux-sdk-builder/pull/316)
+
 # 4.3.1 (2020-08-13)
 
 - Disabled the `branches` code coverage threshold check (set via the `codeCoverageThreshold` property in `skyuxconfig.json`) since remapped coverage for branches is reported inaccurately. [#315](https://github.com/blackbaud/skyux-sdk-builder/pull/315)
