@@ -1,3 +1,7 @@
+# 4.4.1 (2020-08-20)
+
+- Fixed a race condition where the omnibar theme was updated before the omnibar was finished loading. [#319](https://github.com/blackbaud/skyux-sdk-builder/pull/319)
+
 # 4.4.0 (2020-08-17)
 
 - Added support for applying the application's theme to omnibar. [#316](https://github.com/blackbaud/skyux-sdk-builder/pull/316)
