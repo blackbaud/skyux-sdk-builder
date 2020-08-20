@@ -1,6 +1,6 @@
 # 4.4.1 (2020-08-20)
 
-- Fixed a race condition where the omnibar theme was updated before the omnibar was finished loading. [#319](https://github.com/blackbaud/skyux-sdk-builder/pull/319)
+- Fixed a race condition where the omnibar theme updated before it finished loading. [#319](https://github.com/blackbaud/skyux-sdk-builder/pull/319)
 
 # 4.4.0 (2020-08-17)
 
