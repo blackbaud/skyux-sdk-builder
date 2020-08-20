@@ -314,26 +314,27 @@ export class AppComponent implements OnInit, OnDestroy {
       // triggers change detection on each interval.  Loading the omnibar outside
       // Angular will keep change detection from being triggered during each interval.
       this.zone.runOutsideAngular(() => {
-        BBAuthClientFactory.BBOmnibar.load(omnibarConfig);
-        omnibarLoaded = true;
+        BBAuthClientFactory.BBOmnibar.load(omnibarConfig).then(() => {
+          /* istanbul ignore else */
+          if (this.themeSvc) {
+            this.themeSvc.settingsChange
+              .pipe(
+                takeUntil(this.ngUnsubscribe)
+              )
+              .subscribe((settings) => {
+                const currentSettings = settings.currentSettings;
 
-        /* istanbul ignore else */
-        if (this.themeSvc) {
-          this.themeSvc.settingsChange
-            .pipe(
-              takeUntil(this.ngUnsubscribe)
-            )
-            .subscribe((settings) => {
-              const currentSettings = settings.currentSettings;
-
-              BBAuthClientFactory.BBOmnibar.update({
-                theme: {
-                  mode: currentSettings.mode.name,
-                  name: currentSettings.theme.name
-                }
+                BBAuthClientFactory.BBOmnibar.update({
+                  theme: {
+                    mode: currentSettings.mode.name,
+                    name: currentSettings.theme.name
+                  }
+                });
               });
-            });
-        }
+          }
+        });
+
+        omnibarLoaded = true;
       });
     };
 
