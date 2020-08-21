@@ -185,13 +185,17 @@ function getWebpackConfig(skyPagesConfig, argv) {
   };
 
   if (runCoverage) {
-    const tsLoader = config.module.rules.find(r => r.test && r.test.toString() === '/\\.ts$/');
-    const tsLoaderIndex = config.module.rules.indexOf(tsLoader);
-
-    // Insert the coverage loader before `ts-loader`.
-    config.module.rules.splice(tsLoaderIndex, 0, {
+    config.module.rules.push({
+      enforce: 'post',
       test: /\.(js|ts)$/,
-      use: '@jsdevtools/coverage-istanbul-loader',
+      use: [
+        {
+          loader: '@skyux-sdk/istanbul-instrumenter-loader',
+          options: {
+            esModules: true
+          }
+        }
+      ],
       include: srcPath,
       exclude: [
         /\.(e2e-|pact-)?spec\.ts$/,
