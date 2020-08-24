@@ -1,3 +1,7 @@
+# 4.4.2 (2020-08-24)
+
+- Replaced `@jsdevtools/coverage-istanbul-loader` with `@skyux-sdk/istanbul-instrumenter-loader` to allow setting breakpoints while debugging `skyux watch`. [#321](https://github.com/blackbaud/skyux-sdk-builder/pull/321)
+
 # 4.4.1 (2020-08-20)
 
 - Fixed a race condition where the omnibar theme updated before it finished loading. [#319](https://github.com/blackbaud/skyux-sdk-builder/pull/319)
