@@ -32,7 +32,11 @@ function getConfig(config) {
 
   // Adjust the instrument loader src path.
   webpackConfig.module.rules.forEach(rule => {
-    if (rule.use === '@jsdevtools/coverage-istanbul-loader') {
+    if (
+      rule.use &&
+      Array.isArray(rule.use) &&
+      rule.use[0].loader === '@skyux-sdk/istanbul-instrumenter-loader'
+    ) {
       rule.include = srcPath;
     }
   });
