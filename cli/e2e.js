@@ -17,8 +17,8 @@ const chromeDriverManager = require('./utils/chromedriver-manager');
 let seleniumServer;
 let start;
 
-function hasEnvironmentChromeDriver() {
-  return process.env.ChromeWebDriver && os.platform() === 'win32';
+function getChromeDriver(argv) {
+  return argv.chromeDriver;
 }
 
 /**
@@ -45,9 +45,10 @@ function killServers(exitCode) {
  * Perhaps this should be API driven?
  * @name spawnProtractor
  */
-function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
+function spawnProtractor(argv, configPath, chunks, port, skyPagesConfig) {
   logger.info('Running Protractor');
 
+  const chromeDriver = getChromeDriver(argv);
   const opts = {
     params: {
       localUrl: `https://localhost:${port}`,
@@ -56,9 +57,9 @@ function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
     }
   };
 
-  if (hasEnvironmentChromeDriver()) {
-    console.log('Using pre-installed chrome web driver.');
-    opts.chromeDriver = `${process.env.ChromeWebDriver}\\chromedriver.exe`;
+  if (chromeDriver) {
+    console.log('Using pre-installed chrome web driver.', chromeDriver);
+    opts.chromeDriver = chromeDriver;
   }
 
   protractorLauncher.init(configPath, opts);
@@ -69,9 +70,10 @@ function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
  * Spawns the selenium server if directConnect is not enabled.
  * @name spawnSelenium
  */
-function spawnSelenium(configPath) {
+function spawnSelenium(argv, configPath) {
 
   const config = require(configPath).config;
+  const chromeDriver = getChromeDriver(argv);
 
   return new Promise((resolve, reject) => {
     logger.info('Spawning selenium...');
@@ -94,10 +96,10 @@ function spawnSelenium(configPath) {
       });
 
     // Otherwise we need to prep protractor's selenium
-    } else if (hasEnvironmentChromeDriver()) {
+    } else if (chromeDriver) {
 
       console.log('Purposefully skipping webdriver-manager update!');
-      console.log('Aready available at', process.env.ChromeWebDriver);
+      console.log('Available at', chromeDriver);
       resolve();
 
     } else {
@@ -164,11 +166,12 @@ function e2e(command, argv, skyPagesConfig, webpack) {
         .all([
           spawnBuild(argv, skyPagesConfig, webpack),
           port,
-          spawnSelenium(configPath)
+          spawnSelenium(argv, configPath)
         ]);
     })
     .then(([chunks, port]) => {
       spawnProtractor(
+        argv,
         configPath,
         chunks,
         port,
