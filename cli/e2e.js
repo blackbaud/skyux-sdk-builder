@@ -1,7 +1,6 @@
 /*jslint node: true */
 'use strict';
 
-const os = require('os');
 const fs = require('fs-extra');
 const glob = require('glob');
 const path = require('path');
