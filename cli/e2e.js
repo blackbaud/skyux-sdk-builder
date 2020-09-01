@@ -1,6 +1,7 @@
 /*jslint node: true */
 'use strict';
 
+const os = require('os');
 const fs = require('fs-extra');
 const glob = require('glob');
 const path = require('path');
@@ -15,6 +16,10 @@ const chromeDriverManager = require('./utils/chromedriver-manager');
 
 let seleniumServer;
 let start;
+
+function hasEnvironmentChromeDriver() {
+  return process.env.ChromeWebDriver && os.platform() === 'win32';
+}
 
 /**
  * Handles killing off the selenium and webpack servers.
@@ -51,7 +56,7 @@ function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
     }
   };
 
-  if (process.env.ChromeWebDriver) {
+  if (hasEnvironmentChromeDriver()) {
     console.log('Using pre-installed chrome web driver.');
     opts.chromeDriver = `${process.env.ChromeWebDriver}\\chromedriver.exe`;
   }
@@ -89,7 +94,7 @@ function spawnSelenium(configPath) {
       });
 
     // Otherwise we need to prep protractor's selenium
-    } else if (process.env.ChromeWebDriver) {
+    } else if (hasEnvironmentChromeDriver()) {
 
       console.log('Purposefully skipping webdriver-manager update!');
       console.log('Aready available at', process.env.ChromeWebDriver);
