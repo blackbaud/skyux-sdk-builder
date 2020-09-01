@@ -47,7 +47,6 @@ function killServers(exitCode) {
 function spawnProtractor(argv, configPath, chunks, port, skyPagesConfig) {
   logger.info('Running Protractor');
 
-  const chromeDriver = getChromeDriver(argv);
   const opts = {
     params: {
       localUrl: `https://localhost:${port}`,
@@ -55,6 +54,8 @@ function spawnProtractor(argv, configPath, chunks, port, skyPagesConfig) {
       skyPagesConfig: skyPagesConfig
     }
   };
+
+  const chromeDriver = getChromeDriver(argv);
 
   if (chromeDriver) {
     console.log('Using pre-installed chrome web driver.', chromeDriver);
@@ -97,8 +98,7 @@ function spawnSelenium(argv, configPath) {
     // Otherwise we need to prep protractor's selenium
     } else if (chromeDriver) {
 
-      console.log('Purposefully skipping webdriver-manager update!');
-      console.log('Available at', chromeDriver);
+      console.log('Skipping webdriver-manager update.');
       resolve();
 
     } else {
