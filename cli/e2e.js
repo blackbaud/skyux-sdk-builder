@@ -82,9 +82,10 @@ function spawnSelenium(configPath) {
 
     // Otherwise we need to prep protractor's selenium
     } else {
-      chromeDriverManager.update()
-        .then(() => resolve())
-        .catch(err => reject(err));
+      console.log('Purposefully skipping webdriver-manager update!');
+    //   chromeDriverManager.update()
+    //     .then(() => resolve())
+    //     .catch(err => reject(err));
     }
   });
 }
