@@ -90,9 +90,13 @@ function spawnSelenium(configPath) {
 
     // Otherwise we need to prep protractor's selenium
     } else if (process.env.ChromeWebDriver) {
+
       console.log('Purposefully skipping webdriver-manager update!');
       console.log('Aready available at', process.env.ChromeWebDriver);
+      resolve();
+
     } else {
+
       chromeDriverManager.update()
         .then(() => resolve())
         .catch(err => reject(err));
