@@ -58,7 +58,7 @@ function spawnProtractor(argv, configPath, chunks, port, skyPagesConfig) {
   const chromeDriver = getChromeDriver(argv);
 
   if (chromeDriver) {
-    console.log('Using pre-installed chrome web driver.', chromeDriver);
+    logger.info('Using provided chromeDriver', chromeDriver);
     opts.chromeDriver = chromeDriver;
   }
 
@@ -98,7 +98,7 @@ function spawnSelenium(argv, configPath) {
     // Otherwise we need to prep protractor's selenium
     } else if (chromeDriver) {
 
-      console.log('Skipping webdriver-manager update.');
+      logger.info('Skipping webdriver-manager update.');
       resolve();
 
     } else {
