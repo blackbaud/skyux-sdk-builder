@@ -53,7 +53,7 @@ function spawnProtractor(configPath, chunks, port, skyPagesConfig) {
 
   if (process.env.ChromeWebDriver) {
     console.log('Using pre-installed chrome web driver.');
-    opts.chromeDriver = process.env.ChromeWebDriver;
+    opts.chromeDriver = `${process.env.ChromeWebDriver}\\chromedriver.exe`;
   }
 
   protractorLauncher.init(configPath, opts);
