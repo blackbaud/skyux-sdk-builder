@@ -1,3 +1,7 @@
+# 4.5.0 (2020-09-02)
+
+- Added the `--chromeDriver` flag to bypass the ChromeDriver Manager update during `skyux e2e`. [#323](https://github.com/blackbaud/skyux-sdk-builder/pull/323)
+
 # 4.4.2 (2020-08-24)
 
 - Replaced `@jsdevtools/coverage-istanbul-loader` with `@skyux-sdk/istanbul-instrumenter-loader` to allow setting breakpoints while debugging `skyux watch`. [#321](https://github.com/blackbaud/skyux-sdk-builder/pull/321)

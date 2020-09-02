@@ -255,4 +255,16 @@ describe('cli e2e', () => {
       done();
     });
   });
+
+  it('should not run webdriverManager.update() if --chromeDriver arg is supplied', (done) => {
+    const chromeDriverManagerSpy = jasmine.createSpyObj('chromedriver-manager', ['update']);
+    mock('../cli/utils/chromedriver-manager', chromeDriverManagerSpy);
+
+    mock.reRequire('../cli/e2e')('e2e', { chromeDriver: 'asdf' }, SKY_PAGES_CONFIG, WEBPACK);
+    spyOn(process, 'exit').and.callFake(() => {
+      expect(logger.info).toHaveBeenCalledWith('Skipping webdriver-manager update.');
+      expect(chromeDriverManagerSpy.update).not.toHaveBeenCalled();
+      done();
+    });
+  });
 });
