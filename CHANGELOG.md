@@ -1,4 +1,4 @@
-# 4.5.0 (2020-09-01)
+# 4.5.0 (2020-09-02)
 
 - Added the `--chromeDriver` flag to bypass the ChromeDriver Manager update during `skyux e2e`. [#323](https://github.com/blackbaud/skyux-sdk-builder/pull/323)
 
