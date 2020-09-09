@@ -1,6 +1,7 @@
 branches:
   only:
     - master
+    - 3.x.x
 
 environment:
   nodejs_version: "10"
