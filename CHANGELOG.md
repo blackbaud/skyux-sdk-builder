@@ -1,3 +1,7 @@
+# 3.20.0 (2020-09-09)
+
+- Added the `--chromeDriver` flag to bypass the ChromeDriver Manager update during `skyux e2e`. (Backport of [#323](https://github.com/blackbaud/skyux-sdk-builder/pull/323)) [#325](https://github.com/blackbaud/skyux-sdk-builder/pull/325)
+
 # 3.19.0 (2020-06-09)
 
 - Added support for `@blackbaud/skyux-lib-help@3.3.0`. [#274](https://github.com/blackbaud/skyux-sdk-builder/pull/274)
