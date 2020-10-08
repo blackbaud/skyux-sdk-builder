@@ -1,3 +1,7 @@
+# 4.5.1 (2020-10-08)
+
+- Upgraded the package dependencies to address some security vulnerabilities. [#329](https://github.com/blackbaud/skyux-sdk-builder/pull/329)
+
 # 4.5.0 (2020-09-02)
 
 - Added the `--chromeDriver` flag to bypass the ChromeDriver Manager update during `skyux e2e`. [#323](https://github.com/blackbaud/skyux-sdk-builder/pull/323)
