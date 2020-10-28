@@ -14,6 +14,11 @@ import 'core-js/es/map';
 import 'core-js/es/weak-map';
 import 'core-js/es/set';
 
+/* Add support for SVG `.contains` method in IE11. */
+if (!SVGElement.prototype.contains) {
+  SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
+}
+
 /* IE10 and IE11 requires the following for the Reflect API. */
 import 'core-js/es/reflect';
 
