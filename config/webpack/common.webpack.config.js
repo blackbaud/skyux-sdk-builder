@@ -179,7 +179,7 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
           ]
         },
 
-        babelLoaderUtil.getES5Rule(skyPagesConfig.skyux.incompatibleDependencies),
+        babelLoaderUtil.getES5Rule(skyPagesConfig.skyux.dependenciesForTranspilation),
 
         {
           test: /\.s?css$/,

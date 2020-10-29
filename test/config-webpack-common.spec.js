@@ -219,7 +219,7 @@ describe('config webpack common', () => {
     const config = lib.getWebpackConfig({
       runtime: runtimeUtils.getDefaultRuntime(),
       skyux: {
-        incompatibleDependencies: ['foobar'],
+        dependenciesForTranspilation: ['foobar'],
         moduleAliases: {
           '@skyux/foo': './src/app/public'
         }
