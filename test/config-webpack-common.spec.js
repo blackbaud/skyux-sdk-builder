@@ -209,7 +209,7 @@ describe('config webpack common', () => {
     });
 
     const babelRule = getBabelRule(config);
-    expect(babelRule.test).toEqual(/(\|\/)(strip-ansi|ansi-regex)(\|\/)/);
+    expect(babelRule.test).toEqual(/[\\\/](strip-ansi|ansi-regex)[\\\/]/);
     expect(babelRule.include).toEqual(/node_modules/);
   });
 
@@ -227,7 +227,7 @@ describe('config webpack common', () => {
     });
 
     const babelRule = getBabelRule(config);
-    expect(babelRule.test).toEqual(/(\|\/)(strip-ansi|ansi-regex|foobar)(\|\/)/);
+    expect(babelRule.test).toEqual(/[\\\/](strip-ansi|ansi-regex|foobar)[\\\/]/);
   });
 
 });

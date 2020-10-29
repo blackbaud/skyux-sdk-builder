@@ -4,12 +4,12 @@
  */
 function getES5Rule(nonES5Dependencies = []) {
 
-  // The following packages are provided by Webpack Dev Server and are not compatible
-  // with our ES5 target.
+  // The following packages are provided by Webpack Dev Server and are
+  // not compatible with our ES5 target.
   // See: https://github.com/blackbaud/skyux-sdk-builder/issues/220
   const webServerPackages = [
     'strip-ansi',
-    'ansi-regex',
+    'ansi-regex'
   ];
 
   const dependencies = [
@@ -17,8 +17,11 @@ function getES5Rule(nonES5Dependencies = []) {
     ...nonES5Dependencies
   ];
 
+  const pattern = String.raw`[\\\/](${dependencies.join('|')})[\\\/]`;
+  const regex = new RegExp(pattern);
+
   return {
-    test: new RegExp(`(\\|\/)(${dependencies.join('|')})(\\|\/)`),
+    test: regex,
     include: /node_modules/,
     use: {
       loader: 'babel-loader',

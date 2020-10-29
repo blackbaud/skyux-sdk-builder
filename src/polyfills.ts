@@ -14,7 +14,10 @@ import 'core-js/es/map';
 import 'core-js/es/weak-map';
 import 'core-js/es/set';
 
-/* Add support for SVG `.contains` method in IE11. */
+/**
+ * Add support for SVG `.contains` method in IE11.
+ * @see https://github.com/popperjs/popper-core/issues/515#issuecomment-505130453
+ */
 if (!SVGElement.prototype.contains) {
   SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
 }
