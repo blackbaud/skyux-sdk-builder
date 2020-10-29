@@ -1,8 +1,9 @@
 /**
  * Returns a Webpack rule that converts the provided package dependencies to ES5.
- * @param {*} nonES5Dependencies An array of package dependency names that are not ES5 compatible.
+ * @param {*} dependenciesForTranspilation An array of package dependency names
+ * that are not ES5 compatible.
  */
-function getES5Rule(nonES5Dependencies = []) {
+function getES5Rule(dependenciesForTranspilation = []) {
 
   // The following packages are provided by Webpack Dev Server and are
   // not compatible with our ES5 target.
@@ -14,7 +15,7 @@ function getES5Rule(nonES5Dependencies = []) {
 
   const dependencies = [
     ...webServerPackages,
-    ...nonES5Dependencies
+    ...dependenciesForTranspilation
   ];
 
   const pattern = String.raw`[\\\/](${dependencies.join('|')})[\\\/]`;
