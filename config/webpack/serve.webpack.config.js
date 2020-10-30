@@ -55,19 +55,7 @@ function getWebpackConfig(argv, skyPagesConfig) {
 
     module: {
       rules: [
-        tsLoaderUtil.getRule(skyPagesConfig.runtime.command),
-        // https://github.com/blackbaud/skyux-sdk-builder/issues/220
-        // Limited to known node_module packages that do not target ES5.
-        {
-          test: /strip-ansi|ansi-regex/,
-          include: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env']
-            }
-          }
-        }
+        tsLoaderUtil.getRule(skyPagesConfig.runtime.command)
       ]
     },
 

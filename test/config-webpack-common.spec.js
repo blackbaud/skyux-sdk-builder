@@ -38,6 +38,12 @@ describe('config webpack common', () => {
     ).toBe(expectedAppExtrasAlias);
   }
 
+  function getBabelRule(config) {
+    return config.module.rules.find(rule => {
+      return (rule && rule.use && rule.use.loader) === 'babel-loader';
+    });
+  }
+
   afterAll(() => {
     mock.stopAll();
   });
@@ -188,6 +194,40 @@ describe('config webpack common', () => {
     const alias = config.resolve.alias;
 
     expect(alias['@skyux/foo']).toBe(path.join(process.cwd(), '.skypagestmp/src/app/public'));
+  });
+
+  it('should use the babel-loader only for the `ansi-regex` package in `node_modules`', () => {
+    const lib = mock.reRequire('../config/webpack/common.webpack.config');
+
+    const config = lib.getWebpackConfig({
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        moduleAliases: {
+          '@skyux/foo': './src/app/public'
+        }
+      }
+    });
+
+    const babelRule = getBabelRule(config);
+    expect(babelRule.test).toEqual(/[\\\/](strip-ansi|ansi-regex)[\\\/]/);
+    expect(babelRule.include).toEqual(/node_modules/);
+  });
+
+  it('should allow adding other packages to babel-loader', () => {
+    const lib = mock.reRequire('../config/webpack/common.webpack.config');
+
+    const config = lib.getWebpackConfig({
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        dependenciesForTranspilation: ['foobar'],
+        moduleAliases: {
+          '@skyux/foo': './src/app/public'
+        }
+      }
+    });
+
+    const babelRule = getBabelRule(config);
+    expect(babelRule.test).toEqual(/[\\\/](strip-ansi|ansi-regex|foobar)[\\\/]/);
   });
 
 });

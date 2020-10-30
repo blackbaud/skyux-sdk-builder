@@ -10,6 +10,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
+const babelLoaderUtil = require('./babel-loader-rule');
 const tsLoaderUtil = require('./ts-loader-rule');
 
 function spaPath() {
@@ -87,6 +88,7 @@ function getWebpackConfig(skyPagesConfig, argv) {
         },
 
         tsLoaderUtil.getRule(),
+        babelLoaderUtil.getES5Rule(skyPagesConfig.skyux.dependenciesForTranspilation),
 
         {
           test: /\.s?css$/,

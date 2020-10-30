@@ -12,6 +12,7 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const { OutputKeepAlivePlugin } = require('../../plugin/output-keep-alive');
 const skyPagesConfigUtil = require('../sky-pages/sky-pages.config');
 const aliasBuilder = require('./alias-builder');
+const babelLoaderUtil = require('./babel-loader-rule');
 
 function spaPath() {
   return skyPagesConfigUtil.spaPath.apply(skyPagesConfigUtil, arguments);
@@ -177,6 +178,9 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
             outPath('runtime')
           ]
         },
+
+        babelLoaderUtil.getES5Rule(skyPagesConfig.skyux.dependenciesForTranspilation),
+
         {
           test: /\.s?css$/,
           use: [
