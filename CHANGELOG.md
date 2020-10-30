@@ -1,3 +1,7 @@
+# 4.6.0 (2020-10-30)
+
+- Added support for the `dependenciesForTranspilation` property in `skyuxconfig.json` to allow consumers to provide a list of dependencies that are not ES5 compatible. Each package name listed will be coverted to support SKY UX Builder's target environment. [#331](https://github.com/blackbaud/skyux-sdk-builder/pull/331)
+
 # 4.5.1 (2020-10-08)
 
 - Upgraded the package dependencies to address some security vulnerabilities. [#329](https://github.com/blackbaud/skyux-sdk-builder/pull/329)
