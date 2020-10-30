@@ -108,15 +108,16 @@ let config = {
   onComplete: () => common.afterAll
 };
 
-// In CI, use firefox
-if (process.env.TRAVIS) {
+// In CI, use headless Chrome.
+if (process.env.CI) {
   config.capabilities = {
     browserName: 'chrome',
     'chromeOptions': {
       'args': [
         '--disable-extensions',
         '--ignore-certificate-errors',
-        '--no-sandbox'
+        '--no-sandbox',
+        '--headless'
       ]
     }
   };
