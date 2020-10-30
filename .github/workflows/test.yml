@@ -11,9 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: |
+    - name: Install
+      run: |
         npx -p @skyux-sdk/cli skyux certs install
         npm ci
+    - name: Coverage
+      run: |
         npm run coverage:ci
         bash <(curl -s https://codecov.io/bash) -s coverage/builder -F builder
         bash <(curl -s https://codecov.io/bash) -s coverage/runtime/ -F runtime
@@ -22,7 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: |
+    - name: E2E
+      run: |
         npx -p @skyux-sdk/cli skyux certs install
         npm ci
         npm run e2e
