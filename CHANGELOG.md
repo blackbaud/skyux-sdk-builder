@@ -1,3 +1,7 @@
+# 4.6.1 (2020-11-25)
+
+- Removed `user-scalable` property from local template.
+
 # 4.6.0 (2020-10-30)
 
 - Added support for the `dependenciesForTranspilation` property in `skyuxconfig.json` to allow consumers to provide a list of dependencies that are not ES5 compatible. Each package name listed will be coverted to support SKY UX Builder's target environment. [#331](https://github.com/blackbaud/skyux-sdk-builder/pull/331)
