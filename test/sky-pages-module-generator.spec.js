@@ -489,7 +489,7 @@ require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
     expect(source).toContain(expectedProvider);
 
     expect(source).toContain(`
-export function paramsConfigFactory(config: SkyAppConfig): SkyAppParamsConfig {
+export function skyAppParamsConfigFactory(config: SkyAppConfig): SkyAppParamsConfig {
   return new SkyAppParamsConfig({
     params: config.skyux.params
   });
