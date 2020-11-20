@@ -6,6 +6,7 @@
   "scripts": {
     "coverage": "npm run coverage:builder && npm run coverage:runtime && npm run coverage:src-app",
     "coverage:builder": "istanbul cover --report=html --dir=./coverage/builder ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+    "coverage:ci": "npm run coverage:builder && npm run coverage:runtime -- --headless && npm run coverage:src-app -- --headless",
     "coverage:runtime": "node ./utils/cli-test.js dev-runtime",
     "coverage:src-app": "node ./utils/cli-test.js dev-src-app",
     "e2e": "node ./utils/cli-chromedriver-manager-update && npm run protractor",

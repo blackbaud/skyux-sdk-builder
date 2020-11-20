@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install
+      run: |
+        npx -p @skyux-sdk/cli skyux certs install
+        npm ci
+    - name: Coverage
+      run: |
+        npm run coverage:ci
+        bash <(curl -s https://codecov.io/bash) -s coverage/builder -F builder
+        bash <(curl -s https://codecov.io/bash) -s coverage/runtime/ -F runtime
+        bash <(curl -s https://codecov.io/bash) -s coverage/src-app/ -F srcapp
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: E2E
+      run: |
+        npx -p @skyux-sdk/cli skyux certs install
+        npm ci
+        npm run e2e
