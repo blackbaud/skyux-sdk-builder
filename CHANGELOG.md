@@ -1,3 +1,7 @@
+# 4.7.0 (2020-11-20)
+
+- Added support for `@skyux/config@4.2.0`. Consuming applications can access `SkyAppRuntimeConfigParams` in their components and services by injecting `SkyAppRuntimeConfigParamsProvider`. [#335](https://github.com/blackbaud/skyux-sdk-builder/pull/335)
+
 # 4.6.0 (2020-10-30)
 
 - Added support for the `dependenciesForTranspilation` property in `skyuxconfig.json` to allow consumers to provide a list of dependencies that are not ES5 compatible. Each package name listed will be coverted to support SKY UX Builder's target environment. [#331](https://github.com/blackbaud/skyux-sdk-builder/pull/331)
