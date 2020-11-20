@@ -471,4 +471,30 @@ require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
     );
   });
 
+  it('should provide SkyAppParamsConfig', () => {
+    const generator = mock.reRequire(GENERATOR_PATH);
+    const expectedProvider = `provide: SkyAppParamsConfig,`;
+
+    const source = generator.getSource({
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: runtimeUtils.getDefaultSkyux({
+        params: {
+          foo: {
+            value: 'bar'
+          }
+        }
+      })
+    });
+
+    expect(source).toContain(expectedProvider);
+
+    expect(source).toContain(`
+export function paramsConfigFactory(appConfig: SkyAppConfig): SkyAppParamsConfig {
+  return new SkyAppParamsConfig({
+    params: {"envid":true,"svcid":true,"foo":{"value":"bar"}}
+  });
+}
+`);
+  });
+
 });
