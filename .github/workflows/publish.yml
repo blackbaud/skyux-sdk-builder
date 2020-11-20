@@ -18,10 +18,6 @@ jobs:
       with:
         node-version: '12.x'
         registry-url: 'https://registry.npmjs.org'
-    - uses: rtCamp/action-slack-notify@master
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        SLACK_MESSAGE: Successfully published `@skyux-sdk/builder@${{ steps.vars.outputs.tag }}` to NPM. http://github.com/${{ github.repository }}/blob/${{ steps.vars.outputs.tag }}/CHANGELOG.md
     - name: Install
       run: |
         npm install
@@ -29,3 +25,7 @@ jobs:
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_MESSAGE: Successfully published `@skyux-sdk/builder@${{ steps.vars.outputs.tag }}` to NPM. http://github.com/${{ github.repository }}/blob/${{ steps.vars.outputs.tag }}/CHANGELOG.md
