@@ -489,9 +489,9 @@ require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
     expect(source).toContain(expectedProvider);
 
     expect(source).toContain(`
-export function paramsConfigFactory(appConfig: SkyAppConfig): SkyAppParamsConfig {
+export function paramsConfigFactory(config: SkyAppConfig): SkyAppParamsConfig {
   return new SkyAppParamsConfig({
-    params: {"envid":true,"svcid":true,"foo":{"value":"bar"}}
+    params: config.skyux.params
   });
 }
 `);
