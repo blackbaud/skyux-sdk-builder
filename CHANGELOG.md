@@ -1,3 +1,7 @@
+# 4.7.1 (2020-11-30)
+
+- Fixed the local index template to allow user scaling on mobile devices. [#336](https://github.com/blackbaud/skyux-sdk-builder/pull/336)
+
 # 4.7.0 (2020-11-20)
 
 - Added support for `@skyux/config@4.2.0`. Consuming applications can access `SkyAppRuntimeConfigParams` in their components and services by injecting `SkyAppRuntimeConfigParamsProvider`. [#335](https://github.com/blackbaud/skyux-sdk-builder/pull/335)
