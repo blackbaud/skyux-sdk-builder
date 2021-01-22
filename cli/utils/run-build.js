@@ -14,6 +14,10 @@ const server = require('./server');
 const browser = require('./browser');
 const runCompiler = require('./run-compiler');
 const tsLinter = require('./ts-linter');
+const {
+  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS,
+  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS
+} = require('./customizable-tsconfig-options');
 
 function writeTSConfig(skyPagesConfig) {
 
@@ -85,19 +89,30 @@ function writeTSConfig(skyPagesConfig) {
  */
 function applySpaTsConfig(config) {
   const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
-  const compilerOptionsKeys = [
-    'esModuleInterop',
-    'allowSyntheticDefaultImports'
-  ];
 
-  compilerOptionsKeys.forEach(key => {
-    if (spaTsConfig.compilerOptions[key]) {
+  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS.forEach(key => {
+    if (
+      spaTsConfig &&
+      spaTsConfig.compilerOptions &&
+      spaTsConfig.compilerOptions[key] !== undefined
+    ) {
       config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
+    }
+  });
+
+  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS.forEach(key => {
+    if (
+      spaTsConfig &&
+      spaTsConfig.angularCompilerOptions &&
+      spaTsConfig.angularCompilerOptions[key] !== undefined
+    ) {
+      config.angularCompilerOptions[key] = spaTsConfig.angularCompilerOptions[key];
     }
   });
 
   return config;
 }
+
 
 function stageAot(skyPagesConfig, assetsBaseUrl, assetsRel) {
   let skyPagesConfigOverrides = {

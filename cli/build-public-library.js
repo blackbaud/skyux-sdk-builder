@@ -8,6 +8,10 @@ const logger = require('@blackbaud/skyux-logger');
 
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
 const tsLinter = require('./utils/ts-linter');
+const {
+  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS,
+  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS
+} = require('./utils/customizable-tsconfig-options');
 
 function runLinter(argv) {
   const lintResult = tsLinter.lintSync(argv);
@@ -86,14 +90,24 @@ function cleanRuntime() {
  */
 function applyLibraryTsConfig(config) {
   const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
-  const compilerOptionsKeys = [
-    'esModuleInterop',
-    'allowSyntheticDefaultImports'
-  ];
 
-  compilerOptionsKeys.forEach(key => {
-    if (spaTsConfig && spaTsConfig.compilerOptions && spaTsConfig.compilerOptions[key]) {
+  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS.forEach(key => {
+    if (
+      spaTsConfig &&
+      spaTsConfig.compilerOptions &&
+      spaTsConfig.compilerOptions[key] !== undefined
+    ) {
       config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
+    }
+  });
+
+  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS.forEach(key => {
+    if (
+      spaTsConfig &&
+      spaTsConfig.angularCompilerOptions &&
+      spaTsConfig.angularCompilerOptions[key] !== undefined
+    ) {
+      config.angularCompilerOptions[key] = spaTsConfig.angularCompilerOptions[key];
     }
   });
 
@@ -107,7 +121,8 @@ function writeTSConfig() {
     ),
     compilerOptions: {
       lib: ['dom', 'es6']
-    }
+    },
+    angularCompilerOptions: {},
   };
 
   tsConfig = applyLibraryTsConfig(tsConfig);
