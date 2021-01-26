@@ -50,7 +50,7 @@ const CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS = [
 function applyTypescriptCompilerOptions(config, spaTsConfig) {
   /* istanbul ignore if */
   if (hasTypescriptCompilerOptions(spaTsConfig)) {
-    config['compilerOptions'] = config['compilerOptions'] || {};
+    config.compilerOptions = config.compilerOptions || {};
   }
 
   CUSTOMIZABLE_TYPESCRIPT_COMPILER_OPTIONS.forEach(key => {
@@ -73,7 +73,7 @@ function applyTypescriptCompilerOptions(config, spaTsConfig) {
  */
 function applyAngularCompilerOptions(config, spaTsConfig) {
   if (hasAngularCompilerOptions(spaTsConfig)) {
-    config['angularCompilerOptions'] = config['angularCompilerOptions'] || {};
+    config.angularCompilerOptions = config.angularCompilerOptions || {};
   }
 
   CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS.forEach(key => {
@@ -113,7 +113,8 @@ function hasCompilerOptions(spaTsConfig, compilerObjKey, customizableKeys) {
     return false;
   }
 
-  for (let key of customizableKeys) {
+  for (let i = 0; i < customizableKeys.length; i++) {
+    const key = customizableKeys[i];
     if (key in spaTsConfig[compilerObjKey]) {
       return true;
     }
