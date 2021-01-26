@@ -401,6 +401,7 @@ describe('cli utils run build', () => {
         strictDomEventTypes: true,
         strictContextGenerics: true,
         strictLiteralTypes: true,
+        foo: 'bar'
       }
     });
 
@@ -427,32 +428,93 @@ describe('cli utils run build', () => {
       }
     })).then(() => {
       const tsConfig = fsSpy.calls.argsFor(0)[1];
-      expect(tsConfig.compilerOptions.esModuleInterop).toEqual(true);
-      expect(tsConfig.compilerOptions.allowSyntheticDefaultImports).toEqual(true);
-      // Typescript
-      expect(tsConfig.compilerOptions.strict).toEqual(true);
-      expect(tsConfig.compilerOptions.noImplicitAny).toEqual(true);
-      expect(tsConfig.compilerOptions.noImplicitThis).toEqual(true);
-      expect(tsConfig.compilerOptions.alwaysStrict).toEqual(true);
-      expect(tsConfig.compilerOptions.strictBindCallApply).toEqual(true);
-      expect(tsConfig.compilerOptions.strictNullChecks).toEqual(true);
-      expect(tsConfig.compilerOptions.strictFunctionTypes).toEqual(true);
-      expect(tsConfig.compilerOptions.strictPropertyInitialization).toEqual(true);
-      // Angular
-      expect(tsConfig.angularCompilerOptions.fullTemplateTypeCheck).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictTemplates).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictInputTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictInputAccessModifiers).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictNullInputTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictAttributeTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictSafeNavigationTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictDomLocalRefTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictOutputEventTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictDomEventTypes).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictContextGenerics).toEqual(true);
-      expect(tsConfig.angularCompilerOptions.strictLiteralTypes).toEqual(true);
-      // Non-supported
+
+      expect(tsConfig.compilerOptions).toEqual(jasmine.objectContaining({
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+        strict: true,
+        noImplicitAny: true,
+        noImplicitThis: true,
+        alwaysStrict: true,
+        strictBindCallApply: true,
+        strictNullChecks: true,
+        strictFunctionTypes: true,
+        strictPropertyInitialization: true,
+        forceConsistentCasingInFileNames: true,
+        noImplicitReturns: true,
+        noFallthroughCasesInSwitch: true,
+        noUnusedLocals: true,
+        noUnusedParameters: true,
+      }));
+
       expect(tsConfig.compilerOptions.foo).toBeUndefined();
+      done();
+    }).catch(err => fail(err));
+  });
+
+  it('should apply supported properties to `angularCompilerOptions` from SPA\'s tsconfig.json', (done) => {
+
+    mock('../config/webpack/build-aot.webpack.config', {
+      getWebpackConfig: () => ({})
+    });
+
+    spyOn(mockFsExtra, 'readJsonSync').and.returnValue({
+      angularCompilerOptions: {
+        fullTemplateTypeCheck: true,
+        strictTemplates: true,
+        strictInputTypes: true,
+        strictInputAccessModifiers: true,
+        strictNullInputTypes: true,
+        strictAttributeTypes: true,
+        strictSafeNavigationTypes: true,
+        strictDomLocalRefTypes: true,
+        strictOutputEventTypes: true,
+        strictDomEventTypes: true,
+        strictContextGenerics: true,
+        strictLiteralTypes: true,
+        foo: 'bar'
+      }
+    });
+
+    const fsSpy = spyOn(mockFsExtra, 'writeJSONSync').and.callThrough();
+
+    const runBuild = mock.reRequire('../cli/utils/run-build');
+
+    runBuild({}, {
+      runtime: runtimeUtils.getDefaultRuntime(),
+      skyux: {
+        compileMode: 'aot'
+      }
+    }, () => ({
+      run: (cb) => {
+        cb(
+          null,
+          {
+            toJson: () => ({
+              errors: [],
+              warnings: []
+            })
+          }
+        );
+      }
+    })).then(() => {
+      const tsConfig = fsSpy.calls.argsFor(0)[1];
+      expect(tsConfig.angularCompilerOptions).toEqual(jasmine.objectContaining({
+        fullTemplateTypeCheck: true,
+        strictTemplates: true,
+        strictInputTypes: true,
+        strictInputAccessModifiers: true,
+        strictNullInputTypes: true,
+        strictAttributeTypes: true,
+        strictSafeNavigationTypes: true,
+        strictDomLocalRefTypes: true,
+        strictOutputEventTypes: true,
+        strictDomEventTypes: true,
+        strictContextGenerics: true,
+        strictLiteralTypes: true,
+      }));
+
+      expect(tsConfig.angularCompilerOptions.foo).toBeUndefined();
       done();
     }).catch(err => fail(err));
   });
