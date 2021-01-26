@@ -204,8 +204,7 @@ describe('cli build-public-library', () => {
       extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
       compilerOptions: {
         lib: ['dom', 'es6']
-      },
-      angularCompilerOptions: {}
+      }
     });
 
     done();
@@ -223,8 +222,7 @@ describe('cli build-public-library', () => {
       extends: 'node_modules/ng-packagr/lib/ts/conf/tsconfig.ngc.json',
       compilerOptions: {
         lib: ['dom', 'es6']
-      },
-      angularCompilerOptions: {}
+      }
     });
 
     done();

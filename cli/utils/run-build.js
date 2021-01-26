@@ -15,8 +15,8 @@ const browser = require('./browser');
 const runCompiler = require('./run-compiler');
 const tsLinter = require('./ts-linter');
 const {
-  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS,
-  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS
+  applyTypescriptCompilerOptions,
+  applyAngularCompilerOptions
 } = require('./customizable-tsconfig-options');
 
 function writeTSConfig(skyPagesConfig) {
@@ -90,25 +90,8 @@ function writeTSConfig(skyPagesConfig) {
 function applySpaTsConfig(config) {
   const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
 
-  CUSTOMIZABLE_TSCONFIG_COMPILER_OPTIONS.forEach(key => {
-    if (
-      spaTsConfig &&
-      spaTsConfig.compilerOptions &&
-      spaTsConfig.compilerOptions[key] !== undefined
-    ) {
-      config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
-    }
-  });
-
-  CUSTOMIZABLE_ANGULAR_COMPILER_OPTIONS.forEach(key => {
-    if (
-      spaTsConfig &&
-      spaTsConfig.angularCompilerOptions &&
-      spaTsConfig.angularCompilerOptions[key] !== undefined
-    ) {
-      config.angularCompilerOptions[key] = spaTsConfig.angularCompilerOptions[key];
-    }
-  });
+  config = applyTypescriptCompilerOptions(config, spaTsConfig);
+  config = applyAngularCompilerOptions(config, spaTsConfig);
 
   return config;
 }
