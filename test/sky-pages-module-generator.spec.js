@@ -471,11 +471,10 @@ require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
     );
   });
 
-  it('should provide SkyAppParamsConfig', () => {
+  it('should import SkyAppConfigModule', () => {
     const generator = mock.reRequire(GENERATOR_PATH);
-    const expectedProvider = `provide: SkyAppParamsConfig,`;
 
-    const source = generator.getSource({
+    const skyAppConfig = {
       runtime: runtimeUtils.getDefaultRuntime(),
       skyux: runtimeUtils.getDefaultSkyux({
         params: {
@@ -484,17 +483,13 @@ require('!style-loader!css-loader!sass-loader!src/styles/custom.css');
           }
         }
       })
-    });
+    };
 
-    expect(source).toContain(expectedProvider);
-
-    expect(source).toContain(`
-export function skyAppParamsConfigFactory(config: SkyAppConfig): SkyAppParamsConfig {
-  return new SkyAppParamsConfig({
-    params: config.skyux.params
-  });
-}
-`);
+    const source = generator.getSource(skyAppConfig);
+    expect(source).toContain(`SkyAppConfigModule.forRoot({
+      params: ${JSON.stringify(skyAppConfig.skyux.params)},
+      host: ${JSON.stringify(skyAppConfig.skyux.host)}
+    })`);
   });
 
 });
