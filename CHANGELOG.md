@@ -1,3 +1,7 @@
+# 4.7.2 (2021-04-01)
+
+- Upgraded dependencies to address a handful of security vulnerabilities. [#347](https://github.com/blackbaud/skyux-sdk-builder/pull/347) (Thanks [@Blackbaud-ChristiSchneider!](https://github.com/Blackbaud-ChristiSchneider))
+
 # 4.7.1 (2020-11-30)
 
 - Fixed the local index template to allow user scaling on mobile devices. [#336](https://github.com/blackbaud/skyux-sdk-builder/pull/336)
