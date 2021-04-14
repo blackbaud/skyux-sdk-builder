@@ -91,10 +91,18 @@ function applySpaTsConfig(config) {
   ];
 
   compilerOptionsKeys.forEach(key => {
-    if (spaTsConfig.compilerOptions[key]) {
+    if (spaTsConfig.compilerOptions[key] !== undefined) {
       config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
     }
   });
+
+  // Add "strict" configuration if relevant.
+  if (spaTsConfig.extends.includes('tsconfig.strict')) {
+    const strictConfig = fs.readJsonSync(skyPagesConfigUtil.outPath('tsconfig.strict.json'));
+    // Remove the "extends" property to avoid an infinite lookup.
+    delete strictConfig.extends;
+    config = merge(config, strictConfig);
+  }
 
   return config;
 }
