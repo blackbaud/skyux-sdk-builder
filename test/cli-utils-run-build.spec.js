@@ -372,6 +372,35 @@ describe('cli utils run build', () => {
     spyOn(mockFsExtra, 'readJsonSync').and.returnValue({
       compilerOptions: {
         esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+        strict: true,
+        noImplicitAny: true,
+        noImplicitThis: true,
+        alwaysStrict: true,
+        strictBindCallApply: true,
+        strictNullChecks: true,
+        strictFunctionTypes: true,
+        strictPropertyInitialization: true,
+        forceConsistentCasingInFileNames: true,
+        noImplicitReturns: true,
+        noFallthroughCasesInSwitch: true,
+        noUnusedLocals: true,
+        noUnusedParameters: true,
+        foo: 'bar'
+      },
+      angularCompilerOptions: {
+        fullTemplateTypeCheck: true,
+        strictTemplates: true,
+        strictInputTypes: true,
+        strictInputAccessModifiers: true,
+        strictNullInputTypes: true,
+        strictAttributeTypes: true,
+        strictSafeNavigationTypes: true,
+        strictDomLocalRefTypes: true,
+        strictOutputEventTypes: true,
+        strictDomEventTypes: true,
+        strictContextGenerics: true,
+        strictLiteralTypes: true,
         foo: 'bar'
       }
     });
@@ -399,21 +428,50 @@ describe('cli utils run build', () => {
       }
     })).then(() => {
       const tsConfig = fsSpy.calls.argsFor(0)[1];
-      expect(tsConfig.compilerOptions.esModuleInterop).toEqual(true);
+
+      expect(tsConfig.compilerOptions).toEqual(jasmine.objectContaining({
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+        strict: true,
+        noImplicitAny: true,
+        noImplicitThis: true,
+        alwaysStrict: true,
+        strictBindCallApply: true,
+        strictNullChecks: true,
+        strictFunctionTypes: true,
+        strictPropertyInitialization: true,
+        forceConsistentCasingInFileNames: true,
+        noImplicitReturns: true,
+        noFallthroughCasesInSwitch: true,
+        noUnusedLocals: true,
+        noUnusedParameters: true,
+      }));
+
       expect(tsConfig.compilerOptions.foo).toBeUndefined();
       done();
     }).catch(err => fail(err));
   });
 
-  it('should apply supported properties to `compilerOptions` from SPA\'s tsconfig.json', (done) => {
+  it('should apply supported properties to `angularCompilerOptions` from SPA\'s tsconfig.json', (done) => {
 
     mock('../config/webpack/build-aot.webpack.config', {
       getWebpackConfig: () => ({})
     });
 
     spyOn(mockFsExtra, 'readJsonSync').and.returnValue({
-      compilerOptions: {
-        esModuleInterop: true,
+      angularCompilerOptions: {
+        fullTemplateTypeCheck: true,
+        strictTemplates: true,
+        strictInputTypes: true,
+        strictInputAccessModifiers: true,
+        strictNullInputTypes: true,
+        strictAttributeTypes: true,
+        strictSafeNavigationTypes: true,
+        strictDomLocalRefTypes: true,
+        strictOutputEventTypes: true,
+        strictDomEventTypes: true,
+        strictContextGenerics: true,
+        strictLiteralTypes: true,
         foo: 'bar'
       }
     });
@@ -441,9 +499,24 @@ describe('cli utils run build', () => {
       }
     })).then(() => {
       const tsConfig = fsSpy.calls.argsFor(0)[1];
-      expect(tsConfig.compilerOptions.esModuleInterop).toEqual(true);
-      expect(tsConfig.compilerOptions.foo).toBeUndefined();
+      expect(tsConfig.angularCompilerOptions).toEqual(jasmine.objectContaining({
+        fullTemplateTypeCheck: true,
+        strictTemplates: true,
+        strictInputTypes: true,
+        strictInputAccessModifiers: true,
+        strictNullInputTypes: true,
+        strictAttributeTypes: true,
+        strictSafeNavigationTypes: true,
+        strictDomLocalRefTypes: true,
+        strictOutputEventTypes: true,
+        strictDomEventTypes: true,
+        strictContextGenerics: true,
+        strictLiteralTypes: true,
+      }));
+
+      expect(tsConfig.angularCompilerOptions.foo).toBeUndefined();
       done();
     }).catch(err => fail(err));
   });
+
 });

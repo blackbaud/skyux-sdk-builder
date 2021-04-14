@@ -122,12 +122,12 @@ export class AppComponent implements OnInit, OnDestroy {
     @Optional() private themeSvc?: SkyThemeService
   ) {
     /* istanbul ignore else */
-    if (themeSvc) {
+    if (this.themeSvc) {
       const themeSettings = this.getInitialThemeSettings();
 
       this.themeSvc.init(
         document.body,
-        renderer,
+        renderer as Renderer2,
         themeSettings
       );
     }
@@ -143,7 +143,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // Let the isReady property take effect on the CSS class that hides/shows
         // content based on when styles are loaded.
         setTimeout(() => {
-          viewport.visible.next(true);
+          viewport!.visible.next(true);
         });
       });
   }
@@ -198,7 +198,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private setOnSearch(omnibarConfig: any) {
     if (this.searchProvider) {
       omnibarConfig.onSearch = (searchArgs: BBOmnibarSearchArgs) => {
-        return this.searchProvider.getSearchResults(searchArgs);
+        return this.searchProvider!.getSearchResults(searchArgs);
       };
     }
   }
@@ -208,7 +208,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const baseUrl =
       (
-        skyuxConfig.host.url +
+        skyuxConfig.host!.url +
         this.config.runtime.app.base.substr(0, this.config.runtime.app.base.length - 1)
       ).toLowerCase();
 
@@ -222,7 +222,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     nav.beforeNavCallback = (item: BBOmnibarNavigationItem) => {
-      const url = item.url.toLowerCase();
+      const url = item.url!.toLowerCase();
 
       if (
         url === baseUrl ||
@@ -231,11 +231,11 @@ export class AppComponent implements OnInit, OnDestroy {
         url.indexOf(baseUrl + '/') === 0 ||
         url.indexOf(baseUrl + '?') === 0
       ) {
-        const routePath = item.url.substring(baseUrl.length, url.length);
+        const routePath = item.url!.substring(baseUrl.length, url.length);
 
         // Since the omnibar is loaded outside Angular, navigating needs to be explicitly
         // run inside the Angular zone in order for navigation to work properly.
-        this.zone.run(() => {
+        this.zone!.run(() => {
           this.router.navigateByUrl(routePath);
         });
 
@@ -299,7 +299,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       omnibarConfig.allowAnonymous = !this.config.skyux.auth;
 
-      this.setOmnibarArgsOverrides(omnibarConfig, args);
+      this.setOmnibarArgsOverrides(omnibarConfig, args as SkyAppOmnibarReadyArgs);
 
       const initialThemeSettings = this.getInitialThemeSettings();
 
@@ -313,7 +313,7 @@ export class AppComponent implements OnInit, OnDestroy {
       // The omnibar uses setInterval() to poll for user activity, and setInterval()
       // triggers change detection on each interval.  Loading the omnibar outside
       // Angular will keep change detection from being triggered during each interval.
-      this.zone.runOutsideAngular(() => {
+      this.zone!.runOutsideAngular(() => {
         BBAuthClientFactory.BBOmnibar.load(omnibarConfig).then(() => {
           /* istanbul ignore else */
           if (this.themeSvc) {

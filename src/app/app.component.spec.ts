@@ -347,6 +347,7 @@ describe('AppComponent', () => {
         expect(runOutsideAngularSpy).toHaveBeenCalled();
         expect(spyOmnibarLoad).not.toHaveBeenCalled();
 
+        // @ts-ignore
         loadOmnibarCallback();
 
         expect(spyOmnibarLoad).toHaveBeenCalled();
@@ -360,10 +361,10 @@ describe('AppComponent', () => {
       skyAppConfig.skyux.host.url = 'base.com/';
       skyAppConfig.runtime.app.base = 'custom-base/';
 
-      let beforeNavCallback: (item: BBOmnibarNavigationItem) => boolean | void;
+      let beforeNavCallback: undefined | ((item: BBOmnibarNavigationItem) => boolean | void);
 
       spyOmnibarLoad.and.callFake((config: BBOmnibarConfig) => {
-        beforeNavCallback = config.nav.beforeNavCallback;
+        beforeNavCallback = config.nav?.beforeNavCallback;
         return Promise.resolve();
       });
 
@@ -389,6 +390,7 @@ describe('AppComponent', () => {
 
         fixture.detectChanges();
 
+        // @ts-ignore
         beforeNavCallback({
           title: '',
           url: 'base.com/custom-base/new-place'
@@ -397,6 +399,7 @@ describe('AppComponent', () => {
         expect(runSpy).toHaveBeenCalled();
         expect(navigateByUrlSpy).not.toHaveBeenCalled();
 
+        // @ts-ignore
         zoneRunCallback();
 
         expect(navigateByUrlSpy).toHaveBeenCalled();
@@ -736,9 +739,9 @@ describe('AppComponent', () => {
   }));
 
   it('should respond when SkyAppStyleLoader.loadStyles is resolved', fakeAsync(() => {
-    let viewportVisible: boolean;
+    let viewportVisible: boolean | undefined;
 
-    let styleResolve: () => void;
+    let styleResolve: (value: unknown) => void;
 
     const stylePromise = new Promise((resolve) => {
       styleResolve = resolve;
@@ -757,6 +760,7 @@ describe('AppComponent', () => {
     expect(comp.isReady).toBe(false);
     expect(viewportVisible).toBeUndefined();
 
+    // @ts-ignore
     styleResolve();
     tick();
 
