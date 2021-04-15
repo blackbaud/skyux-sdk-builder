@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
-const merge = require('../../utils/merge');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
+const merge = require('../../utils/merge');
 
 function applyStrictModeConfig(tsConfig) {
   const spaTsConfig = fs.readJsonSync(

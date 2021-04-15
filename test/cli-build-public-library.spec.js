@@ -45,6 +45,12 @@ describe('cli build-public-library', () => {
       }
     });
 
+    mock('../cli/utils/strict-mode', {
+      applyStrictModeConfig(config) {
+        return config;
+      }
+    });
+
     mock('../lib/plugin-file-processor', mockPluginFileProcessor);
 
     mock('../config/sky-pages/sky-pages.config', mockSkyPagesConfig);
