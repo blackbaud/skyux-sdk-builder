@@ -3,7 +3,9 @@ const merge = require('../../utils/merge');
 const skyPagesConfigUtil = require('../../config/sky-pages/sky-pages.config');
 
 function applyStrictModeConfig(tsConfig) {
-  const spaTsConfig = fs.readJsonSync(skyPagesConfigUtil.spaPath('tsconfig.json'));
+  const spaTsConfig = fs.readJsonSync(
+    skyPagesConfigUtil.spaPath('tsconfig.json')
+  );
 
   // Add "strict" configuration if relevant.
   if (spaTsConfig.extends.includes('tsconfig.strict')) {
