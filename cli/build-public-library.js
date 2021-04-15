@@ -6,8 +6,8 @@ const ngPackage = require('ng-packagr');
 const rimraf = require('rimraf');
 const logger = require('@blackbaud/skyux-logger');
 
-const merge = require('../utils/merge');
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+const strictMode = require('./utils/strict-mode');
 const tsLinter = require('./utils/ts-linter');
 
 function runLinter(argv) {
@@ -98,14 +98,6 @@ function applyLibraryTsConfig(config) {
     }
   });
 
-  // Add "strict" configuration if relevant.
-  if (spaTsConfig.extends.includes('tsconfig.strict')) {
-    const strictConfig = fs.readJsonSync(skyPagesConfigUtil.outPath('tsconfig.strict.json'));
-    // Remove the "extends" property to avoid an infinite lookup.
-    delete strictConfig.extends;
-    config = merge(config, strictConfig);
-  }
-
   return config;
 }
 
@@ -120,6 +112,8 @@ function writeTSConfig() {
   };
 
   tsConfig = applyLibraryTsConfig(tsConfig);
+  tsConfig = strictMode.applyStrictModeConfig(tsConfig);
+
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'), tsConfig);
 }
 

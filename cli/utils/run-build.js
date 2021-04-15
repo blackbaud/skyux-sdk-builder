@@ -9,6 +9,7 @@ const generator = require('../../lib/sky-pages-module-generator');
 const assetsProcessor = require('../../lib/assets-processor');
 const pluginFileProcessor = require('../../lib/plugin-file-processor');
 const localeAssetsProcessor = require('../../lib/locale-assets-processor');
+const strictMode = require('./strict-mode');
 
 const server = require('./server');
 const browser = require('./browser');
@@ -75,6 +76,7 @@ function writeTSConfig(skyPagesConfig) {
   };
 
   config = applySpaTsConfig(config);
+  config = strictMode.applyStrictModeConfig(config);
 
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTempSrc('tsconfig.json'), config);
 }
@@ -95,14 +97,6 @@ function applySpaTsConfig(config) {
       config.compilerOptions[key] = spaTsConfig.compilerOptions[key];
     }
   });
-
-  // Add "strict" configuration if relevant.
-  if (spaTsConfig.extends.includes('tsconfig.strict')) {
-    const strictConfig = fs.readJsonSync(skyPagesConfigUtil.outPath('tsconfig.strict.json'));
-    // Remove the "extends" property to avoid an infinite lookup.
-    delete strictConfig.extends;
-    config = merge(config, strictConfig);
-  }
 
   return config;
 }
