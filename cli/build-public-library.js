@@ -7,6 +7,7 @@ const rimraf = require('rimraf');
 const logger = require('@blackbaud/skyux-logger');
 
 const skyPagesConfigUtil = require('../config/sky-pages/sky-pages.config');
+const strictMode = require('./utils/strict-mode');
 const tsLinter = require('./utils/ts-linter');
 
 function runLinter(argv) {
@@ -111,6 +112,8 @@ function writeTSConfig() {
   };
 
   tsConfig = applyLibraryTsConfig(tsConfig);
+  tsConfig = strictMode.applyStrictModeConfig(tsConfig);
+
   fs.writeJSONSync(skyPagesConfigUtil.spaPathTemp('tsconfig.lib.json'), tsConfig);
 }
 

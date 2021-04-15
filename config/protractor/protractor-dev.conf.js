@@ -83,6 +83,7 @@ let config = {
               'index.js',
               'package.json',
               'skyuxconfig.json',
+              'tsconfig.strict.json',
               'tsconfig.json',
               'tslint.json'
             ];
@@ -96,6 +97,13 @@ let config = {
                 )
               );
             });
+          })
+          .then(() => {
+            // Ensure test application is running in strict mode.
+            const spaTsConfigPath = path.resolve(common.tmp, 'tsconfig.json');
+            const spaTsConfig = fs.readJsonSync(spaTsConfigPath);
+            spaTsConfig.extends = './node_modules/@skyux-sdk/builder/tsconfig.strict';
+            fs.writeJsonSync(spaTsConfigPath, spaTsConfig);
           })
           .then(resolve)
           .catch(reject);

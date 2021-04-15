@@ -73,6 +73,13 @@ describe('cli utils run build', () => {
         };
       }
     });
+
+    mock('../cli/utils/strict-mode', {
+      applyStrictModeConfig(config) {
+        return config;
+      }
+    });
+
     mock('../lib/plugin-file-processor', {
       processFiles: () => {}
     });
