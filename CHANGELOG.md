@@ -1,3 +1,7 @@
+# 4.8.0 (2021-04-15)
+
+- Added a "strict" mode for TypeScript compilation. To enable strict mode, extend the `tsconfig.strict.json` file in your application's local `tsconfig.json` file. [#349](https://github.com/blackbaud/skyux-sdk-builder/pull/349) (Thanks [@ThomasOrtiz](https://github.com/ThomasOrtiz)!)
+
 # 4.7.2 (2021-04-01)
 
 - Upgraded dependencies to address a handful of security vulnerabilities. [#347](https://github.com/blackbaud/skyux-sdk-builder/pull/347) (Thanks [@Blackbaud-ChristiSchneider!](https://github.com/Blackbaud-ChristiSchneider))
