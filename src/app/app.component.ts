@@ -270,7 +270,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setOmnibarArgsOverrides(omnibarConfig: any, args: SkyAppOmnibarReadyArgs) {
+  private setOmnibarArgsOverrides(omnibarConfig: any, args?: SkyAppOmnibarReadyArgs) {
     if (args) {
       // Eventually this could be expanded to allow any valid config property to be overridden,
       // but for now keep it scoped to the two parameters we know consumers will want to override.
@@ -299,7 +299,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       omnibarConfig.allowAnonymous = !this.config.skyux.auth;
 
-      this.setOmnibarArgsOverrides(omnibarConfig, args as SkyAppOmnibarReadyArgs);
+      this.setOmnibarArgsOverrides(omnibarConfig, args);
 
       const initialThemeSettings = this.getInitialThemeSettings();
 

@@ -1,6 +1,3 @@
 {
-  "extends": "../tsconfig",
-  "compilerOptions": {
-    "strict": true
-  }
+  "extends": "../tsconfig.strict.json"
 }

@@ -118,35 +118,7 @@ describe('cli build-public-library', () => {
       compilerOptions: {
         esModuleInterop: true,
         allowSyntheticDefaultImports: true,
-        strict: true,
-        noImplicitAny: true,
-        noImplicitThis: true,
-        alwaysStrict: true,
-        strictBindCallApply: true,
-        strictNullChecks: true,
-        strictFunctionTypes: true,
-        strictPropertyInitialization: true,
-        forceConsistentCasingInFileNames: true,
-        noImplicitReturns: true,
-        noFallthroughCasesInSwitch: true,
-        noUnusedLocals: true,
-        noUnusedParameters: true,
-        // Non-Supported
         foo: 'bar'
-      },
-      angularCompilerOptions: {
-        fullTemplateTypeCheck: true,
-        strictTemplates: true,
-        strictInputTypes: true,
-        strictInputAccessModifiers: true,
-        strictNullInputTypes: true,
-        strictAttributeTypes: true,
-        strictSafeNavigationTypes: true,
-        strictDomLocalRefTypes: true,
-        strictOutputEventTypes: true,
-        strictDomEventTypes: true,
-        strictContextGenerics: true,
-        strictLiteralTypes: true,
       }
     });
 
@@ -158,34 +130,7 @@ describe('cli build-public-library', () => {
       compilerOptions: {
         lib: ['dom', 'es6'],
         esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-        strict: true,
-        noImplicitAny: true,
-        noImplicitThis: true,
-        alwaysStrict: true,
-        strictBindCallApply: true,
-        strictNullChecks: true,
-        strictFunctionTypes: true,
-        strictPropertyInitialization: true,
-        forceConsistentCasingInFileNames: true,
-        noImplicitReturns: true,
-        noFallthroughCasesInSwitch: true,
-        noUnusedLocals: true,
-        noUnusedParameters: true,
-      },
-      angularCompilerOptions: {
-        fullTemplateTypeCheck: true,
-        strictTemplates: true,
-        strictInputTypes: true,
-        strictInputAccessModifiers: true,
-        strictNullInputTypes: true,
-        strictAttributeTypes: true,
-        strictSafeNavigationTypes: true,
-        strictDomLocalRefTypes: true,
-        strictOutputEventTypes: true,
-        strictDomEventTypes: true,
-        strictContextGenerics: true,
-        strictLiteralTypes: true,
+        allowSyntheticDefaultImports: true
       }
     });
 
