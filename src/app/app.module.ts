@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 
 import {
-  BrowserModule
-} from '@angular/platform-browser';
+  BrowserAnimationsModule
+} from '@angular/platform-browser/animations';
 
 import {
   RouterModule
@@ -25,7 +25,7 @@ import {
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
     RouterModule,
     SkyPagesModule
   ],
