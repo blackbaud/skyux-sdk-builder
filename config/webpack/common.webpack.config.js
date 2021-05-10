@@ -153,12 +153,6 @@ function getWebpackConfig(skyPagesConfig, argv = {}) {
       rules: [
         {
           enforce: 'pre',
-          test: /config\.ts$/,
-          loader: outPath('loader', 'sky-app-config'),
-          include: outPath('runtime')
-        },
-        {
-          enforce: 'pre',
           test: [
             /\.(html|s?css)$/,
             /sky-pages\.module\.ts/
