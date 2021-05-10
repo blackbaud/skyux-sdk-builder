@@ -1,3 +1,7 @@
+# 4.8.1 (2021-05-10)
+
+- Upgraded `karma` and `@blackbaud/skyux-logger` to address security vulnerabilities. [#353](https://github.com/blackbaud/skyux-sdk-builder/pull/353)
+
 # 4.8.0 (2021-04-15)
 
 - Added a "strict" mode for TypeScript compilation. To enable strict mode, extend the `tsconfig.strict.json` file in your application's local `tsconfig.json` file. [#349](https://github.com/blackbaud/skyux-sdk-builder/pull/349) (Thanks [@ThomasOrtiz](https://github.com/ThomasOrtiz)!)
