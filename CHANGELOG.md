@@ -1,3 +1,7 @@
+# 4.8.2 (2021-05-12)
+
+- Reverted the `karma` upgrade to address timeouts in IE 11 BrowserStack tests. [#358](https://github.com/blackbaud/skyux-sdk-builder/pull/358)
+
 # 4.8.1 (2021-05-10)
 
 - Upgraded `karma` and `@blackbaud/skyux-logger` to address security vulnerabilities. [#353](https://github.com/blackbaud/skyux-sdk-builder/pull/353)
