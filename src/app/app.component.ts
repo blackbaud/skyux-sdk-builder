@@ -61,18 +61,6 @@ require('style-loader!./app.component.scss');
 
 let omnibarLoaded: boolean;
 
-const switchableThemes: {mode: SkyThemeMode, theme: SkyTheme}[] = [{
-  mode: SkyThemeMode.presets.dark,
-  theme: SkyTheme.presets.modern
-}, {
-  mode: SkyThemeMode.presets.light,
-  theme: SkyTheme.presets.modern
-}, {
-  mode: SkyThemeMode.presets.light,
-  theme: SkyTheme.presets.default
-}];
-let currentThemeIndex: number;
-
 function fixUpUrl(baseUrl: string, route: string, config: SkyAppConfig) {
   return config.runtime.params.getUrl(baseUrl + route);
 }
@@ -145,21 +133,50 @@ export class AppComponent implements OnInit, OnDestroy {
 
       const setupThemeSwitcher = this.windowRef.nativeWindow.SKYUX_HOST.setupThemeSwitcher;
       if (setupThemeSwitcher) {
-        currentThemeIndex = switchableThemes.findIndex(x => x.theme == themeSettings.theme && x.mode == themeSettings.mode);
+        const appConfig = this.config.skyux.app;
+        const themingConfig = appConfig && appConfig.theming;
 
-        setupThemeSwitcher(this.getThemeName(themeSettings), () => {
-          currentThemeIndex = currentThemeIndex == 0
-            ? switchableThemes.length - 1
-            : currentThemeIndex - 1;
+        if (themingConfig && themingConfig.supportedThemes.indexOf('modern') >= 0) {
+          const supportedThemeInfo: {
+            settings: SkyThemeSettings,
+            suffix?: string,
+            hidden?: boolean
+          }[] = [];
+          const supportDefault = themingConfig.supportedThemes.indexOf('default') >= 0;
 
-          const newSettings = new SkyThemeSettings(
-            switchableThemes[currentThemeIndex].theme,
-            switchableThemes[currentThemeIndex].mode
-          );
-          this.themeSvc.setTheme(newSettings);
+          if (supportDefault) {
+            supportedThemeInfo.push({
+              settings: new SkyThemeSettings(
+                SkyTheme.presets.default,
+                SkyThemeMode.presets.light
+              )
+            });
+          }
 
-          return this.getThemeName(newSettings);
-        });
+          supportedThemeInfo.push({
+            settings: new SkyThemeSettings(
+              SkyTheme.presets.modern,
+              SkyThemeMode.presets.light
+            )
+          });
+
+          supportedThemeInfo.push({
+            settings: new SkyThemeSettings(
+              SkyTheme.presets.modern,
+              SkyThemeMode.presets.dark
+            ),
+            suffix: ' - dark (experimental)',
+            hidden: true
+          });
+
+          const currentThemeIndex = themeSettings.theme.name == 'default' ? 0
+            : supportDefault ? 1
+            : 0;
+
+            setupThemeSwitcher(supportedThemeInfo, currentThemeIndex, (settings: SkyThemeSettings) => {
+              this.themeSvc!.setTheme(settings);
+            });
+        }
       }
     }
 
@@ -423,15 +440,5 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     return 'default';
-  }
-
-  private getThemeName(settings: SkyThemeSettings): string {
-    let themeName = settings.theme.name;
-
-    if (themeName === 'modern') {
-      themeName += ` (${settings.mode.name})`
-    }
-
-    return themeName;
   }
 }
