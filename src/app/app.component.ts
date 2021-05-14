@@ -61,6 +61,18 @@ require('style-loader!./app.component.scss');
 
 let omnibarLoaded: boolean;
 
+const switchableThemes: {mode: SkyThemeMode, theme: SkyTheme}[] = [{
+  mode: SkyThemeMode.presets.dark,
+  theme: SkyTheme.presets.modern
+}, {
+  mode: SkyThemeMode.presets.light,
+  theme: SkyTheme.presets.modern
+}, {
+  mode: SkyThemeMode.presets.light,
+  theme: SkyTheme.presets.default
+}];
+let currentThemeIndex: number;
+
 function fixUpUrl(baseUrl: string, route: string, config: SkyAppConfig) {
   return config.runtime.params.getUrl(baseUrl + route);
 }
@@ -130,6 +142,25 @@ export class AppComponent implements OnInit, OnDestroy {
         renderer as Renderer2,
         themeSettings
       );
+
+      const setupThemeSwitcher = this.windowRef.nativeWindow.SKYUX_HOST.setupThemeSwitcher;
+      if (setupThemeSwitcher) {
+        currentThemeIndex = switchableThemes.findIndex(x => x.theme == themeSettings.theme && x.mode == themeSettings.mode);
+
+        setupThemeSwitcher(this.getThemeName(themeSettings), () => {
+          currentThemeIndex = currentThemeIndex == 0
+            ? switchableThemes.length - 1
+            : currentThemeIndex - 1;
+
+          const newSettings = new SkyThemeSettings(
+            switchableThemes[currentThemeIndex].theme,
+            switchableThemes[currentThemeIndex].mode
+          );
+          this.themeSvc.setTheme(newSettings);
+
+          return this.getThemeName(newSettings);
+        });
+      }
     }
 
     this.styleLoader.loadStyles()
@@ -392,5 +423,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     return 'default';
+  }
+
+  private getThemeName(settings: SkyThemeSettings): string {
+    let themeName = settings.theme.name;
+
+    if (themeName === 'modern') {
+      themeName += ` (${settings.mode.name})`
+    }
+
+    return themeName;
   }
 }
