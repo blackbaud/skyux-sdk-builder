@@ -1027,4 +1027,58 @@ describe('AppComponent', () => {
     });
   }));
 
+  describe('with host theme switcher', () => {
+    let mockSkyuxHost: any;
+    let supportedThemes: any[];
+
+    beforeEach(() => {
+      mockSkyuxHost = {
+        setupThemeSwitcher: jasmine.createSpy('setupThemeSwitcher')
+          .and
+          .callFake((themes: any[], callback: any) => {
+            supportedThemes = themes;
+          })
+      };
+    });
+
+    afterEach(() => {
+      supportedThemes = [];
+    });
+
+    it('should not setup theme switcher with just default', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default'
+          ],
+          theme: 'default'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).not.toHaveBeenCalled();
+      });
+    }));
+
+    it('should setup theme switchers with just modern', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).toHaveBeenCalled();
+        expect(supportedThemes.length).toBe(2);
+      });
+    }))
+  });
+
 });

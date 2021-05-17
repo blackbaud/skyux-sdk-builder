@@ -131,7 +131,8 @@ export class AppComponent implements OnInit, OnDestroy {
         themeSettings
       );
 
-      const setupThemeSwitcher = this.windowRef.nativeWindow.SKYUX_HOST.setupThemeSwitcher;
+      const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+      const setupThemeSwitcher = skyuxHost && skyuxHost.setupThemeSwitcher;
       if (setupThemeSwitcher) {
         const appConfig = this.config.skyux.app;
         const themingConfig = appConfig && appConfig.theming;
@@ -155,10 +156,9 @@ export class AppComponent implements OnInit, OnDestroy {
             hidden: true
           }];
 
-          if (themingConfig.supportedThemes.indexOf('default') >= 0)
-          {
+          if (themingConfig.supportedThemes.indexOf('default') >= 0) {
             supportedThemeInfo.splice(
-              themeSettings.theme.name == 'default' ? 0 : supportedThemeInfo.length,
+              themeSettings.theme.name === 'default' ? 0 : supportedThemeInfo.length,
               0,
               {
                 settings: new SkyThemeSettings(
