@@ -141,41 +141,37 @@ export class AppComponent implements OnInit, OnDestroy {
             settings: SkyThemeSettings,
             suffix?: string,
             hidden?: boolean
-          }[] = [];
-          const supportDefault = themingConfig.supportedThemes.indexOf('default') >= 0;
-
-          if (supportDefault) {
-            supportedThemeInfo.push({
-              settings: new SkyThemeSettings(
-                SkyTheme.presets.default,
-                SkyThemeMode.presets.light
-              )
-            });
-          }
-
-          supportedThemeInfo.push({
+          }[] = [{
             settings: new SkyThemeSettings(
               SkyTheme.presets.modern,
               SkyThemeMode.presets.light
             )
-          });
-
-          supportedThemeInfo.push({
+          }, {
             settings: new SkyThemeSettings(
               SkyTheme.presets.modern,
               SkyThemeMode.presets.dark
             ),
             suffix: ' - dark (experimental)',
             hidden: true
+          }];
+
+          if (themingConfig.supportedThemes.indexOf('default') >= 0)
+          {
+            supportedThemeInfo.splice(
+              themeSettings.theme.name == 'default' ? 0 : supportedThemeInfo.length,
+              0,
+              {
+                settings: new SkyThemeSettings(
+                  SkyTheme.presets.default,
+                  SkyThemeMode.presets.light
+                )
+              }
+            );
+          }
+
+          setupThemeSwitcher(supportedThemeInfo, (settings: SkyThemeSettings) => {
+            this.themeSvc!.setTheme(settings);
           });
-
-          const currentThemeIndex = themeSettings.theme.name == 'default' ? 0
-            : supportDefault ? 1
-            : 0;
-
-            setupThemeSwitcher(supportedThemeInfo, currentThemeIndex, (settings: SkyThemeSettings) => {
-              this.themeSvc!.setTheme(settings);
-            });
         }
       }
     }
