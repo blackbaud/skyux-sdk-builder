@@ -119,7 +119,8 @@ describe('AppComponent', () => {
       settingsChange: new BehaviorSubject<any>({
         previousSettings: undefined,
         currentSettings: defaultThemeSettings
-      })
+      }),
+      setTheme: jasmine.createSpy('setTheme')
     };
 
     const providers: any[] = [
@@ -1027,4 +1028,167 @@ describe('AppComponent', () => {
     });
   }));
 
+  describe('with host theme switcher', () => {
+    let mockSkyuxHost: any;
+    let supportedThemes: any[];
+    let hostCallback: Function;
+
+    beforeEach(() => {
+      mockSkyuxHost = {
+        setupThemeSwitcher: jasmine.createSpy('setupThemeSwitcher')
+          .and
+          .callFake((themes: any[], callback: Function) => {
+            supportedThemes = themes;
+            hostCallback = callback;
+          })
+      };
+    });
+
+    afterEach(() => {
+      supportedThemes = [];
+    });
+
+    it('should not setup theme switcher with just default', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default'
+          ],
+          theme: 'default'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).not.toHaveBeenCalled();
+      });
+    }));
+
+    it('should setup theme switchers with just modern', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).toHaveBeenCalled();
+        expect(supportedThemes).toEqual([{
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.light
+          )
+        }, {
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.dark
+          ),
+          suffix: ' - dark (experimental)',
+          hidden: true
+        }]);
+      });
+    }));
+
+    it('should order \'default\' theme first', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default',
+            'modern'
+          ],
+          theme: 'default'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).toHaveBeenCalled();
+        expect(supportedThemes).toEqual([{
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.default,
+            SkyThemeMode.presets.light
+          )
+        }, {
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.light
+          )
+        }, {
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.dark
+          ),
+          suffix: ' - dark (experimental)',
+          hidden: true
+        }]);
+      });
+    }));
+
+    it('should order \'modern\' theme first', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'default',
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        expect(mockSkyuxHost.setupThemeSwitcher).toHaveBeenCalled();
+        expect(supportedThemes).toEqual([{
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.light
+          )
+        }, {
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.modern,
+            SkyThemeMode.presets.dark
+          ),
+          suffix: ' - dark (experimental)',
+          hidden: true
+        }, {
+          settings: new SkyThemeSettings(
+            SkyTheme.presets.default,
+            SkyThemeMode.presets.light
+          )
+        }]);
+      });
+    }));
+
+    it('should set the theme via the host callback', async(() => {
+      skyAppConfig.skyux.app = {
+        theming: {
+          supportedThemes: [
+            'modern'
+          ],
+          theme: 'modern'
+        }
+      };
+
+      const settings: SkyThemeSettings = new SkyThemeSettings(
+        SkyTheme.presets.default,
+        SkyThemeMode.presets.light
+      );
+
+      setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost).then(() => {
+        fixture.detectChanges();
+
+        hostCallback(settings);
+
+        expect(mockThemeSvc.setTheme).toHaveBeenCalledWith(settings);
+      });
+    }));
+  });
 });

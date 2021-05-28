@@ -130,6 +130,50 @@ export class AppComponent implements OnInit, OnDestroy {
         renderer as Renderer2,
         themeSettings
       );
+
+      const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+      const setupThemeSwitcher = skyuxHost && skyuxHost.setupThemeSwitcher;
+      if (setupThemeSwitcher) {
+        const appConfig = this.config.skyux.app;
+        const themingConfig = appConfig && appConfig.theming;
+
+        if (themingConfig && themingConfig.supportedThemes.indexOf('modern') >= 0) {
+          const supportedThemeInfo: {
+            settings: SkyThemeSettings,
+            suffix?: string,
+            hidden?: boolean
+          }[] = [{
+            settings: new SkyThemeSettings(
+              SkyTheme.presets.modern,
+              SkyThemeMode.presets.light
+            )
+          }, {
+            settings: new SkyThemeSettings(
+              SkyTheme.presets.modern,
+              SkyThemeMode.presets.dark
+            ),
+            suffix: ' - dark (experimental)',
+            hidden: true
+          }];
+
+          if (themingConfig.supportedThemes.indexOf('default') >= 0) {
+            supportedThemeInfo.splice(
+              themeSettings.theme.name === 'default' ? 0 : supportedThemeInfo.length,
+              0,
+              {
+                settings: new SkyThemeSettings(
+                  SkyTheme.presets.default,
+                  SkyThemeMode.presets.light
+                )
+              }
+            );
+          }
+
+          setupThemeSwitcher(supportedThemeInfo, (settings: SkyThemeSettings) => {
+            this.themeSvc!.setTheme(settings);
+          });
+        }
+      }
     }
 
     this.styleLoader.loadStyles()
