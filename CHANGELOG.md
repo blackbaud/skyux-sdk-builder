@@ -1,3 +1,7 @@
+# 4.9.0 (2021-05-28)
+
+- Support switching supported themes via SKY UX Host. [#359](https://github.com/blackbaud/skyux-sdk-builder/pull/359)
+
 # 4.8.2 (2021-05-12)
 
 - Reverted the `karma` upgrade to address timeouts in IE 11 BrowserStack tests. [#358](https://github.com/blackbaud/skyux-sdk-builder/pull/358)
