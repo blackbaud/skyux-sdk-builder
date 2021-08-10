@@ -13,6 +13,7 @@ import {
 } from '@angular/router';
 
 import {
+  NextObserver,
   Subject
 } from 'rxjs';
 
@@ -169,9 +170,16 @@ export class AppComponent implements OnInit, OnDestroy {
             );
           }
 
+          let themeSwitcherUpdates: NextObserver<SkyThemeSettings> = {
+            next: () => {}
+          };
+          this.themeSvc!.settingsChange.subscribe((value) => {
+            themeSwitcherUpdates.next(value.currentSettings);
+          });
+
           setupThemeSwitcher(supportedThemeInfo, (settings: SkyThemeSettings) => {
             this.themeSvc!.setTheme(settings);
-          });
+          }, themeSwitcherUpdates);
         }
       }
     }
