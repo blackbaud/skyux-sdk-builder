@@ -1,3 +1,7 @@
+# 4.9.1 (2021-08-17)
+
+- Updated theme switcher to reflect theme changes on demo pages. [#361](https://github.com/blackbaud/skyux-sdk-builder/pull/361)
+
 # 4.9.0 (2021-05-28)
 
 - Support switching supported themes via SKY UX Host. [#359](https://github.com/blackbaud/skyux-sdk-builder/pull/359)
