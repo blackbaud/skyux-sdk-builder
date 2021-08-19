@@ -41,9 +41,13 @@ module.exports = function SaveMetadata() {
       });
     });
 
-    fs.writeFileSync(
-      path.join(process.cwd(), 'dist', 'metadata.json'),
-      JSON.stringify(metadata, null, '\t')
-    );
+    const outputPath = path.join(process.cwd(), 'dist');
+
+    if (fs.existsSync(outputPath)) {
+      fs.writeFileSync(
+        path.join(outputPath, 'metadata.json'),
+        JSON.stringify(metadata, null, '\t')
+      );
+    }
   });
 };
