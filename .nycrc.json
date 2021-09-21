@@ -1,0 +1,21 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "branches": 100,
+  "lines": 100,
+  "functions": 100,
+  "statements": 100,
+  "extension": ".js",
+  "reporter": ["text", "html", "json"],
+  "report-dir": "./coverage/builder",
+  "exclude": [
+    "**/coverage",
+    "**/dist",
+    "**/e2e",
+    "**/test",
+    "**/utils",
+    "**/config/karma/dev-runtime.karma.conf.js",
+    "**/config/karma/dev-src-app.karma.conf.js",
+    "**/config/protractor/protractor-dev.conf.js"
+  ]
+}

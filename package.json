@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "coverage": "npm run coverage:builder && npm run coverage:runtime && npm run coverage:src-app",
-    "coverage:builder": "istanbul cover --report=html --dir=./coverage/builder ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
+    "coverage:builder": "nyc ./node_modules/jasmine/bin/jasmine.js JASMINE_CONFIG_PATH=jasmine.json",
     "coverage:ci": "npm run coverage:builder && npm run coverage:runtime -- --headless && npm run coverage:src-app -- --headless",
     "coverage:runtime": "node ./utils/cli-test.js dev-runtime",
     "coverage:src-app": "node ./utils/cli-test.js dev-src-app",
@@ -140,8 +140,8 @@
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.21.1",
-    "istanbul": "0.4.5",
     "mock-require": "3.0.3",
+    "nyc": "15.1.0",
     "proxyquire": "2.1.3",
     "rxjs": "6.6.3",
     "ts-node": "8.3.0",

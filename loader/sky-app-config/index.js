@@ -1,3 +1,4 @@
+/*istanbul ignore file*/
 /*jshint node: true*/
 'use strict';
 
