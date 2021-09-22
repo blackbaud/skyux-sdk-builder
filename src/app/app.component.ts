@@ -134,7 +134,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<any>();
 
-  private skyuxHost: SkyuxHost;
+  private skyuxHost: SkyuxHost | undefined;
 
   constructor(
     private router: Router,
@@ -162,8 +162,8 @@ export class AppComponent implements OnInit, OnDestroy {
         themeSettings
       );
 
-      const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
-      const setupThemeSwitcher = skyuxHost && skyuxHost.setupThemeSwitcher;
+      // const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+      const setupThemeSwitcher = this.skyuxHost?.setupThemeSwitcher;
       if (setupThemeSwitcher) {
         const appConfig = this.config.skyux.app;
         const themingConfig = appConfig && appConfig.theming;
@@ -373,7 +373,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const loadHelp = () => {
       if (helpConfig && this.helpInitService) {
-        const helpMode = this.skyuxHost.help?.helpMode;
+        const helpMode = this.skyuxHost?.help?.helpMode;
 
         if (helpMode) {
           helpConfig.helpMode = helpMode;
@@ -479,7 +479,7 @@ export class AppComponent implements OnInit, OnDestroy {
       const svcId = this.config.runtime.params.get('svcid');
 
       if (svcId) {
-        const svcIdMap = this.skyuxHost.theming?.serviceIdMap;
+        const svcIdMap = this.skyuxHost?.theming?.serviceIdMap;
 
         if (svcIdMap) {
           const mappedTheme = svcIdMap[svcId];
