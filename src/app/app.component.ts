@@ -32,7 +32,8 @@ import {
 } from '@blackbaud/skyux-lib-help';
 
 import {
-  SkyAppConfig
+  SkyAppConfig,
+  SkyuxConfigAppSupportedTheme
 } from '@skyux/config';
 
 import {
@@ -59,6 +60,30 @@ import {
 } from '@skyux/auth-client-factory';
 
 require('style-loader!./app.component.scss');
+
+type SupportedThemeInfoItem = {
+  settings: SkyThemeSettings,
+  suffix?: string,
+  hidden?: boolean
+};
+
+type SkyuxHost = {
+  setupThemeSwitcher: (
+    supportedThemeInfo: SupportedThemeInfoItem[],
+    callback: (settings: SkyThemeSettings) => void,
+    themeSwitcherUpdates: NextObserver<SkyThemeSettings>
+  ) => void
+
+  theming: {
+    serviceIdMap: {
+      [key: string]: SkyuxConfigAppSupportedTheme
+    }
+  }
+
+  help: {
+    helpMode?: 'legacy' | 'menu'
+  }
+};
 
 let omnibarLoaded: boolean;
 
@@ -109,6 +134,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject<any>();
 
+  private skyuxHost: SkyuxHost | undefined;
+
   constructor(
     private router: Router,
     private windowRef: SkyAppWindowRef,
@@ -122,6 +149,9 @@ export class AppComponent implements OnInit, OnDestroy {
     @Optional() renderer?: Renderer2,
     @Optional() private themeSvc?: SkyThemeService
   ) {
+    // Defined globally by the SKY UX Host service.
+    this.skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+
     /* istanbul ignore else */
     if (this.themeSvc) {
       const themeSettings = this.getInitialThemeSettings();
@@ -132,8 +162,8 @@ export class AppComponent implements OnInit, OnDestroy {
         themeSettings
       );
 
-      const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
-      const setupThemeSwitcher = skyuxHost && skyuxHost.setupThemeSwitcher;
+      // const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
+      const setupThemeSwitcher = this.skyuxHost?.setupThemeSwitcher;
       if (setupThemeSwitcher) {
         const appConfig = this.config.skyux.app;
         const themingConfig = appConfig && appConfig.theming;
@@ -337,9 +367,29 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initShellComponents() {
+  private async initShellComponents(): Promise<void> {
     const omnibarConfig = this.config.skyux.omnibar;
     const helpConfig = this.config.skyux.help;
+
+    const loadHelp = () => {
+      if (helpConfig && this.helpInitService) {
+        const helpMode = this.skyuxHost?.help?.helpMode;
+
+        if (helpMode) {
+          helpConfig.helpMode = helpMode;
+        }
+
+        helpConfig.helpUpdateCallback = (args: { url: string }) => {
+          BBAuthClientFactory.BBOmnibar.update({
+            help: {
+              url: args.url
+            }
+          });
+        };
+
+        this.helpInitService.load(helpConfig);
+      }
+    };
 
     const loadOmnibar = (args?: SkyAppOmnibarReadyArgs) => {
       this.setParamsFromQS(omnibarConfig);
@@ -368,6 +418,8 @@ export class AppComponent implements OnInit, OnDestroy {
       // Angular will keep change detection from being triggered during each interval.
       this.zone!.runOutsideAngular(() => {
         BBAuthClientFactory.BBOmnibar.load(omnibarConfig).then(() => {
+          loadHelp();
+
           /* istanbul ignore else */
           if (this.themeSvc) {
             this.themeSvc.settingsChange
@@ -406,10 +458,8 @@ export class AppComponent implements OnInit, OnDestroy {
         } else {
           loadOmnibar();
         }
-      }
-
-      if (helpConfig && this.helpInitService) {
-        this.helpInitService.load(helpConfig);
+      } else {
+        loadHelp();
       }
     }
   }
@@ -421,7 +471,7 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getInitialThemeName(): 'default' | 'modern' {
+  private getInitialThemeName(): SkyuxConfigAppSupportedTheme {
     const appConfig = this.config.skyux.app;
     const themingConfig = appConfig && appConfig.theming;
 
@@ -429,8 +479,7 @@ export class AppComponent implements OnInit, OnDestroy {
       const svcId = this.config.runtime.params.get('svcid');
 
       if (svcId) {
-        const skyuxHost = this.windowRef.nativeWindow.SKYUX_HOST;
-        const svcIdMap = skyuxHost && skyuxHost.theming && skyuxHost.theming.serviceIdMap;
+        const svcIdMap = this.skyuxHost?.theming?.serviceIdMap;
 
         if (svcIdMap) {
           const mappedTheme = svcIdMap[svcId];
