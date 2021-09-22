@@ -1,3 +1,7 @@
+# 4.11.0 (2021-09-22)
+
+- Added support for `@blackbaud/help-client@3.0.1` and `@blackbaud/skyux-lib-help@4.0.1`. [#366](https://github.com/blackbaud/skyux-sdk-builder/pull/366)
+
 # 4.10.0 (2021-08-23)
 
 - Upgraded `selenium-standalone` to address security vulnerabilities. [#364](https://github.com/blackbaud/skyux-sdk-builder/pull/364)
