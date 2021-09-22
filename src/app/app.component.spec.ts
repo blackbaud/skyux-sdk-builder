@@ -729,7 +729,56 @@ describe('AppComponent', () => {
     skyAppConfig.runtime.params.has = (key: any) => false;
     setup(skyAppConfig).then(() => {
       fixture.detectChanges();
-      expect(spyHelp.calls.mostRecent().args[0].productId).toEqual('test-config');
+      expect(spyHelp).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          productId: 'test-config'
+        })
+      );
+    });
+  }));
+
+  it('should pass helpMode from SKYUX_HOST to HelpInitializationService.load', async () => {
+    const mockSkyuxHost = {
+      help: {
+        helpMode: 'menu'
+      }
+    };
+
+    const spyHelp = spyOn(mockHelpInitService, 'load');
+    skyAppConfig.skyux.help = { productId: 'test-config' };
+    skyAppConfig.runtime.params.has = () => false;
+
+    await setup(skyAppConfig, undefined, undefined, undefined, mockSkyuxHost);
+    fixture.detectChanges();
+
+    expect(spyHelp).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        helpMode: 'menu'
+      })
+    );
+  });
+
+  it('should update omnibar when helpUpdateCallback is called', async(() => {
+    spyOn(mockHelpInitService, 'load');
+
+    skyAppConfig.skyux.help = { productId: 'test-config' };
+    skyAppConfig.runtime.params.has = () => false;
+
+    setup(skyAppConfig).then(() => {
+      fixture.detectChanges();
+
+      const config = TestBed.inject(SkyAppConfig);
+      const helpUpdateCallback = config.skyux.help.helpUpdateCallback;
+
+      helpUpdateCallback({
+        url: 'https://www.example.com/help'
+      });
+
+      expect(spyOmnibarUpdate).toHaveBeenCalledWith({
+        help: {
+          url: 'https://www.example.com/help'
+        }
+      });
     });
   }));
 
