@@ -729,7 +729,7 @@ describe('AppComponent', () => {
     skyAppConfig.runtime.params.has = (key: any) => false;
     setup(skyAppConfig).then(() => {
       fixture.detectChanges();
-      expect(spyHelp).toHaveBeenCalledWith(skyAppConfig.skyux.help);
+      expect(spyHelp.calls.mostRecent().args[0].productId).toEqual('test-config');
     });
   }));
 
