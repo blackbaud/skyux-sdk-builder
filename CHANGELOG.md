@@ -1,3 +1,7 @@
+# 4.12.0 (2021-09-23)
+
+- Added support for specifying the `allowAnonymous` omnibar option when `auth` is set to `false`. [#368](https://github.com/blackbaud/skyux-sdk-builder/pull/368)
+
 # 4.11.0 (2021-09-22)
 
 - Added support for `@blackbaud/help-client@3.0.1` and `@blackbaud/skyux-lib-help@4.0.1`. [#366](https://github.com/blackbaud/skyux-sdk-builder/pull/366)
