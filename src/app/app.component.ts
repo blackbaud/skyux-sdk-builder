@@ -406,7 +406,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // Allow the consumer to set `allowAnonymous` if `auth` is false
         // to enable custom auth logic while still taking advantage of
         // omnibar features like signing out due to inactivity.
-        omnibarConfig.allowAnonymous = false;
+        omnibarConfig.allowAnonymous = true;
       }
 
       this.setOmnibarArgsOverrides(omnibarConfig, args);
