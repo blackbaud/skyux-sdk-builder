@@ -456,10 +456,49 @@ describe('AppComponent', () => {
     });
   }));
 
-  it('should set the allow anonymous flag based on the app\'s auth configuration', async(() => {
+  it('should set the allow anonymous flag to false if auth is true', async(() => {
     skyAppConfig.skyux.omnibar = {};
 
     skyAppConfig.skyux.auth = true;
+
+    setup(skyAppConfig, true).then(() => {
+      fixture.detectChanges();
+
+      expect(spyOmnibarLoad).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          allowAnonymous: false
+        })
+      );
+    });
+  }));
+
+  it(
+    'should set the allow anonymous flag to true if auth is false and allow anonymous is undefined',
+    async(() => {
+      skyAppConfig.skyux.omnibar = {};
+
+      skyAppConfig.skyux.auth = false;
+
+      setup(skyAppConfig, true).then(() => {
+        fixture.detectChanges();
+
+        expect(spyOmnibarLoad).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            allowAnonymous: true
+          })
+        );
+      });
+    })
+  );
+
+  it(
+    'should not override allow anonymous flag if auth is false and allow anonymous is specified',
+    async(() => {
+    skyAppConfig.skyux.omnibar = {
+      allowAnonymous: false
+    };
+
+    skyAppConfig.skyux.auth = false;
 
     setup(skyAppConfig, true).then(() => {
       fixture.detectChanges();

@@ -400,7 +400,14 @@ export class AppComponent implements OnInit, OnDestroy {
         omnibarConfig.enableHelp = true;
       }
 
-      omnibarConfig.allowAnonymous = !this.config.skyux.auth;
+      if (this.config.skyux.auth) {
+        omnibarConfig.allowAnonymous = false;
+      } else if (omnibarConfig.allowAnonymous === undefined) {
+        // Allow the consumer to set `allowAnonymous` if `auth` is false
+        // to enable custom auth logic while still taking advantage of
+        // omnibar features like signing out due to inactivity.
+        omnibarConfig.allowAnonymous = false;
+      }
 
       this.setOmnibarArgsOverrides(omnibarConfig, args);
 
