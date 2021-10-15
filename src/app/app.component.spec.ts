@@ -805,6 +805,7 @@ describe('AppComponent', () => {
   it('should update omnibar when helpUpdateCallback is called', async () => {
     spyOn(mockHelpInitService, 'load');
 
+    skyAppConfig.skyux.omnibar = {};
     skyAppConfig.skyux.help = { productId: 'test-config' };
     skyAppConfig.runtime.params.has = () => false;
 

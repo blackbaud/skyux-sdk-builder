@@ -390,10 +390,12 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         helpConfig.helpUpdateCallback = (args: { url: string }) => {
-          if (!omnibarLoaded && omnibarConfig) {
-            pendingHelpUrl = args.url;
-          } else {
-            updateOmnibarHelpUrl(args.url);
+          if (omnibarConfig) {
+            if (!omnibarLoaded) {
+              pendingHelpUrl = args.url;
+            } else {
+              updateOmnibarHelpUrl(args.url);
+            }
           }
         };
 
