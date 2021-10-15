@@ -85,7 +85,7 @@ type SkyuxHost = {
   }
 };
 
-let omnibarLoaded: boolean;
+let omnibarLoaded = false;
 
 function fixUpUrl(baseUrl: string, route: string, config: SkyAppConfig) {
   return config.runtime.params.getUrl(baseUrl + route);
@@ -370,16 +370,15 @@ export class AppComponent implements OnInit, OnDestroy {
   private async initShellComponents(): Promise<void> {
     const omnibarConfig = this.config.skyux.omnibar;
     const helpConfig = this.config.skyux.help;
-    let omnibarLoaded = false;
-    let pendingHelpUrl: string;
 
-    function updateOmnibarHelpUrl(helpUrl: string) {
+    let pendingHelpUrl: string;
+    const updateOmnibarHelpUrl = (helpUrl: string) => {
       BBAuthClientFactory.BBOmnibar.update({
         help: {
           url: helpUrl
         }
       });
-    }
+    };
 
     const loadHelp = () => {
       if (helpConfig && this.helpInitService) {
@@ -390,7 +389,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         helpConfig.helpUpdateCallback = (args: { url: string }) => {
-          if (!omnibarLoaded) {
+          if (!omnibarLoaded && omnibarConfig) {
             pendingHelpUrl = args.url;
           } else {
             updateOmnibarHelpUrl(args.url);
@@ -439,8 +438,6 @@ export class AppComponent implements OnInit, OnDestroy {
             updateOmnibarHelpUrl(pendingHelpUrl);
           }
 
-          omnibarLoaded = true;
-
           /* istanbul ignore else */
           if (this.themeSvc) {
             this.themeSvc.settingsChange
@@ -458,9 +455,9 @@ export class AppComponent implements OnInit, OnDestroy {
                 });
               });
           }
-        });
 
-        omnibarLoaded = true;
+          omnibarLoaded = true;
+        });
       });
     };
 

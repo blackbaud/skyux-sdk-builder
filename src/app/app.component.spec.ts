@@ -408,16 +408,21 @@ describe('AppComponent', () => {
     })
   );
 
-  it('should call omnibar destroy if it was loaded', async(() => {
+  it('should call omnibar destroy if it was loaded', async () => {
     skyAppConfig.skyux.omnibar = {};
 
-    setup(skyAppConfig).then(() => {
-      fixture.detectChanges();
-      fixture.destroy();
-      expect(spyOmnibarLoad).toHaveBeenCalled();
-      expect(spyOmnibarDestroy).toHaveBeenCalled();
-    });
-  }));
+    await setup(skyAppConfig);
+
+    fixture.detectChanges();
+
+    await fixture.whenStable();
+
+    fixture.detectChanges();
+    fixture.destroy();
+
+    expect(spyOmnibarLoad).toHaveBeenCalled();
+    expect(spyOmnibarDestroy).toHaveBeenCalled();
+  });
 
   it('should not load the omnibar or help widget if the addin param is 1', () => {
     const spyHelp = spyOn(mockHelpInitService, 'load');
@@ -797,29 +802,57 @@ describe('AppComponent', () => {
     );
   });
 
-  it('should update omnibar when helpUpdateCallback is called', async(() => {
+  it('should update omnibar when helpUpdateCallback is called', async () => {
     spyOn(mockHelpInitService, 'load');
 
+    // skyAppConfig.skyux.omnibar = {};
     skyAppConfig.skyux.help = { productId: 'test-config' };
     skyAppConfig.runtime.params.has = () => false;
 
-    setup(skyAppConfig).then(() => {
-      fixture.detectChanges();
+    await setup(skyAppConfig);
+    fixture.detectChanges();
 
-      const config = TestBed.inject(SkyAppConfig);
-      const helpUpdateCallback = config.skyux.help.helpUpdateCallback;
+    await fixture.whenStable();
+    fixture.detectChanges();
 
-      helpUpdateCallback({
-        url: 'https://www.example.com/help'
-      });
+    const config = TestBed.inject(SkyAppConfig);
+    const helpUpdateCallback = config.skyux.help.helpUpdateCallback;
 
-      expect(spyOmnibarUpdate).toHaveBeenCalledWith({
-        help: {
-          url: 'https://www.example.com/help'
-        }
-      });
+    helpUpdateCallback({
+      url: 'https://www.example.com/help'
     });
-  }));
+
+    expect(spyOmnibarUpdate).toHaveBeenCalledWith({
+      help: {
+        url: 'https://www.example.com/help'
+      }
+    });
+  });
+
+  it('should update omnibar with help URL if help is loaded first', async () => {
+    spyOn(mockHelpInitService, 'load');
+
+    skyAppConfig.skyux.omnibar = {};
+    skyAppConfig.skyux.help = { productId: 'test-config' };
+    skyAppConfig.runtime.params.has = () => false;
+
+    await setup(skyAppConfig);
+    fixture.detectChanges();
+
+    const config = TestBed.inject(SkyAppConfig);
+    const helpUpdateCallback = config.skyux.help.helpUpdateCallback;
+
+    helpUpdateCallback({
+      url: 'https://www.example.com/help'
+    });
+
+    expect(spyOmnibarUpdate).not.toHaveBeenCalled();
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(spyOmnibarUpdate).toHaveBeenCalled();
+  });
 
   it('should set isReady after SkyAppStyleLoader.loadStyles is resolved', async(() => {
     setup(skyAppConfig).then(() => {
