@@ -456,9 +456,9 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     }
 
-    loadHelp();
-
     if (this.config.runtime.params.get('addin') !== '1') {
+      loadHelp();
+
       if (omnibarConfig) {
         if (this.omnibarProvider) {
           this.omnibarProvider.ready().then(loadOmnibar);
