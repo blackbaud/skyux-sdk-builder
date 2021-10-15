@@ -85,7 +85,7 @@ type SkyuxHost = {
   }
 };
 
-let omnibarLoaded: boolean;
+let omnibarLoaded = false;
 
 function fixUpUrl(baseUrl: string, route: string, config: SkyAppConfig) {
   return config.runtime.params.getUrl(baseUrl + route);
@@ -371,6 +371,16 @@ export class AppComponent implements OnInit, OnDestroy {
     const omnibarConfig = this.config.skyux.omnibar;
     const helpConfig = this.config.skyux.help;
 
+    let pendingHelpUrl: string;
+
+    const updateOmnibarHelpUrl = (helpUrl: string) => {
+      BBAuthClientFactory.BBOmnibar.update({
+        help: {
+          url: helpUrl
+        }
+      });
+    };
+
     const loadHelp = () => {
       if (helpConfig && this.helpInitService) {
         const helpMode = this.skyuxHost?.help?.helpMode;
@@ -380,11 +390,13 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         helpConfig.helpUpdateCallback = (args: { url: string }) => {
-          BBAuthClientFactory.BBOmnibar.update({
-            help: {
-              url: args.url
+          if (omnibarConfig) {
+            if (!omnibarLoaded) {
+              pendingHelpUrl = args.url;
+            } else {
+              updateOmnibarHelpUrl(args.url);
             }
-          });
+          }
         };
 
         this.helpInitService.load(helpConfig);
@@ -425,7 +437,9 @@ export class AppComponent implements OnInit, OnDestroy {
       // Angular will keep change detection from being triggered during each interval.
       this.zone!.runOutsideAngular(() => {
         BBAuthClientFactory.BBOmnibar.load(omnibarConfig).then(() => {
-          loadHelp();
+          if (pendingHelpUrl) {
+            updateOmnibarHelpUrl(pendingHelpUrl);
+          }
 
           /* istanbul ignore else */
           if (this.themeSvc) {
@@ -444,9 +458,9 @@ export class AppComponent implements OnInit, OnDestroy {
                 });
               });
           }
-        });
 
-        omnibarLoaded = true;
+          omnibarLoaded = true;
+        });
       });
     };
 
@@ -459,14 +473,14 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     if (this.config.runtime.params.get('addin') !== '1') {
+      loadHelp();
+
       if (omnibarConfig) {
         if (this.omnibarProvider) {
           this.omnibarProvider.ready().then(loadOmnibar);
         } else {
           loadOmnibar();
         }
-      } else {
-        loadHelp();
       }
     }
   }

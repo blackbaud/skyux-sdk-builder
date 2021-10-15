@@ -1,3 +1,7 @@
+# 4.12.1 (2021-10-15)
+
+- Fixed the app component to initialize the Help service immediately after the page loads. [#369](https://github.com/blackbaud/skyux-sdk-builder/pull/369)
+
 # 4.12.0 (2021-09-23)
 
 - Added support for specifying the `allowAnonymous` omnibar option when `auth` is set to `false`. [#368](https://github.com/blackbaud/skyux-sdk-builder/pull/368)
