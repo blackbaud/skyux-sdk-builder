@@ -370,6 +370,16 @@ export class AppComponent implements OnInit, OnDestroy {
   private async initShellComponents(): Promise<void> {
     const omnibarConfig = this.config.skyux.omnibar;
     const helpConfig = this.config.skyux.help;
+    let omnibarLoaded = false;
+    let pendingHelpUrl: string;
+
+    function updateOmnibarHelpUrl(helpUrl: string) {
+      BBAuthClientFactory.BBOmnibar.update({
+        help: {
+          url: helpUrl
+        }
+      });
+    }
 
     const loadHelp = () => {
       if (helpConfig && this.helpInitService) {
@@ -380,11 +390,11 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         helpConfig.helpUpdateCallback = (args: { url: string }) => {
-          BBAuthClientFactory.BBOmnibar.update({
-            help: {
-              url: args.url
-            }
-          });
+          if (!omnibarLoaded) {
+            pendingHelpUrl = args.url;
+          } else {
+            updateOmnibarHelpUrl(args.url);
+          }
         };
 
         this.helpInitService.load(helpConfig);
@@ -425,6 +435,12 @@ export class AppComponent implements OnInit, OnDestroy {
       // Angular will keep change detection from being triggered during each interval.
       this.zone!.runOutsideAngular(() => {
         BBAuthClientFactory.BBOmnibar.load(omnibarConfig).then(() => {
+          if (pendingHelpUrl) {
+            updateOmnibarHelpUrl(pendingHelpUrl);
+          }
+
+          omnibarLoaded = true;
+
           loadHelp();
 
           /* istanbul ignore else */
