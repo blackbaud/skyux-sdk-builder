@@ -372,6 +372,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const helpConfig = this.config.skyux.help;
 
     let pendingHelpUrl: string;
+
     const updateOmnibarHelpUrl = (helpUrl: string) => {
       BBAuthClientFactory.BBOmnibar.update({
         help: {
