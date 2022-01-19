@@ -1,6 +1,6 @@
 # 4.12.2 (2022-01-19)
 
-- Replaced `jasmine` with `jasmine-core`. [#370](https://github.com/blackbaud/skyux-sdk-builder/pull/370)
+- Upgraded `jasmine` to `3.6.0` to meet the minimum required version of `karma-jasmine`. [#370](https://github.com/blackbaud/skyux-sdk-builder/pull/370)
 
 # 4.12.1 (2021-10-15)
 
