@@ -140,6 +140,7 @@
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.21.1",
+    "jasmine": "3.5.0",
     "mock-require": "3.0.3",
     "nyc": "15.1.0",
     "proxyquire": "2.1.3",
