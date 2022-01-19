@@ -1,3 +1,7 @@
+# 4.12.2 (2022-01-19)
+
+- Fixed the version of `jasmine-core` to match the version of `jasmine`. []()
+
 # 4.12.1 (2021-10-15)
 
 - Fixed the app component to initialize the Help service immediately after the page loads. [#369](https://github.com/blackbaud/skyux-sdk-builder/pull/369)
