@@ -1,6 +1,6 @@
 # 4.12.2 (2022-01-19)
 
-- Fixed the version of `jasmine-core` to match the version of `jasmine`. []()
+- Replaced `jasmine` with `jasmine-core`. [#370](https://github.com/blackbaud/skyux-sdk-builder/pull/370)
 
 # 4.12.1 (2021-10-15)
 
