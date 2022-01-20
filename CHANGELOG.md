@@ -1,6 +1,6 @@
 # 4.12.2 (2022-01-20)
 
-- Added `jasmine-core@3.6.0` to package dependencies to prevent `karma-jasmine` from installing `jasmine-core@3.99.0` which introduces breaking changes for our consumers. [#371](https://github.com/blackbaud/skyux-sdk-builder/pull/371)
+- Added `jasmine-core@3.6.0` to the package dependencies to prevent `karma-jasmine` from installing `jasmine-core@3.99.0`, which introduces breaking changes for our consumers. [#371](https://github.com/blackbaud/skyux-sdk-builder/pull/371)
 
 # 4.12.1 (2021-10-15)
 
