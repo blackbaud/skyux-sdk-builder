@@ -1,3 +1,7 @@
+# 4.12.2 (2022-01-20)
+
+- Added `jasmine-core@3.6.0` to the package dependencies to prevent `karma-jasmine` from installing `jasmine-core@3.99.0`, which introduces breaking changes for our consumers. [#371](https://github.com/blackbaud/skyux-sdk-builder/pull/371)
+
 # 4.12.1 (2021-10-15)
 
 - Fixed the app component to initialize the Help service immediately after the page loads. [#369](https://github.com/blackbaud/skyux-sdk-builder/pull/369)
