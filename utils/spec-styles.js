@@ -8,9 +8,7 @@ const styleLoader = require('@skyux/theme/utils/node-js/style-loader');
 // This will ensure that styles are loaded before tests run by ensuring the style rule
 // for the HTML hidden property defined in sky.scss has been applied.
 (function () {
-  beforeAll(function (done) {
-    styleLoader.loadStyles().then(() => {
-      done();
-    });
+  beforeAll(function () {
+    return styleLoader.loadStyles();
   });
 }());
