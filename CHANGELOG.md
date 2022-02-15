@@ -1,6 +1,6 @@
 # 4.12.3 (2022-02-15)
 
-- Updated the style loader to return a promise to address error with IE 11. [#372](https://github.com/blackbaud/skyux-sdk-builder/pull/372)
+- Updated the style loader to return a promise to address an error with IE 11. [#372](https://github.com/blackbaud/skyux-sdk-builder/pull/372)
 
 # 4.12.2 (2022-01-20)
 
